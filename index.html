@@ -1097,8 +1097,8 @@ render();
     if(pin!==row.pin && h!==row.pin) return {ok:false, msg:'PIN이 달라요'};
     if(row.expires_at && Date.parse(row.expires_at) < Date.now())
       return {ok:false, msg:'만료된 코드예요 — 관리자에게 문의하세요'};
-    CURRENT=code; localStorage.setItem(SESS,code);
-    return {ok:true, expiresAt:row.expires_at||null};
+    CURRENT=code;   // 세션 저장은 로그인 완전히 끝난 뒤(로그인 유지 체크 시)
+    return {ok:true, expiresAt:row.expires_at||null, mustSetPin:!!row.must_set_pin};
   }
 
   /* ---- 로그인 화면 ---- */
@@ -1138,6 +1138,7 @@ render();
           <input class="idf-pin" maxlength="1" inputmode="numeric" type="password" autocomplete="off">
         </div>
         <div class="idf-err" id="idfErr"></div>
+        <label class="idf-remember"><input type="checkbox" id="idfRemember" checked><span>로그인 유지</span></label>
         <button id="idfGo">들어가기</button>
       </div>`;
     document.body.appendChild(ov);
@@ -1164,9 +1165,13 @@ render();
     });
 
     const go=async()=>{
+      const remember=document.getElementById('idfRemember').checked;
       const b=document.getElementById('idfGo'); b.disabled=true; b.textContent='확인 중…';
       const r=await tryLogin(code.value, getPin());
-      if(r.ok){ ov.classList.add('done'); setTimeout(()=>ov.remove(),260); addLogoutBtn(r.expiresAt);
+      if(r.ok){
+        if(r.mustSetPin){ ov.remove(); showSetPin(remember, r.expiresAt); return; }
+        if(remember) localStorage.setItem(SESS, CURRENT); else localStorage.removeItem(SESS);
+        ov.classList.add('done'); setTimeout(()=>ov.remove(),260); addLogoutBtn(r.expiresAt);
         try{ await loadCloud(CURRENT); }catch(e){ toast('불러오기 실패 — 새로고침 해주세요'); } }
       else{ document.getElementById('idfErr').textContent=r.msg; b.disabled=false; b.textContent='들어가기';
         const card=ov.querySelector('.idf-card'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
@@ -1174,6 +1179,52 @@ render();
     };
     document.getElementById('idfGo').onclick=go;
     setTimeout(()=>code.focus(),320);
+  }
+
+  /* 첫 로그인 — 개인이 자기 PIN 설정 (두 번 입력 확인) */
+  function showSetPin(remember, expiresAt){
+    const ov=document.createElement('div'); ov.id='idfLogin';
+    const rowHtml='<div class="idf-pins">'+Array(4).fill('<input class="idf-pin" maxlength="1" inputmode="numeric" type="password" autocomplete="off">').join('')+'</div>';
+    ov.innerHTML=`
+      <div class="idf-card">
+        <div class="idf-logo">${LOGO_SVG}</div>
+        <div class="idf-t">비밀번호 설정</div>
+        <div class="idf-s">처음 오셨네요 · 나만의 PIN 4자리를 정하세요</div>
+        <div class="sp-label">새 PIN</div>${rowHtml}
+        <div class="sp-label">다시 한 번</div>${rowHtml}
+        <div class="idf-err" id="spErr"></div>
+        <button id="spGo">설정 완료</button>
+      </div>`;
+    document.body.appendChild(ov);
+    const rows=[...ov.querySelectorAll('.idf-pins')].map(r=>[...r.querySelectorAll('.idf-pin')]);
+    const [row1,row2]=rows;
+    function wire(row,next){
+      row.forEach((p,i)=>{
+        p.addEventListener('input',()=>{ p.value=p.value.replace(/[^0-9]/g,'');
+          if(p.value){ p.classList.add('filled'); pop(p); buzz(); if(i<3) row[i+1].focus(); else if(next) next.focus(); }
+          else p.classList.remove('filled'); });
+        p.addEventListener('keydown',e=>{ if(e.key==='Backspace'&&!p.value&&i>0){ e.preventDefault(); row[i-1].focus(); row[i-1].value=''; row[i-1].classList.remove('filled'); }
+          else if(e.key==='Enter') go(); });
+      });
+    }
+    wire(row1,row2[0]); wire(row2,null);
+    const go=async()=>{
+      const p1=row1.map(x=>x.value).join(''), p2=row2.map(x=>x.value).join('');
+      const err=document.getElementById('spErr');
+      if(p1.length<4){ err.textContent='새 PIN 4자리를 입력하세요'; return; }
+      if(p1!==p2){ err.textContent='두 번 입력한 PIN이 서로 달라요'; buzz();
+        const card=ov.querySelector('.idf-card'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+        row2.forEach(x=>{x.value='';x.classList.remove('filled')}); row2[0].focus(); return; }
+      const b=document.getElementById('spGo'); b.disabled=true; b.textContent='설정 중…';
+      try{ await sb.from('idea_folder_users').update({pin:p1, must_set_pin:false}).eq('code',CURRENT); }
+      catch(e){ err.textContent='저장 실패 — 다시 시도'; b.disabled=false; b.textContent='설정 완료'; return; }
+      if(remember) localStorage.setItem(SESS, CURRENT); else localStorage.removeItem(SESS);
+      ov.classList.add('done'); setTimeout(()=>ov.remove(),260); addLogoutBtn(expiresAt);
+      toast('비밀번호 설정 완료 ✓');
+      try{ await loadCloud(CURRENT); }catch(e){ toast('불러오기 실패 — 새로고침 해주세요'); }
+    };
+    document.getElementById('spGo').onclick=go;
+    setTimeout(()=>row1[0].focus(),320);
   }
 
   function addLogoutBtn(expiresAt){
@@ -1239,6 +1290,10 @@ render();
       box-shadow:0 6px 20px rgba(200,255,0,.25);transition:transform .08s}
     #idfLogin #idfGo:active{transform:scale(.97)}
     #idfLogin #idfGo:disabled{opacity:.5}
+    #idfLogin .idf-remember{display:flex;align-items:center;justify-content:center;gap:8px;
+      margin:-2px 0 14px;color:#8a8a86;font-size:13px;cursor:pointer;user-select:none}
+    #idfLogin .idf-remember input{width:17px;height:17px;accent-color:#C8FF00;cursor:pointer}
+    #idfLogin .sp-label{font-size:12px;color:#8a8a86;text-align:center;margin:6px 0 8px;font-weight:600}
     /* ══ 오프닝 인트로 ══ */
     #idfIntro{position:fixed;inset:0;z-index:10050;background:#050505;overflow:hidden;
       display:flex;align-items:center;justify-content:center}
@@ -1357,6 +1412,7 @@ render();
       <div class="adm-card">
         <div class="adm-t2">🔑 비밀번호 변경</div>
         <input id="admNewPw" type="password" placeholder="새 비밀번호">
+        <input id="admNewPw2" type="password" placeholder="새 비밀번호 다시 입력">
         <button class="adm-btn" id="admPwSave">변경</button>
       </div>
 
@@ -1387,10 +1443,13 @@ render();
 
     document.getElementById('admPwSave').onclick=async()=>{
       const v=document.getElementById('admNewPw').value.trim();
+      const v2=document.getElementById('admNewPw2').value.trim();
       if(v.length<2){ toast('새 비밀번호를 입력하세요'); return; }
+      if(v!==v2){ toast('두 번 입력한 비밀번호가 달라요'); return; }
       const {error}=await sb.from('idea_folder_users').update({pin:v}).eq('code',ADMIN_ID);
       if(error){ toast('변경 실패'); return; }
-      document.getElementById('admNewPw').value=''; toast('비밀번호 변경됨 ✓');
+      document.getElementById('admNewPw').value=''; document.getElementById('admNewPw2').value='';
+      toast('비밀번호 변경됨 ✓');
     };
 
     let DUR=6;
@@ -1513,8 +1572,8 @@ render();
         const act=btn.dataset.act;
         if(act==='ext6') await extendCode(code,6);
         else if(act==='ext12') await extendCode(code,12);
-        else if(act==='pin'){ const np=(prompt('새 PIN (숫자 4자리)')||'').trim();
-          if(np){ await sb.from('idea_folder_users').update({pin:np}).eq('code',code); toast('PIN 변경됨 ✓'); } }
+        else if(act==='pin'){ const np=(prompt('임시 PIN (숫자 4자리) — 사용자가 첫 로그인 때 새로 정합니다')||'').trim();
+          if(np){ await sb.from('idea_folder_users').update({pin:np, must_set_pin:true}).eq('code',code); toast('PIN 재설정됨 ✓'); } }
         else if(act==='del'){ if(confirm(code+' 계정을 삭제할까요?')){
           await sb.from('idea_folder_users').delete().eq('code',code); toast('삭제됨'); } }
         refreshList();
@@ -1603,6 +1662,7 @@ render();
         localStorage.removeItem(SESS); try{ localStorage.removeItem(KEY); }catch(e){}
         CURRENT=null; showLogin(); return;
       }
+      if(data.must_set_pin){ showSetPin(true, data.expires_at||null); return; }
       addLogoutBtn(data.expires_at||null);
       await loadCloud(code);
     }catch(e){ addLogoutBtn(); toast('오프라인 — 저장된 내용 표시'); }
