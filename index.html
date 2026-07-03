@@ -1285,11 +1285,11 @@ render();
     #idfLogin .idf-card.shake{animation:idfShake .4s}
     @keyframes idfShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
     #idfLogin .idf-err{color:#ff6b6b;font-size:13px;min-height:18px;margin-bottom:8px}
-    #idfLogin #idfGo{width:100%;background:#C8FF00;color:#0D0D0D;border:none;border-radius:13px;
+    #idfLogin #idfGo,#idfLogin #spGo{width:100%;background:#C8FF00;color:#0D0D0D;border:none;border-radius:13px;
       font-size:16px;font-weight:800;padding:16px;cursor:pointer;font-family:inherit;
-      box-shadow:0 6px 20px rgba(200,255,0,.25);transition:transform .08s}
-    #idfLogin #idfGo:active{transform:scale(.97)}
-    #idfLogin #idfGo:disabled{opacity:.5}
+      box-shadow:0 6px 20px rgba(200,255,0,.25);transition:transform .08s;margin-top:6px}
+    #idfLogin #idfGo:active,#idfLogin #spGo:active{transform:scale(.97)}
+    #idfLogin #idfGo:disabled,#idfLogin #spGo:disabled{opacity:.5}
     #idfLogin .idf-remember{display:flex;align-items:center;justify-content:center;gap:8px;
       margin:-2px 0 14px;color:#8a8a86;font-size:13px;cursor:pointer;user-select:none}
     #idfLogin .idf-remember input{width:17px;height:17px;accent-color:#C8FF00;cursor:pointer}
@@ -1377,8 +1377,8 @@ render();
       <button class="adm-x" id="admX">×</button>
       <div class="adm-h">관리자 페이지</div>
       <div class="adm-sub">아이디와 비밀번호</div>
-      <input id="admId" placeholder="아이디" autocomplete="off">
-      <input id="admPw" type="password" placeholder="비밀번호" autocomplete="off">
+      <input id="admId" placeholder="아이디" autocomplete="off" autocapitalize="off" name="idf-admin-id" readonly onfocus="this.removeAttribute('readonly')">
+      <input id="admPw" type="password" placeholder="비밀번호" autocomplete="new-password" name="idf-admin-pw" readonly onfocus="this.removeAttribute('readonly')">
       <div class="adm-err" id="admErr"></div>
       <button class="adm-go" id="admGo">들어가기</button></div>`;
     document.getElementById('admX').onclick=closeAdmin;
@@ -1411,8 +1411,8 @@ render();
 
       <div class="adm-card">
         <div class="adm-t2">🔑 비밀번호 변경</div>
-        <input id="admNewPw" type="password" placeholder="새 비밀번호">
-        <input id="admNewPw2" type="password" placeholder="새 비밀번호 다시 입력">
+        <input id="admNewPw" type="password" placeholder="새 비밀번호" autocomplete="new-password" name="idf-newpw" readonly onfocus="this.removeAttribute('readonly')">
+        <input id="admNewPw2" type="password" placeholder="새 비밀번호 다시 입력" autocomplete="new-password" name="idf-newpw2" readonly onfocus="this.removeAttribute('readonly')">
         <button class="adm-btn" id="admPwSave">변경</button>
       </div>
 
