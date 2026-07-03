@@ -374,7 +374,7 @@
   .d-del{background:var(--surface-2);color:var(--link)}
 
   .toast{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--lime);color:#0D0D0D;padding:11px 20px;border-radius:22px;font-weight:700;font-size:14px;z-index:80;
+    background:var(--lime);color:#0D0D0D;padding:11px 20px;border-radius:22px;font-weight:700;font-size:14px;z-index:10100;
     opacity:0;pointer-events:none;transition:.25s;box-shadow:0 6px 20px rgba(0,0,0,.4)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -1140,8 +1140,10 @@ render();
         <div class="idf-err" id="idfErr"></div>
         <label class="idf-remember"><input type="checkbox" id="idfRemember" checked><span>로그인 유지</span></label>
         <button id="idfGo">들어가기</button>
+        <a class="idf-link" id="idfFirst">처음이신가요? 비밀번호 설정 →</a>
       </div>`;
     document.body.appendChild(ov);
+    document.getElementById('idfFirst').onclick=()=>{ ov.remove(); showFirstTime(); };
     const code=document.getElementById('idfCode');
     const pins=[...ov.querySelectorAll('.idf-pin')];
     const getPin=()=>pins.map(p=>p.value).join('');
@@ -1178,6 +1180,41 @@ render();
         buzz(); pins.forEach(p=>{ p.value=''; p.classList.remove('filled'); }); pins[0].focus(); }
     };
     document.getElementById('idfGo').onclick=go;
+    setTimeout(()=>code.focus(),320);
+  }
+
+  /* 처음이신가요 — 코드만 입력해 첫 비밀번호 설정으로 진입 */
+  function showFirstTime(){
+    const ov=document.createElement('div'); ov.id='idfLogin';
+    ov.innerHTML=`
+      <div class="idf-card">
+        <div class="idf-logo">${LOGO_SVG}</div>
+        <div class="idf-t">비밀번호 설정</div>
+        <div class="idf-s">받으신 코드를 입력하세요</div>
+        <input id="ftCode" maxlength="6" placeholder="코드 6자리" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <div class="idf-err" id="ftErr"></div>
+        <button id="idfGo" style="width:100%">다음</button>
+        <a class="idf-link" id="ftBack">← 로그인으로 돌아가기</a>
+      </div>`;
+    document.body.appendChild(ov);
+    const code=document.getElementById('ftCode');
+    code.addEventListener('input',()=>{ code.value=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); });
+    const go=async()=>{
+      const c=code.value.trim().toUpperCase(); const err=document.getElementById('ftErr');
+      if(c.length<1){ err.textContent='코드를 입력하세요'; return; }
+      const b=document.getElementById('idfGo'); b.disabled=true; b.textContent='확인 중…';
+      let row;
+      try{ const {data,error}=await sb.from('idea_folder_users').select('*').eq('code',c).maybeSingle(); if(error) throw error; row=data; }
+      catch(e){ err.textContent='연결 오류 — 잠시 후 다시'; b.disabled=false; b.textContent='다음'; return; }
+      const reset=()=>{ b.disabled=false; b.textContent='다음'; };
+      if(!row || row.is_admin){ err.textContent='없는 코드예요'; reset(); return; }
+      if(row.expires_at && Date.parse(row.expires_at)<Date.now()){ err.textContent='만료된 코드예요 — 관리자에게 문의하세요'; reset(); return; }
+      if(!row.must_set_pin){ err.textContent='이미 설정된 코드예요 · 코드와 PIN으로 로그인하세요'; reset(); return; }
+      CURRENT=c; ov.remove(); showSetPin(true, row.expires_at||null);
+    };
+    document.getElementById('idfGo').onclick=go;
+    code.addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
+    document.getElementById('ftBack').onclick=()=>{ ov.remove(); showLogin(); };
     setTimeout(()=>code.focus(),320);
   }
 
@@ -1294,6 +1331,9 @@ render();
       margin:-2px 0 14px;color:#8a8a86;font-size:13px;cursor:pointer;user-select:none}
     #idfLogin .idf-remember input{width:17px;height:17px;accent-color:#C8FF00;cursor:pointer}
     #idfLogin .sp-label{font-size:12px;color:#8a8a86;text-align:center;margin:6px 0 8px;font-weight:600}
+    #idfLogin .idf-link{display:block;margin-top:16px;color:#8a8a86;font-size:13px;font-weight:600;
+      text-decoration:none;cursor:pointer;text-align:center;transition:color .15s}
+    #idfLogin .idf-link:hover{color:#C8FF00}
     /* ══ 오프닝 인트로 ══ */
     #idfIntro{position:fixed;inset:0;z-index:10050;background:#050505;overflow:hidden;
       display:flex;align-items:center;justify-content:center}
@@ -1442,14 +1482,18 @@ render();
     document.getElementById('admX2').onclick=closeAdmin;
 
     document.getElementById('admPwSave').onclick=async()=>{
+      const btn=document.getElementById('admPwSave');
       const v=document.getElementById('admNewPw').value.trim();
       const v2=document.getElementById('admNewPw2').value.trim();
       if(v.length<2){ toast('새 비밀번호를 입력하세요'); return; }
       if(v!==v2){ toast('두 번 입력한 비밀번호가 달라요'); return; }
+      btn.disabled=true; btn.textContent='변경 중…';
       const {error}=await sb.from('idea_folder_users').update({pin:v}).eq('code',ADMIN_ID);
-      if(error){ toast('변경 실패'); return; }
+      if(error){ toast('변경 실패'); btn.disabled=false; btn.textContent='변경'; return; }
       document.getElementById('admNewPw').value=''; document.getElementById('admNewPw2').value='';
-      toast('비밀번호 변경됨 ✓');
+      toast('관리자 비밀번호 변경됨 ✓');
+      btn.classList.add('adm-ok'); btn.textContent='✓ 변경되었습니다';
+      setTimeout(()=>{ btn.classList.remove('adm-ok'); btn.textContent='변경'; btn.disabled=false; }, 1900);
     };
 
     let DUR=6;
@@ -1494,16 +1538,16 @@ render();
         <div class="cc-brand">아이디어 폴더</div>
         <div class="cc-label">로그인 코드</div>
         <div class="cc-code">${acc.code}</div>
-        <div class="cc-row"><span>PIN</span><b>${acc.pin}</b></div>
         <div class="cc-row"><span>기간</span><b class="cc-exp">${exp}</b></div>
         ${acc.name?`<div class="cc-name">${esc(acc.name)}</div>`:''}
+        <div class="cc-guide">첫 접속 시 <b>“처음이신가요?”</b> → 코드 입력 →<br>본인 비밀번호를 직접 설정하세요</div>
       </div>
       <div class="cc-actions">
         <button class="adm-btn" data-cc="copy">텍스트 복사</button>
         <button class="adm-btn adm-primary" data-cc="img">📸 이미지 저장</button>
       </div>`;
     wrap.querySelector('[data-cc="copy"]').onclick=()=>{
-      const t=`[아이디어 폴더 로그인]\n코드: ${acc.code}\nPIN: ${acc.pin}\n기간: ${exp}`;
+      const t=`[아이디어 폴더]\n로그인 코드: ${acc.code}\n기간: ${exp}\n\n※ 첫 접속: 앱에서 "처음이신가요? 비밀번호 설정" → 코드 입력 → 본인 비밀번호 설정`;
       if(navigator.clipboard) navigator.clipboard.writeText(t);
       toast('복사됨 ✓ — 카톡에 붙여넣기');
     };
@@ -1519,16 +1563,17 @@ render();
     g.strokeStyle='rgba(200,255,0,.55)'; g.lineWidth=3; roundRect(g,40,40,W-80,H-80,36); g.stroke();
     g.textAlign='center';
     g.fillStyle='#C8FF00'; g.font='700 36px '+F; g.fillText('아이디어 폴더', W/2, 150);
-    g.fillStyle='#8a8a86'; g.font='500 22px '+F; g.fillText('로그인 코드', W/2, 290);
-    g.fillStyle='#f2f2f0'; g.font='800 104px '+F; g.fillText(acc.code, W/2, 400);
-    g.fillStyle='#8a8a86'; g.font='500 24px '+F; g.textAlign='right'; g.fillText('PIN', W/2-24, 510);
-    g.fillStyle='#f2f2f0'; g.font='800 46px '+F; g.textAlign='left';  g.fillText(acc.pin, W/2+24, 514);
+    g.fillStyle='#8a8a86'; g.font='500 22px '+F; g.fillText('로그인 코드', W/2, 300);
+    g.fillStyle='#f2f2f0'; g.font='800 108px '+F; g.fillText(acc.code, W/2, 420);
     const exp = acc.expires_at ? ('만료 '+fmtDate(acc.expires_at)) : '평생 이용';
-    g.fillStyle='#8a8a86'; g.font='500 24px '+F; g.textAlign='right'; g.fillText('기간', W/2-24, 590);
-    g.fillStyle='#C8FF00'; g.font='700 30px '+F; g.textAlign='left';  g.fillText(exp, W/2+24, 592);
-    if(acc.name){ g.fillStyle='#5a5a56'; g.font='500 24px '+F; g.textAlign='center'; g.fillText(acc.name, W/2, 680); }
-    g.fillStyle='#5a5a56'; g.font='500 20px '+F; g.textAlign='center';
-    g.fillText('앱에서 이 코드와 PIN으로 로그인하세요', W/2, H-100);
+    g.fillStyle='#8a8a86'; g.font='500 24px '+F; g.textAlign='right'; g.fillText('기간', W/2-24, 520);
+    g.fillStyle='#C8FF00'; g.font='700 30px '+F; g.textAlign='left';  g.fillText(exp, W/2+24, 522);
+    if(acc.name){ g.fillStyle='#5a5a56'; g.font='500 24px '+F; g.textAlign='center'; g.fillText(acc.name, W/2, 610); }
+    g.textAlign='center';
+    g.fillStyle='#8a8a86'; g.font='600 22px '+F; g.fillText('첫 접속 방법', W/2, 700);
+    g.fillStyle='#5a5a56'; g.font='500 20px '+F;
+    g.fillText('앱에서 "처음이신가요? 비밀번호 설정" →', W/2, 740);
+    g.fillText('코드 입력 → 본인 비밀번호를 직접 설정', W/2, 772);
     c.toBlob(b=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(b);
       a.download='아이디어폴더_코드_'+acc.code+'.png'; a.click();
       toast('이미지 저장됨 ✓'); },'image/png');
@@ -1616,6 +1661,7 @@ render();
     #idfAdmin .adm-btn{background:#1c1c1c;border:1px solid #333;color:#f2f2f0;border-radius:10px;
       padding:11px 14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
     #idfAdmin .adm-primary{background:#C8FF00;color:#0D0D0D;border-color:#C8FF00}
+    #idfAdmin .adm-btn.adm-ok{background:#C8FF00;color:#0D0D0D;border-color:#C8FF00;transition:.2s}
     #idfAdmin .adm-dur{display:flex;gap:8px;margin-bottom:12px}
     #idfAdmin .adm-dur button{flex:1;background:#1c1c1c;border:1px solid #333;color:#8a8a86;
       border-radius:10px;padding:11px 0;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
@@ -1632,6 +1678,9 @@ render();
     #idfAdmin .cc-code{color:#f2f2f0;font-size:44px;font-weight:800;letter-spacing:.08em;margin-bottom:12px}
     #idfAdmin .cc-row{display:flex;justify-content:space-between;color:#8a8a86;font-size:14px;padding:5px 4px;border-top:1px solid #232323}
     #idfAdmin .cc-row b{color:#f2f2f0}
+    #idfAdmin .cc-guide{margin-top:14px;padding-top:12px;border-top:1px solid #232323;
+      color:#8a8a86;font-size:12px;line-height:1.5}
+    #idfAdmin .cc-guide b{color:#C8FF00}
     #idfAdmin .cc-row b.cc-exp{color:#C8FF00}
     #idfAdmin .cc-name{color:#5a5a56;font-size:13px;margin-top:10px}
     #idfAdmin .cc-actions{display:flex;gap:8px;margin-top:12px}
