@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>카드 시안 · 아이디어 노트</title>
+<style>
+  :root{--bg:#0D0D0D;--surface:#151515;--surface-2:#1c1c1c;--line:#2a2a2a;--ink:#f2f2f0;--ink-dim:#8a8a86;--ink-faint:#5a5a56;
+    --lime:#C8FF00;--idea:#c88bff;--link:#ff9d5c;--gold:#ffd24a;
+    --font:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard','Segoe UI',sans-serif;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.5;padding:0 0 40px}
+  .wrap{max-width:520px;margin:0 auto;padding:0 16px}
+  .note{background:rgba(200,255,0,.08);border-bottom:1px solid rgba(200,255,0,.25);color:var(--lime);font-size:12px;text-align:center;padding:9px;font-weight:700}
+  h2{font-size:20px;font-weight:800;margin:20px 0 4px;letter-spacing:-.02em}
+  .sub{font-size:13px;color:var(--ink-dim);margin-bottom:16px}
+
+  /* ── 담기(composer) ── */
+  .comp{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:26px}
+  .comp-t{font-size:13px;font-weight:800;color:var(--ink-dim);text-align:center;margin-bottom:10px}
+  .types{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+  .types button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:20px;
+    padding:8px 15px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+  .types button.on{background:rgba(200,255,0,.12);border-color:var(--lime);color:var(--lime)}
+
+  /* 미리보기 카드(라이브) */
+  .pv-wrap{display:flex;justify-content:center;margin-bottom:14px}
+  .pcard{width:210px;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);position:relative;cursor:pointer}
+  .pcard .media{position:relative;aspect-ratio:4/5;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .pcard .media.empty{border:1.5px dashed #383834;background:var(--surface)}
+  .pcard .ph-add{text-align:center;color:var(--ink-faint)}
+  .pcard .ph-add .p{width:46px;height:46px;border-radius:50%;background:var(--lime);color:#0D0D0D;font-size:26px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 8px;box-shadow:0 0 18px rgba(200,255,0,.4)}
+  .pcard .ph-add b{color:var(--ink);font-size:14px}
+  .pcard .photo{position:absolute;inset:0;background-size:cover;background-position:center}
+  .pcard .grad{position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.35),transparent);z-index:1}
+  .pcard .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 12px;z-index:2;color:#fff;font-weight:700;font-size:15px;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .pcard .cap.empty{color:rgba(255,255,255,.35);font-weight:500}
+  .pcard .views{position:absolute;top:9px;right:9px;z-index:3;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
+    color:#fff;font-size:12px;font-weight:800;border-radius:20px;padding:4px 10px;display:none;align-items:center;gap:4px}
+  .pcard .views.on{display:inline-flex}
+  .pcard .fav{position:absolute;top:8px;left:8px;z-index:3;background:rgba(0,0,0,.45);border:none;width:26px;height:26px;border-radius:8px;color:#fff;font-size:14px;cursor:pointer;backdrop-filter:blur(4px)}
+  .pcard .memobtn{position:absolute;left:9px;bottom:9px;z-index:3;background:rgba(200,139,255,.9);color:#0D0D0D;border:none;
+    font-size:11px;font-weight:800;border-radius:14px;padding:4px 10px;cursor:pointer;display:none}
+  .pcard .memobtn.on{display:inline-block}
+
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12px;color:var(--ink-dim);font-weight:700;margin-bottom:6px}
+  .field input,.field textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
+    color:var(--ink);font-size:14px;padding:11px 13px;outline:none;font-family:inherit;resize:none}
+  .field input:focus,.field textarea:focus{border-color:rgba(200,255,0,.5)}
+  .btnrow{display:flex;flex-wrap:wrap;gap:7px}
+  .btnrow button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:16px;
+    padding:8px 13px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+  .btnrow button.on{background:rgba(200,255,0,.14);border-color:var(--lime);color:var(--lime)}
+  .save{width:100%;background:var(--lime);color:#0D0D0D;border:none;border-radius:12px;font-size:15px;font-weight:800;
+    padding:14px;cursor:pointer;font-family:inherit;margin-top:6px}
+  .hint{font-size:11px;color:var(--ink-faint);margin-top:5px}
+
+  /* ── 저장된 카드 그리드 ── */
+  .cat-h{display:flex;align-items:center;gap:8px;margin:22px 2px 12px}
+  .cat-h b{font-size:15px;font-weight:800}
+  .cat-h .n{font-size:11px;font-weight:800;color:var(--lime);background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);border-radius:11px;padding:2px 8px}
+  .cat-h .line{flex:1;height:1px;background:var(--line)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .gc{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);position:relative}
+  .gc .media{position:relative;aspect-ratio:4/5;overflow:hidden}
+  .gc .photo{position:absolute;inset:0;background-size:cover;background-position:center}
+  .gc .grad{position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);z-index:1}
+  .gc .cap{position:absolute;left:0;right:0;bottom:0;padding:11px 11px;z-index:2;color:#fff;font-weight:700;font-size:13.5px;line-height:1.3;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .gc .views{position:absolute;top:8px;right:8px;z-index:3;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);color:#fff;font-size:11px;font-weight:800;border-radius:14px;padding:3px 8px}
+  .gc .fav{position:absolute;top:7px;left:7px;z-index:3;background:rgba(0,0,0,.45);width:24px;height:24px;border-radius:7px;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .gc .memobtn{position:absolute;left:8px;bottom:8px;z-index:3;background:rgba(200,139,255,.9);color:#0D0D0D;font-size:10px;font-weight:800;border-radius:12px;padding:3px 8px;border:none;cursor:pointer}
+  .gc .memo-pop{position:absolute;inset:0;z-index:4;background:rgba(13,13,13,.94);padding:12px;font-size:12px;color:var(--ink);display:none;overflow:auto}
+  .gc .memo-pop.on{display:block}
+  .gc .memo-pop .x{position:absolute;top:6px;right:8px;cursor:pointer;color:var(--ink-dim)}
+</style>
+</head>
+<body>
+<div class="note">🎬 컨텐츠 카드 시안 — 채워보세요 (제목 입력 · 사진 · 조회수 눌러보기)</div>
+<div class="wrap">
+  <h2>담기 — 채우면 바로 반영</h2>
+  <div class="sub">사진 넣고 제목 쓰면 카드가 실시간으로 채워져요. 유형 버튼은 위·가운데.</div>
+
+  <div class="comp">
+    <div class="comp-t">유형</div>
+    <div class="types" id="types">
+      <button data-t="content" class="on">🎬 컨텐츠</button>
+      <button data-t="idea">💡 아이디어</button>
+    </div>
+
+    <div class="pv-wrap">
+      <div class="pcard" id="pcard">
+        <button class="fav">☆</button>
+        <span class="views" id="pvViews">👁 <span id="pvViewsN"></span></span>
+        <div class="media empty" id="pvMedia">
+          <div class="ph-add" id="pvAdd"><div class="p">+</div><b>사진 담기</b></div>
+          <div class="grad" style="display:none"></div>
+        </div>
+        <div class="cap empty" id="pvCap">여기에 제목이 들어가요</div>
+        <button class="memobtn" id="pvMemo">＋ 메모</button>
+      </div>
+    </div>
+
+    <div class="field"><label>제목 · 문구 (카드 하단에 보여요)</label>
+      <input id="inTitle" placeholder="예: 앞머리 자르면 안 되는 사람"></div>
+    <div class="field"><label>사진</label>
+      <div class="btnrow"><button id="btnPhoto">🖼 샘플 사진 넣기</button><button id="btnPhoto2">🖼 다른 사진</button><button id="btnNoPhoto">사진 빼기</button></div></div>
+
+    <div class="field" id="viewsField"><label>조회수 (컨텐츠 · 누르면 우상단에 배지)</label>
+      <div class="btnrow" id="viewsRow">
+        <button data-v="10만">10만</button><button data-v="30만">30만</button><button data-v="50만">50만</button>
+        <button data-v="100만">100만</button><button data-v="300만">300만</button><button data-v="500만+">500만+</button>
+        <button data-v="">없음</button>
+      </div></div>
+
+    <div class="field" id="memoField" style="display:none"><label>메모 (아이디어 · 있으면 카드에 ＋메모 버튼)</label>
+      <textarea id="inMemo" rows="2" placeholder="이 아이디어 실행 방법·참고 메모…"></textarea></div>
+
+    <button class="save" id="saveBtn">＋ 카드로 담기</button>
+    <div class="hint">※ 시안이라 저장은 이 화면 안에서만 돼요. 마음에 들면 실제 앱에 넣을게요.</div>
+  </div>
+
+  <div class="cat-h"><b id="gridTitle">🎬 후킹 아이디어</b><span class="n" id="gridN">2</span><span class="line"></span></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+  const PHOTOS=[
+    'linear-gradient(160deg,#e8975a,#3a1728)',
+    'linear-gradient(160deg,#5a7de8,#161a3a)',
+    'linear-gradient(160deg,#6ad06a,#12331a)',
+    'linear-gradient(160deg,#c88bff,#2a163a)'
+  ];
+  let state={type:'content',title:'',photo:null,views:'',memo:''};
+  const $=id=>document.getElementById(id);
+
+  function renderPreview(){
+    // photo
+    const media=$('pvMedia'), add=$('pvAdd'), grad=media.querySelector('.grad');
+    let ph=media.querySelector('.photo');
+    if(state.photo){ media.classList.remove('empty'); add.style.display='none'; grad.style.display='block';
+      if(!ph){ph=document.createElement('div');ph.className='photo';media.insertBefore(ph,media.firstChild);} ph.style.background=state.photo; ph.style.backgroundSize='cover'; }
+    else { media.classList.add('empty'); add.style.display=''; grad.style.display='none'; if(ph)ph.remove(); }
+    // caption
+    const cap=$('pvCap'); cap.textContent=state.title||'여기에 제목이 들어가요'; cap.classList.toggle('empty',!state.title);
+    // views
+    $('pvViews').classList.toggle('on', state.type==='content'&&!!state.views);
+    $('pvViewsN').textContent=state.views;
+    // memo btn
+    $('pvMemo').classList.toggle('on', state.type==='idea'&&!!state.memo.trim());
+  }
+  // types
+  $('types').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    state.type=b.dataset.t; $('types').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    $('viewsField').style.display=state.type==='content'?'':'none';
+    $('memoField').style.display=state.type==='idea'?'':'none';
+    $('gridTitle').textContent=state.type==='content'?'🎬 후킹 아이디어':'💡 콘텐츠 아이디어';
+    renderPreview();
+  });
+  $('inTitle').oninput=e=>{state.title=e.target.value;renderPreview();};
+  $('inMemo').oninput=e=>{state.memo=e.target.value;renderPreview();};
+  $('btnPhoto').onclick=()=>{state.photo=PHOTOS[0];renderPreview();};
+  $('btnPhoto2').onclick=()=>{state.photo=PHOTOS[1];renderPreview();};
+  $('btnNoPhoto').onclick=()=>{state.photo=null;renderPreview();};
+  $('viewsRow').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    state.views=b.dataset.v; $('viewsRow').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b&&b.dataset.v));
+    renderPreview();
+  });
+
+  // grid
+  const grid=$('grid');
+  function gcard(c){
+    const photo=c.photo?`<div class="photo" style="background:${c.photo};background-size:cover"></div><div class="grad"></div>`:'';
+    const views=c.views?`<span class="views">👁 ${c.views}</span>`:'';
+    const memo=c.memo?`<button class="memobtn" onclick="this.nextElementSibling.classList.add('on')">＋ 메모</button><div class="memo-pop"><span class="x" onclick="this.parentElement.classList.remove('on')">✕</span>${c.memo}</div>`:'';
+    const el=document.createElement('div'); el.className='gc';
+    el.innerHTML=`<div class="media">${photo}<button class="fav">☆</button>${views}<div class="cap">${c.title||''}</div>${memo}</div>`;
+    return el;
+  }
+  let cards=[
+    {title:'"이거 모르면 손해" 손실회피 제목',photo:PHOTOS[0],views:'120만',memo:''},
+    {title:'첫 3초에 결과부터 보여주고 시작',photo:PHOTOS[2],views:'54만',memo:''}
+  ];
+  function renderGrid(){ grid.innerHTML=''; cards.forEach(c=>grid.appendChild(gcard(c))); $('gridN').textContent=cards.length; }
+  renderGrid();
+
+  $('saveBtn').onclick=()=>{
+    if(!state.title&&!state.photo){alert('제목이나 사진을 넣어주세요');return;}
+    cards.unshift({title:state.title,photo:state.photo,views:state.type==='content'?state.views:'',memo:state.type==='idea'?state.memo:''});
+    renderGrid();
+    state={type:state.type,title:'',photo:null,views:'',memo:''};
+    $('inTitle').value='';$('inMemo').value='';
+    $('viewsRow').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    renderPreview();
+    window.scrollTo({top:document.querySelector('.cat-h').offsetTop-70,behavior:'smooth'});
+  };
+  renderPreview();
+</script>
+</body>
+</html>
