@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#0D0D0D">
 <title>아이디어 폴더 · 고객관점</title>
 <style>
+  /* 프리미엄 한글 폰트 (온라인시 로드, 오프라인은 시스템폰트 폴백) */
+  @font-face{font-family:'Pretendard';font-weight:45 920;font-style:normal;font-display:swap;
+    src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2') format('woff2')}
   :root{
     --bg:#0D0D0D; --surface:#151515; --surface-2:#1c1c1c; --line:#2a2a2a;
     --ink:#f2f2f0; --ink-dim:#8a8a86; --ink-faint:#5a5a56;
@@ -13,7 +16,7 @@
     --img:#7ab8ff; --link:#ff9d5c; --idea:#c88bff;
     --gold:#ffd24a;
     --radius:16px; --radius-sm:10px;
-    --font:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard','Segoe UI',sans-serif;
+    --font:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Segoe UI',sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
@@ -596,6 +599,21 @@
   .eb-stat{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:11px 8px;text-align:center}
   .eb-stat b{display:block;font-size:16px;font-weight:800;color:var(--lime);line-height:1.15}.eb-stat.dday b{color:var(--gold)}.eb-stat span{font-size:10.5px;color:var(--ink-faint);font-weight:600}
   .eb-stat.set,.eb-stat.dday{cursor:pointer}.eb-stat.set{border-style:dashed}
+  .eb-bookstat{font-size:12px;color:var(--ink-dim);text-align:center;margin:-6px 0 18px}.eb-bookstat b{color:var(--lime)}
+  .eb-navsec{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+  .eb-navsec button{background:var(--surface);border:1px solid var(--line);color:var(--ink-dim);border-radius:10px;font-size:13px;font-weight:700;padding:9px 14px;cursor:pointer;font-family:inherit}
+  .eb-navsec button:active{transform:scale(.96)}.eb-navsec .eb-navtoc{color:var(--ink-faint)}.eb-navsec span{flex:1}
+  .eb-pvcopy{text-align:center;color:var(--ink-faint);font-size:13px;margin:24px 0 40px;line-height:1.8}.eb-pvcopy span{font-size:12px}
+  .eb-preview.sepia .eb-pvcopy,.eb-preview.light .eb-pvcopy{color:#8a8272}
+  /* 완성 축하 */
+  .eb-celebrate{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden;animation:idfBgIn .3s ease}
+  .eb-cele-fall{position:absolute;inset:0;pointer-events:none}
+  .eb-cele-fall span{position:absolute;top:-40px;font-size:26px;animation:ebfall linear infinite}
+  @keyframes ebfall{0%{transform:translateY(-40px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(360deg);opacity:.7}}
+  .eb-cele-card{position:relative;z-index:2;background:var(--surface);border:1px solid rgba(var(--lime-rgb),.4);border-radius:22px;padding:30px 26px;text-align:center;max-width:340px;box-shadow:0 0 50px rgba(var(--lime-rgb),.2);animation:ebcele .4s cubic-bezier(.2,1.4,.3,1)}
+  @keyframes ebcele{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
+  .eb-cele-big{font-size:66px;line-height:1}.eb-cele-t{font-size:22px;font-weight:800;margin:12px 0 8px}.eb-cele-s{font-size:14px;color:var(--ink-dim);line-height:1.6;margin-bottom:22px}
+  .eb-cele-card .eb-primary{width:100%}.eb-cele-x{margin-top:12px;background:none;border:none;color:var(--ink-faint);font-size:13px;font-weight:600;cursor:pointer}
   .eb-today{background:var(--surface);border:1px solid rgba(var(--lime-rgb),.28);border-radius:16px;padding:16px;margin-bottom:18px;box-shadow:0 0 24px rgba(var(--lime-rgb),.05)}
   .eb-ttag{font-size:11px;font-weight:800;color:var(--lime);letter-spacing:.04em;margin-bottom:7px}.eb-ttitle{font-size:16px;font-weight:800;margin-bottom:3px}.eb-tchap{font-size:12px;color:var(--ink-faint);margin-bottom:13px}
   .eb-tgo{width:100%;background:var(--lime);color:#0D0D0D;border:none;border-radius:11px;font-weight:800;font-size:14.5px;padding:12px;cursor:pointer;font-family:inherit}
@@ -618,6 +636,9 @@
   .eb-editor .eb-back{margin:0}
   .eb-focusbtn{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:8px;font-size:12px;font-weight:700;padding:6px 10px;cursor:pointer;font-family:inherit}.eb-focusbtn.on{border-color:var(--lime);color:var(--lime)}
   .eb-save{margin-left:auto;font-size:11.5px;color:var(--ink-faint);font-weight:600}
+  .eb-savebtn{margin-left:auto;background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:9px;font-size:12.5px;font-weight:800;padding:7px 13px;cursor:pointer;font-family:inherit;transition:.15s}
+  .eb-savebtn:active{transform:scale(.95)}
+  .eb-savebtn.saved{background:rgba(var(--lime-rgb),.14);border-color:rgba(var(--lime-rgb),.45);color:var(--lime)}
   .eb-done{background:rgba(var(--lime-rgb),.12);border:1px solid rgba(var(--lime-rgb),.4);color:var(--lime);border-radius:9px;font-size:12.5px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}.eb-done.is-done{background:var(--lime);color:#0D0D0D;border-color:var(--lime)}
   .eb-edscroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .eb-edinner{max-width:680px;margin:0 auto;padding:22px 22px 130px}
@@ -635,9 +656,17 @@
   .eb-edbody .eb-divider{height:1px;background:var(--line);margin:26px 0;border:none}
   .eb-edbody ul{padding-left:22px}
   .eb-edbody .eb-imgph{background:var(--surface-2);border:1px dashed #3a3a36;border-radius:12px;padding:34px;text-align:center;color:var(--ink-faint);font-size:13px;margin:16px 0}
+  .eb-edbody .eb-img,.eb-pvsb .eb-img{display:block;max-width:100%;border-radius:10px;margin:16px 0}
+  .eb-coverpick{width:100%;background:var(--surface-2);border:1px dashed #3a3a36;color:var(--ink-dim);border-radius:12px;font-size:14px;font-weight:700;padding:22px;cursor:pointer;font-family:inherit}
+  .eb-coverprev{position:relative;width:120px;height:160px;border-radius:11px;background-size:cover;background-position:center;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+  .eb-coverdel{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border:none;color:#fff;font-size:11px;font-weight:700;border-radius:8px;padding:5px 9px;cursor:pointer;white-space:nowrap;font-family:inherit}
+  .eb-pvcover.hasimg .eb-pct{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+  .eb-pvcover.hasimg .eb-pcby{color:rgba(255,255,255,.85)}
+  .eb-preview.sepia .eb-pvcover.hasimg .eb-pct,.eb-preview.light .eb-pvcover.hasimg .eb-pct{color:#fff}
   .eb-edbody.eb-focusmode>*{opacity:.28;transition:opacity .2s}.eb-edbody.eb-focusmode>*.active{opacity:1}
   .eb-edtip{font-size:12px;color:var(--ink-faint);margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-  .eb-fmt{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(20,20,20,.98);border-top:1px solid var(--line);display:flex;gap:4px;padding:9px 10px calc(9px + env(safe-area-inset-bottom));overflow-x:auto}
+  .eb-fmt{position:sticky;top:0;z-index:12;flex:0 0 auto;background:rgba(20,20,20,.98);border-bottom:1px solid var(--line);display:flex;gap:4px;padding:9px 10px;overflow-x:auto;scrollbar-width:none}
+  .eb-fmt::-webkit-scrollbar{display:none}
   .eb-fmt button{flex:0 0 auto;background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:9px;font-size:13px;font-weight:700;padding:9px 12px;white-space:nowrap;cursor:pointer;font-family:inherit}
   .eb-fmt button:active{background:rgba(var(--lime-rgb),.15)}
   .eb-fmt .eb-mic.rec{background:#d9455f;border-color:#d9455f;color:#fff;animation:ebpulse 1s infinite}
@@ -647,6 +676,17 @@
   .eb-slash{position:fixed;z-index:95;background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(0,0,0,.6);width:180px}
   .eb-slash button{display:flex;width:100%;gap:10px;align-items:center;background:none;border:none;color:var(--ink);font-size:13.5px;font-weight:600;padding:9px 10px;border-radius:8px;text-align:left;cursor:pointer;font-family:inherit}
   .eb-slash button:hover{background:rgba(var(--lime-rgb),.12)}.eb-sic{width:18px;text-align:center}
+  /* 플로팅 선택 툴바 */
+  .eb-selbar{position:fixed;z-index:96;display:flex;gap:2px;background:#222;border:1px solid #3a3a3a;border-radius:11px;
+    padding:4px;box-shadow:0 8px 26px rgba(0,0,0,.55);opacity:0;transform:translateY(6px) scale(.94);pointer-events:none;
+    transition:opacity .13s ease,transform .13s cubic-bezier(.2,1.4,.3,1)}
+  .eb-selbar.on{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .eb-selbar button{background:none;border:none;color:var(--ink);font-size:13.5px;font-weight:700;padding:7px 11px;border-radius:8px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .eb-selbar button:active{background:rgba(var(--lime-rgb),.2);transform:scale(.92)}
+  /* 블록 삽입 미세 등장 */
+  .eb-edbody .eb-callout,.eb-edbody .eb-pulled,.eb-edbody .eb-imgph,.eb-edbody blockquote{animation:ebpop .22s ease}
+  @keyframes ebpop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .eb-save{transition:color .2s}
   /* sheets */
   .eb-sheet{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center}
   .eb-sheetc{width:100%;max-width:760px;background:#141414;border:1px solid #2a2a2a;border-radius:20px 20px 0 0;padding:18px 16px 26px;max-height:80vh;overflow-y:auto}
@@ -654,6 +694,9 @@
   .eb-mat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:9px}
   .eb-matsrc{font-size:11px;color:var(--idea);font-weight:700;margin-bottom:5px}.eb-matt{font-size:14px;font-weight:800;margin-bottom:3px}.eb-matb{font-size:12.5px;color:var(--ink-dim);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .eb-send{background:rgba(var(--lime-rgb),.1);border:1px solid rgba(var(--lime-rgb),.35);color:var(--lime);border-radius:9px;font-size:12px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}
+  .eb-histrow{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+  .eb-histmain{flex:1;min-width:0}.eb-histt{font-size:11.5px;color:var(--ink-faint);font-weight:700;margin-bottom:3px}
+  .eb-histp{font-size:13px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .eb-pickb{font-size:12px;color:var(--ink-faint);font-weight:700;margin:12px 2px 7px}
   .eb-picks{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer}
   .eb-pickc{font-size:11px;color:var(--ink-faint)}.eb-pickt{font-size:14px;font-weight:700}
@@ -665,7 +708,36 @@
   .eb-pvtop{position:sticky;top:0;display:flex;align-items:center;gap:8px;padding:12px 14px;background:rgba(10,10,10,.95);border-bottom:1px solid var(--line);z-index:2}
   .eb-preview .eb-back{margin:0}
   .eb-pvth{background:var(--surface);border:1px solid var(--line);color:var(--ink-dim);border-radius:9px;font-size:12px;font-weight:700;padding:7px 11px;cursor:pointer;font-family:inherit}
-  .eb-pvpdf{background:var(--lime);color:#0D0D0D;border:none;border-radius:9px;font-size:12px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}
+  .eb-pvpdf{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:9px;font-size:12px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}
+  .eb-pvepub{background:var(--lime);color:#0D0D0D;border:none;border-radius:9px;font-size:12px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}
+  .eb-pvwrap{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* 발행 설명 시트 */
+  .eb-info{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:14px 15px;margin-bottom:11px}
+  .eb-infoh{font-size:14.5px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .eb-info p{font-size:13px;color:var(--ink-dim);line-height:1.65;margin:0}
+  .eb-info b{color:var(--ink)}
+  .eb-info code{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12px;color:var(--lime)}
+  .eb-infot{display:block;margin-top:7px;font-size:12px;color:var(--ink-faint)}
+  .eb-badge{font-size:10.5px;font-weight:800;color:#0D0D0D;background:var(--lime);border-radius:20px;padding:2px 8px}
+  /* 워터마크 설정 */
+  .eb-wmbox{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-top:16px}
+  .eb-wmhead{display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:800}
+  .eb-wmdesc{font-size:11.5px;color:var(--ink-faint);line-height:1.6;margin:8px 0 10px}.eb-wmdesc b{color:var(--ink-dim)}
+  .eb-toggle{position:relative;display:inline-block;width:44px;height:25px;flex:0 0 auto}
+  .eb-toggle input{opacity:0;width:0;height:0}
+  .eb-tk{position:absolute;inset:0;background:#333;border-radius:20px;transition:.2s}
+  .eb-tk:before{content:"";position:absolute;width:19px;height:19px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .eb-toggle input:checked+.eb-tk{background:var(--lime)}
+  .eb-toggle input:checked+.eb-tk:before{transform:translateX(19px)}
+  .eb-wmadjust{margin-top:11px}
+  .eb-wmrow{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--ink-faint);font-weight:700}
+  .eb-wmrow input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:4px;
+    background:linear-gradient(90deg,#3a3a3a,var(--lime));outline:none}
+  .eb-wmrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:#fff;border:2px solid var(--lime);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+  .eb-wmrow input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--lime);cursor:pointer}
+  .eb-wmsample{margin-top:10px;height:56px;border:1px solid var(--line);border-radius:9px;background-color:#f3f0e8;
+    color:#555;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .eb-pvpage{max-width:600px;margin:0 auto;padding:40px 26px 80px}
   .eb-pvcover{text-align:center;padding:66px 20px;border-radius:16px;margin-bottom:36px}.eb-pce{font-size:64px}.eb-pct{font-size:30px;font-weight:800;margin-top:16px;line-height:1.3}.eb-pcby{font-size:13px;opacity:.75;margin-top:14px}
   .eb-pvded{text-align:center;font-style:italic;color:var(--ink-dim);font-size:15px;margin:30px 0 44px;line-height:1.8}
@@ -679,6 +751,62 @@
   .eb-preview.sepia .eb-pvsb,.eb-preview.light .eb-pvsb{color:#3a352c}
   .eb-preview.sepia .eb-pvct,.eb-preview.light .eb-pvct{color:#a06a1e}
   @media print{body>*:not(.eb-preview){display:none!important}.eb-pvtop{display:none!important}.eb-preview{position:static;background:#fff!important}.eb-pvpage{max-width:none;padding:0}.eb-pct,.eb-pvct,.eb-pvst,.eb-ptc,.eb-pts{color:#111!important}.eb-pvsb{color:#222!important}}
+
+  /* ═══════════ 전자책 프리미엄 고급화 패스 ═══════════ */
+  /* ① 3D 입체 책 표지 */
+  .eb-bcover,.eb-hcover{border-radius:2px 8px 8px 2px!important;position:relative;overflow:visible!important;
+    box-shadow:inset 3px 0 3px -2px rgba(255,255,255,.14),inset -1px 0 1px rgba(0,0,0,.35),3px 4px 6px rgba(0,0,0,.35),9px 12px 26px rgba(0,0,0,.5)!important}
+  .eb-bcover::before,.eb-hcover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;
+    background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,.06));border-radius:2px 0 0 2px;pointer-events:none;z-index:2}
+  .eb-bcover::after,.eb-hcover::after{content:'';position:absolute;right:-3px;top:2px;bottom:2px;width:3px;
+    background:repeating-linear-gradient(180deg,#eceae2 0 1px,#cbc8bf 1px 2px);border-radius:0 2px 2px 0;
+    box-shadow:1px 0 2px rgba(0,0,0,.25);pointer-events:none}
+  /* 미리보기 표지 = 3D 책 목업 느낌 */
+  .eb-pvcover{border-radius:3px 12px 12px 3px;box-shadow:inset 4px 0 4px -2px rgba(255,255,255,.12),8px 12px 40px rgba(0,0,0,.55)!important;position:relative}
+  .eb-pvcover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(90deg,rgba(0,0,0,.4),transparent);border-radius:3px 0 0 3px;pointer-events:none}
+
+  /* ② 부드러운 전환 모션 — 목록 스태거 등장 */
+  @keyframes ebRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .eb-booklist .eb-bcard,.eb-chap,.eb-sec{animation:ebRise .5s cubic-bezier(.2,.85,.25,1) backwards}
+  .eb-sec:nth-child(2){animation-delay:.03s}.eb-sec:nth-child(3){animation-delay:.06s}.eb-sec:nth-child(4){animation-delay:.09s}.eb-sec:nth-child(5){animation-delay:.12s}.eb-sec:nth-child(6){animation-delay:.15s}
+  .eb-chap:nth-child(2){animation-delay:.05s}.eb-chap:nth-child(3){animation-delay:.1s}.eb-chap:nth-child(4){animation-delay:.15s}
+  .eb-bcard:nth-child(2){animation-delay:.05s}.eb-bcard:nth-child(3){animation-delay:.1s}.eb-bcard:nth-child(4){animation-delay:.15s}.eb-bcard:nth-child(5){animation-delay:.2s}
+  /* 시트 = 밑에서 스프링 */
+  @keyframes ebSheetUp{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+  .eb-sheetc{animation:ebSheetUp .34s cubic-bezier(.2,1,.3,1)}
+  /* 버튼 눌림 물리감 */
+  .eb-primary,.eb-ghost,.eb-tgo,.eb-thE,.eb-navsec button,.eb-send{transition:transform .12s cubic-bezier(.2,.8,.2,1),box-shadow .15s,background .15s}
+  .eb-primary:active,.eb-tgo:active{transform:scale(.97) translateY(1px)}
+
+  /* ③ 타이포 · 여백 품격 */
+  .eb-createh,.eb-htitle{letter-spacing:-.03em}
+  .eb-htitle{font-size:18px}
+  .eb-bt{letter-spacing:-.02em}
+  #wsTitle h2{letter-spacing:-.03em}
+  .eb-hero{padding:20px;border-radius:20px}
+  .eb-today{border-radius:18px;padding:18px}
+  .eb-sec{padding:14px 15px;border-radius:14px}
+  .eb-bcard{padding:15px;border-radius:18px}
+
+  /* ④ 프로스티드 글래스 & 부드러운 깊이 */
+  .eb-editor .eb-edtop{background:rgba(13,13,13,.72);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3)}
+  .eb-fmt{background:rgba(18,18,18,.82);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3)}
+  .eb-sheetc{background:rgba(19,19,19,.9);backdrop-filter:blur(24px) saturate(1.2);-webkit-backdrop-filter:blur(24px) saturate(1.2);box-shadow:0 -12px 44px rgba(0,0,0,.55)}
+  .eb-pvtop{backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
+  .eb-hero,.eb-today,.eb-stat,.eb-sec,.eb-bcard{box-shadow:0 1px 2px rgba(0,0,0,.2),0 6px 18px rgba(0,0,0,.22)}
+  .eb-selbar{background:rgba(34,34,34,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+
+  /* ⑤ 몰입형 에디터 */
+  .eb-edinner{max-width:664px;padding:24px 24px 60px}
+  .eb-edbody{font-size:17px;line-height:1.92;letter-spacing:-.006em;color:#e9e9e6}
+  .eb-edtitle{letter-spacing:-.03em}
+  .eb-edbody:empty::before{font-style:italic}
+  /* 집중 모드일 때 도구·챕터라벨까지 은은하게 */
+  .eb-editor:has(.eb-edbody.eb-focusmode) .eb-edchap,.eb-editor:has(.eb-edbody.eb-focusmode) .eb-edtip{opacity:.3;transition:opacity .3s}
+
+  /* ⑥ 색·디테일 정제 — 완성 링/게이지 부드럽게 */
+  .eb-rf,.eb-bfill,.eb-exec-fill{transition:all .6s cubic-bezier(.2,.8,.2,1)}
+  .eb-pvpage{padding-top:46px}
 </style>
 </head>
 <body>
@@ -1103,6 +1231,9 @@ function ebTip(){return EB_TIPS[Math.floor(Date.now()/1000)%EB_TIPS.length]}
 function ebMaterials(){const th=store.items.filter(i=>i.ws==='think').map(i=>({src:'내 생각',title:i.title||'',body:i.text||''}));
   const id=store.items.filter(i=>i.ws==='idea'&&(i.text||i.memo)).map(i=>({src:'아이디어',title:'',body:i.text||i.memo||''}));return [...th,...id].filter(x=>x.body)}
 
+function ebFlat(b){const a=[];b.chapters.forEach(c=>c.secs.forEach(s=>a.push({c,s})));return a}
+function ebStats(b){let ch=0;b.chapters.forEach(c=>c.secs.forEach(s=>ch+=ebPlain(s.html)));return{ch,pages:Math.max(1,Math.round(ch/900)),mins:Math.max(1,Math.round(ch/500))}}
+function ebYear(){return new Date().getFullYear()}
 function renderBook(){
   if(!store.books)store.books=[];
   const w=WS.find(x=>x.key==='book');
@@ -1112,7 +1243,7 @@ function renderBook(){
 }
 function ebViewList(){
   if(!store.books.length)return `<div class="eb-empty"><div class="eb-big">📖</div><h3>첫 책을 시작해볼까요?</h3><p>하루에 딱 한 꼭지씩. 쓰다 보면 어느덧 한 권이 완성돼요.<br>목차는 베스트셀러 구조로 미리 깔아드릴게요.</p><button class="eb-primary" onclick="ebStart()">＋ 새 책 만들기</button></div>`;
-  return `<div class="eb-booklist">${store.books.map(b=>{const p=ebProgress(b);return `<div class="eb-bcard" onclick="ebOpen('${b.id}')"><div class="eb-bcover" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.emoji}</div><div class="eb-bmain"><div class="eb-bt">${esc(b.title)}</div><div class="eb-bmeta">${EB_TEMPLATES[b.type].name} · ${p.done}/${p.tot} 꼭지 · ${ebDays(b)}일째</div><div class="eb-bbar"><div class="eb-bfill" style="width:${p.pct}%"></div></div><div class="eb-bpct">${p.pct}% 완성</div></div></div>`}).join('')}</div>
+  return `<div class="eb-booklist">${store.books.map(b=>{const p=ebProgress(b);return `<div class="eb-bcard" onclick="ebOpen('${b.id}')"><div class="eb-bcover" style="${b.coverImg?`background-image:url('${(b.coverImg||'').replace(/'/g,'%27')}');background-size:cover;background-position:center`:`background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}`}">${b.coverImg?'':b.emoji}</div><div class="eb-bmain"><div class="eb-bt">${esc(b.title)}</div><div class="eb-bmeta">${EB_TEMPLATES[b.type].name} · ${p.done}/${p.tot} 꼭지 · ${ebDays(b)}일째</div><div class="eb-bbar"><div class="eb-bfill" style="width:${p.pct}%"></div></div><div class="eb-bpct">${p.pct}% 완성</div></div></div>`}).join('')}</div>
     <button class="eb-primary" style="width:100%;margin-top:16px" onclick="ebStart()">＋ 새 책 만들기</button>`;
 }
 function ebStart(){bkCreating=true;bkNewType='howto';bkNewTitle='';render()}
@@ -1131,11 +1262,12 @@ function ebOpen(id){bkCur=store.books.find(b=>b.id===id);bkTocEdit=false;render(
 
 function ebViewWorkspace(b){const p=ebProgress(b),nx=ebNext(b),dd=ebDday(b),st=ebStreak();
   return `<button class="eb-back" onclick="ebBackList()">‹ 책장</button>
-    <div class="eb-hero"><div class="eb-hcover" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.emoji}</div>
+    <div class="eb-hero"><div class="eb-hcover" style="${b.coverImg?`background-image:url('${(b.coverImg||'').replace(/'/g,'%27')}');background-size:cover;background-position:center`:`background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}`}">${b.coverImg?'':b.emoji}</div>
       <div class="eb-hinfo"><div class="eb-htitle">${esc(b.title)}</div><div class="eb-hmeta">${EB_TEMPLATES[b.type].name} · ${p.done}/${p.tot} 꼭지</div></div>
       <div class="eb-ring" style="--p:${p.pct}"><svg width="56" height="56"><circle class="eb-rc" cx="28" cy="28" r="24"/><circle class="eb-rf" cx="28" cy="28" r="24"/></svg><div class="eb-rt">${p.pct}%</div></div></div>
     <div class="eb-statrow"><div class="eb-stat"><b>🔥 ${st}일</b><span>연속 집필</span></div><div class="eb-stat"><b>${ebDays(b)}일째</b><span>함께한 날</span></div>
       ${dd?`<div class="eb-stat dday" onclick="ebSetTarget()"><b>D-${dd.left>=0?dd.left:'지남'}</b><span>하루 ${dd.perDay}꼭지면 완성</span></div>`:`<div class="eb-stat set" onclick="ebSetTarget()"><b>＋</b><span>완성일 정하기</span></div>`}</div>
+    ${(()=>{const bs=ebStats(b);return `<div class="eb-bookstat">📊 총 <b>${bs.ch.toLocaleString()}자</b> · 약 ${bs.pages}페이지 · 읽는 시간 약 ${bs.mins}분</div>`})()}
     ${nx?`<div class="eb-today"><div class="eb-ttag">✍️ 오늘 쓸 한 꼭지</div><div class="eb-ttitle">${esc(nx.s.title)}</div><div class="eb-tchap">${esc(nx.c.title)}</div><button class="eb-tgo" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">이어 쓰기 →</button></div>`:`<div class="eb-today" style="border-color:rgba(var(--lime-rgb),.5)"><div class="eb-ttag">🎉 완성!</div><div class="eb-ttitle">모든 꼭지를 다 쓰셨어요</div><div class="eb-tchap">미리보기로 감상하고 PDF로 발행해보세요.</div></div>`}
     <div class="eb-toch"><span class="eb-thT">📑 목차</span><button class="eb-thE ${bkTocEdit?'on':''}" onclick="bkTocEdit=!bkTocEdit;render()">${bkTocEdit?'완료':'＋ 편집'}</button></div>
     ${b.chapters.map(c=>`<div class="eb-chap"><div class="eb-chapt">${esc(c.title)}${bkTocEdit?`<button class="eb-cte" onclick="ebRenameChap('${c.id}')">✏️</button><button class="eb-cte" onclick="ebDelChap('${c.id}')">🗑</button>`:''}<span class="eb-ctline"></span></div>
@@ -1157,29 +1289,45 @@ function ebMoveSec(cid,sid,dir){const c=bkCur.chapters.find(c=>c.id===cid);const
 /* 표지 꾸미기 */
 function ebCover(){const b=bkCur;const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebSheet';
   sh.innerHTML=`<div class="eb-sheetc"><button class="eb-sheetx" onclick="ebCloseSheet()">✕</button><div class="eb-sheeth">🎨 표지 꾸미기</div><div class="eb-sheets">이모지·색을 고르고, 저자 소개와 헌사를 남겨보세요.</div>
-    <div class="eb-lbl">아이콘</div><div class="eb-emoG" id="ebEmoG">${EB_EMOJIS.map(e=>`<button class="${b.emoji===e?'on':''}" onclick="ebSetEmoji('${e}')">${e}</button>`).join('')}</div>
+    <div class="eb-lbl">표지 사진 (선택)</div>
+    ${b.coverImg?`<div class="eb-coverprev" style="background-image:url('${(b.coverImg||'').replace(/'/g,'%27')}')"><button class="eb-coverdel" onclick="ebRemoveCover()">✕ 사진 빼기</button></div>`:`<button class="eb-coverpick" onclick="ebPickCover()">🖼 표지 사진 올리기</button>`}
+    <div class="eb-lbl">아이콘 ${b.coverImg?'<span class="opt" style="color:var(--ink-faint);font-weight:400">(표지 사진 없을 때 표시)</span>':''}</div><div class="eb-emoG" id="ebEmoG">${EB_EMOJIS.map(e=>`<button class="${b.emoji===e?'on':''}" onclick="ebSetEmoji('${e}')">${e}</button>`).join('')}</div>
     <div class="eb-lbl">색</div><div class="eb-colG" id="ebColG">${EB_COVERS.map(c=>`<div class="eb-sw ${b.color===c?'on':''}" style="background:${c}" onclick="ebSetColor('${c}')"></div>`).join('')}</div>
     <div class="eb-lbl">헌사 (선택)</div><input class="eb-in" placeholder="예: 매일 거울 앞에 서는 모든 디자이너에게" value="${esc(b.dedication||'')}" oninput="bkCur.dedication=this.value;save()">
     <div class="eb-lbl">저자 소개 (선택)</div><textarea class="eb-in" rows="3" style="resize:none" placeholder="예: 15년차 헤어디자이너…" oninput="bkCur.authorBio=this.value;save()">${esc(b.authorBio||'')}</textarea>
+    <div class="eb-wmbox">
+      <div class="eb-wmhead"><span>🛡️ 무단복제 방지 워터마크</span><label class="eb-toggle"><input type="checkbox" id="ebWmChk" ${b.wmOn?'checked':''} onchange="ebToggleWm(this.checked)"><span class="eb-tk"></span></label></div>
+      <div class="eb-wmdesc">페이지 전체에 이름·로고를 <b>아주 옅게 반복</b>해 새겨요. 캡처·복제해도 표시가 남아 함부로 못 퍼뜨려요. (미리보기·PDF·EPUB 모두 적용)</div>
+      <input class="eb-in" id="ebWmText" placeholder="새길 글자 (예: 이수성 · 고객관점)" value="${esc(b.watermark||'')}" ${b.wmOn?'':'style="display:none"'} oninput="bkCur.watermark=this.value;save();ebWmRefresh()">
+      <div class="eb-wmadjust" id="ebWmAdjust" ${b.wmOn?'':'style="display:none"'}>
+        <div class="eb-wmrow"><span>옅게</span><input type="range" id="ebWmRange" min="3" max="26" value="${Math.round(ebWmOp(b)*100)}" oninput="ebWmAdjust(this.value)"><span>진하게</span></div>
+        <div class="eb-wmsample" id="ebWmSample" style="${ebWmBg(ebWmText(b)||'미리보기',ebWmOp(b))}">이 정도로 새겨져요</div>
+      </div>
+    </div>
+    <div class="eb-wmbox" style="margin-top:11px">
+      <div class="eb-wmhead"><span>📄 판권 페이지 (저작권 표시)</span><label class="eb-toggle"><input type="checkbox" ${b.copyright!==false?'checked':''} onchange="bkCur.copyright=this.checked;save()"><span class="eb-tk"></span></label></div>
+      <div class="eb-wmdesc">책 앞에 <b>「© ${ebYear()} ${esc(ebAuthor())} · 무단 전재·복제·배포 금지」</b> 페이지를 자동으로 넣어요. 워터마크와 세트로 무단복제 방지에 좋아요.</div>
+    </div>
     <button class="eb-primary" style="width:100%;margin-top:18px" onclick="ebCloseSheet();render()">완료</button></div>`;
   document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebCloseSheet()}}
 function ebSetEmoji(e){bkCur.emoji=e;save();document.querySelectorAll('#ebEmoG button').forEach(b=>b.classList.toggle('on',b.textContent===e))}
 function ebSetColor(c){bkCur.color=c;save();document.querySelectorAll('#ebColG .eb-sw').forEach((s,i)=>s.classList.toggle('on',EB_COVERS[i]===c))}
+function ebToggleWm(on){bkCur.wmOn=on;if(on&&!(bkCur.watermark||'').trim())bkCur.watermark=ebAuthor();if(on&&typeof bkCur.wmStrength!=='number')bkCur.wmStrength=0.10;save();
+  const t=document.getElementById('ebWmText');if(t){t.style.display=on?'':'none';t.value=bkCur.watermark||''}
+  const a=document.getElementById('ebWmAdjust');if(a)a.style.display=on?'':'none';
+  ebWmRefresh();ebBuzz(8)}
+function ebWmAdjust(v){bkCur.wmStrength=(+v)/100;save();ebWmRefresh()}
+function ebWmRefresh(){const s=document.getElementById('ebWmSample');if(s)s.style.cssText=ebWmBg(ebWmText(bkCur)||'미리보기',ebWmOp(bkCur))}
 function ebCloseSheet(){const s=document.getElementById('ebSheet');if(s)s.remove()}
 
 /* 에디터 */
 function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs.find(x=>x.id===sid);bkSec={c,s};bkFocus=false;
+  const flat=ebFlat(b),fi=flat.findIndex(x=>x.s.id===sid),prv=fi>0?flat[fi-1]:null,nxt=fi<flat.length-1?flat[fi+1]:null;
   const w=document.createElement('div');w.className='eb-editor';w.id='ebEditor';
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="ebCloseEdit()">‹ 목차</button>
       <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebToggleFocus()">🎯 집중</button>
-      <span class="eb-save" id="ebSaveInd">저장됨</span>
+      <button class="eb-savebtn" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button>
       <button class="eb-done ${s.status==='done'?'is-done':''}" id="ebDoneBtn" onclick="ebToggleDone()">${s.status==='done'?'✓ 완성됨':'완성 표시'}</button></div>
-    <div class="eb-edscroll"><div class="eb-edinner">
-      <div class="eb-edchap">${esc(c.title)}</div>
-      <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
-      ${s.guide?`<div class="eb-guide" id="ebGuide"><button class="eb-gx" onclick="document.getElementById('ebGuide').remove()">✕</button><div class="eb-gh">💬 이 꼭지엔 이런 걸 써보세요</div><div class="eb-gq">${esc(s.guide)}</div></div>`:''}
-      <div class="eb-edbody" id="ebEdBody" contenteditable="true" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
-      <div class="eb-edtip">💡 ${ebTip()}</div></div></div>
     <div class="eb-fmt">
       <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
       <button class="eb-mat" onmousedown="ebFp(event)" onclick="ebMaterial()">🧲 글감</button>
@@ -1188,24 +1336,88 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <button onmousedown="ebFp(event)" onclick="ebFmt('quote')">❝ 인용</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('callout')">💡 강조</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('list')">✓ 체크</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('img')">🖼 사진</button>
+      <button onmousedown="ebFp(event)" onclick="ebPickImg()">🖼 사진</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('divider')">— 구분선</button>
-      <span class="eb-wc" id="ebWc">0자</span></div>`;
+      <button onmousedown="ebFp(event)" onclick="ebHistOpen()">🕐 되돌리기</button>
+      <span class="eb-wc" id="ebWc">0자</span></div>
+    <div class="eb-edscroll"><div class="eb-edinner">
+      <div class="eb-edchap">${esc(c.title)}</div>
+      <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
+      ${s.guide?`<div class="eb-guide" id="ebGuide"><button class="eb-gx" onclick="document.getElementById('ebGuide').remove()">✕</button><div class="eb-gh">💬 이 꼭지엔 이런 걸 써보세요</div><div class="eb-gq">${esc(s.guide)}</div></div>`:''}
+      <div class="eb-edbody" id="ebEdBody" contenteditable="true" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
+      <div class="eb-edtip">💡 ${ebTip()}</div>
+      <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('ebEdBody'),title=document.getElementById('ebEdTitle');
   ebAutoGrow(title);
+  // 플로팅 선택 툴바 생성(1회)
+  if(!document.getElementById('ebSelBar')){const bar=document.createElement('div');bar.id='ebSelBar';bar.className='eb-selbar';
+    bar.innerHTML=[['bold','<b>굵게</b>'],['h2','제목'],['quote','❝'],['callout','💡'],['list','✓']].map(([k,l])=>`<button onmousedown="ebFp(event)" onclick="ebFmt('${k}');ebBuzz(6)">${l}</button>`).join('');
+    document.body.appendChild(bar)}
   title.addEventListener('input',()=>{ebAutoGrow(title);s.title=title.value;ebMark()});
-  body.addEventListener('input',()=>{s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('input',()=>{ebSmartType();s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('keydown',e=>{
+    if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');ebBuzz(6);return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');s.html=body.innerHTML;ebMark();return}}
+    if(e.key===' ')ebMdSpace(e);
+  });
   body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
-  document.addEventListener('selectionchange',ebFocusSel);
-  ebUpdWc();setTimeout(()=>body.focus(),180);
+  document.addEventListener('selectionchange',ebSelHandler);
+  ebUpdWc();ebHistPush(s.id,s.html);setTimeout(()=>body.focus(),180);
 }
+/* ── 고급 타이핑 디테일 ── */
+function ebBuzz(ms){try{navigator.vibrate&&navigator.vibrate(ms||8)}catch(e){}}
+function ebSetCaret(node,off){try{const s=window.getSelection(),r=document.createRange();r.setStart(node,off);r.collapse(true);s.removeAllRanges();s.addRange(r)}catch(e){}}
+/* 스마트 문장부호: -- → — , ... → … */
+function ebSmartType(){const sel=window.getSelection();if(!sel.rangeCount)return;const r=sel.getRangeAt(0);const n=r.startContainer;if(n.nodeType!==3)return;const o=r.startOffset,t=n.textContent;
+  if(o>=2&&t.slice(o-2,o)==='--'){n.textContent=t.slice(0,o-2)+'—'+t.slice(o);ebSetCaret(n,o-1)}
+  else if(o>=3&&t.slice(o-3,o)==='...'){n.textContent=t.slice(0,o-3)+'…'+t.slice(o);ebSetCaret(n,o-2)}}
+/* 마크다운 단축: 줄 시작 # / - / * / > + 스페이스 → 블록 변환 */
+function ebMdSpace(e){const sel=window.getSelection();if(!sel.rangeCount)return;const r=sel.getRangeAt(0);if(!r.collapsed)return;const n=r.startContainer,o=r.startOffset;
+  const txt=(n.nodeType===3?n.textContent:'').slice(0,o);let kind=null;
+  if(txt==='#')kind='h2';else if(txt==='-'||txt==='*')kind='list';else if(txt==='>')kind='quote';
+  if(!kind)return;e.preventDefault();n.textContent=n.textContent.slice(o);ebSetCaret(n,0);ebFmt(kind);ebBuzz(6)}
+/* 선택하면 뜨는 플로팅 서식 툴바 */
+function ebSelBar(){let bar=document.getElementById('ebSelBar');const body=document.getElementById('ebEdBody');const sel=window.getSelection();
+  if(!body||!bar||!sel.rangeCount||sel.isCollapsed||!body.contains(sel.anchorNode)){if(bar)bar.classList.remove('on');return}
+  const rect=sel.getRangeAt(0).getBoundingClientRect();if(!rect.width&&!rect.height){bar.classList.remove('on');return}
+  bar.classList.add('on');let top=rect.top-48;if(top<58)top=rect.bottom+10;
+  const bw=bar.offsetWidth||220;bar.style.top=top+'px';bar.style.left=Math.max(8,Math.min(rect.left+rect.width/2-bw/2,innerWidth-bw-8))+'px'}
 function ebAutoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
 function ebUpdWc(){const b=document.getElementById('ebEdBody');if(b)document.getElementById('ebWc').textContent=ebPlain(b.innerHTML)+'자'}
 let ebSaveTmr;
-function ebMark(){ebMarkToday();const e=document.getElementById('ebSaveInd');if(!e)return;e.textContent='입력 중…';clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();e.textContent='저장됨 ✓'},450)}
-function ebCloseEdit(){ebStopMic();document.removeEventListener('selectionchange',ebFocusSel);save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
-function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';save();const btn=document.getElementById('ebDoneBtn');btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';if(s.status==='done')toast('한 꼭지 완성! 잘하셨어요 🎉')}
+function ebMark(){ebMarkToday();clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(bkSec)ebHistPush(bkSec.s.id,bkSec.s.html);ebFlashSaved()},450)}
+function ebFlashSaved(){const b=document.getElementById('ebSaveBtn');if(!b)return;b.textContent='✓ 저장됨';b.classList.add('saved');clearTimeout(b._t);b._t=setTimeout(()=>{b.textContent='💾 저장';b.classList.remove('saved')},1600)}
+function ebSaveNow(){if(bkSec){const body=document.getElementById('ebEdBody');if(body)bkSec.s.html=body.innerHTML;const t=document.getElementById('ebEdTitle');if(t)bkSec.s.title=t.value;}save();if(bkSec)ebHistPush(bkSec.s.id,bkSec.s.html);ebFlashSaved();toast('저장했어요 ✓');ebBuzz(10)}
+/* 되돌리기 히스토리 (로컬 안전망, 동기화 X) */
+let ebHistLast={};
+function ebHistGet(){try{return JSON.parse(localStorage.getItem('idf_bkhist')||'{}')}catch(e){return{}}}
+function ebHistPush(sid,html){if(!sid)return;const now=Date.now();if(ebHistLast[sid]&&now-ebHistLast[sid]<25000)return;
+  const all=ebHistGet();const arr=all[sid]||[];if(arr.length&&arr[arr.length-1].html===html)return;
+  arr.push({t:now,html});while(arr.length>15)arr.shift();all[sid]=arr;
+  const keys=Object.keys(all);while(keys.length>60){delete all[keys.shift()]}
+  try{localStorage.setItem('idf_bkhist',JSON.stringify(all))}catch(e){}ebHistLast[sid]=now}
+function ebPlainText(html){const d=document.createElement('div');d.innerHTML=html||'';return (d.textContent||'').trim()}
+function ebHistOpen(){const sid=bkSec&&bkSec.s.id;const arr=(ebHistGet()[sid]||[]).slice().reverse();window.__ebHist=arr;
+  const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebSheet';
+  sh.innerHTML='<div class="eb-sheetc"><button class="eb-sheetx" onclick="ebCloseSheet()">✕</button><div class="eb-sheeth">🕐 되돌리기 (자동 저장 기록)</div><div class="eb-sheets">쓰는 동안 자동으로 남겨둔 시점들이에요. 실수로 지웠어도 되돌릴 수 있어요.</div>'
+    +(arr.length?arr.map((h,i)=>{const t=ebPlainText(h.html).slice(0,70)||'(빈 내용)';return '<div class="eb-histrow"><div class="eb-histmain"><div class="eb-histt">'+new Date(h.t).toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+(i===0?' · 최근':'')+'</div><div class="eb-histp">'+esc(t)+'</div></div><button class="eb-send" onclick="ebHistRestore('+i+')">되돌리기</button></div>'}).join(''):'<div class="home-first">아직 기록이 없어요. 조금 쓰다 보면 25초마다 자동으로 쌓여요.</div>')
+    +'</div>';
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebCloseSheet()}}
+function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!bkSec)return;if(!confirm('이 시점으로 되돌릴까요?\n지금 내용은 사라져요 (되돌리기엔 다시 남아요).'))return;
+  ebHistPush(bkSec.s.id,bkSec.s.html);ebHistLast[bkSec.s.id]=0; // 현재본도 기록에 남기고 throttle 해제
+  bkSec.s.html=h.html;const body=document.getElementById('ebEdBody');if(body)body.innerHTML=h.html;ebUpdWc();save();ebCloseSheet();toast('되돌렸어요 ✓');ebBuzz(10)}
+function ebSelHandler(){if(bkFocus)ebHiFocus();ebSelBar()}
+function ebCloseEdit(){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
+function ebGoSec(cid,sid){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
+function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';save();const btn=document.getElementById('ebDoneBtn');btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';
+  const p=ebProgress(bkCur);
+  if(p.pct<100)bkCur.celebrated=false;
+  if(s.status==='done'){ebBuzz(16);if(p.pct===100&&!bkCur.celebrated){bkCur.celebrated=true;save();ebCelebrate()}else toast('한 꼭지 완성! 잘하셨어요 🎉')}else ebBuzz(8)}
+function ebCelebrate(){ebBuzz(30);const ov=document.createElement('div');ov.className='eb-celebrate';ov.id='ebCele';
+  const emojis=['🎉','✨','🎊','⭐','📖','🏆','💫','🥳'];let dots='';
+  for(let i=0;i<28;i++){const l=Math.round(Math.random()*100),d=(Math.random()*0.6).toFixed(2),s=(1.4+Math.random()*1.6).toFixed(2);dots+=`<span style="left:${l}%;animation-delay:${d}s;animation-duration:${s}s">${emojis[i%emojis.length]}</span>`}
+  ov.innerHTML=`<div class="eb-cele-fall">${dots}</div><div class="eb-cele-card"><div class="eb-cele-big">🏆</div><div class="eb-cele-t">책 완성! 🎉</div><div class="eb-cele-s">「${esc(bkCur.title)}」<br>모든 꼭지를 다 쓰셨어요. 정말 대단해요!</div><button class="eb-primary" onclick="document.getElementById('ebCele').remove();ebPreview()">📖 완성된 책 보기</button><button class="eb-cele-x" onclick="document.getElementById('ebCele').remove()">닫기</button></div>`;
+  document.body.appendChild(ov)}
 function ebFp(e){e.preventDefault()}
 function ebToggleFocus(){bkFocus=!bkFocus;const b=document.getElementById('ebEdBody');b.classList.toggle('eb-focusmode',bkFocus);document.getElementById('ebFocusBtn').classList.toggle('on',bkFocus);if(bkFocus)ebHiFocus();else b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'))}
 function ebFocusSel(){if(bkFocus)ebHiFocus()}
@@ -1219,7 +1431,25 @@ function ebFmt(kind){const body=document.getElementById('ebEdBody');body.focus()
   else if(kind==='img')ebInsert('<div class="eb-imgph">🖼 사진이 여기 들어가요 (탭해서 업로드)</div>');
   else if(kind==='divider')ebInsert('<hr class="eb-divider">');
   bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()}
-function ebInsert(html){document.execCommand('insertHTML',false,html+'<p><br></p>')}
+function ebInsert(html){document.execCommand('insertHTML',false,html+'<p><br></p>');ebBuzz(6)}
+/* 이미지: 압축 → 버킷 업로드(URL) → 실패 시 base64 폴백 */
+function ebCompress(file,max){max=max||1100;return new Promise(res=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(b=>res(b||null),'image/jpeg',0.74)};img.onerror=()=>res(null);img.src=URL.createObjectURL(file)})}
+function ebBlobDataUrl(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>res(null);r.readAsDataURL(blob)})}
+async function ebUploadImg(file,max){const blob=await ebCompress(file,max);if(!blob)return null;let url=window.__idfUpload?await window.__idfUpload(blob):null;if(!url)url=await ebBlobDataUrl(blob);return url}
+function ebPickImg(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;toast('사진 올리는 중…');
+    const url=await ebUploadImg(f,1100);if(!url){toast('사진 업로드 실패 — 다시');return}
+    const body=document.getElementById('ebEdBody');if(!body)return;body.focus();
+    document.execCommand('insertHTML',false,'<img class="eb-img" src="'+url+'" alt=""/><p><br></p>');
+    bkSec.s.html=body.innerHTML;ebUpdWc();ebMark();ebBuzz(8);toast('사진 넣었어요 ✓')};
+  inp.click()}
+function ebPickCover(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;toast('표지 올리는 중…');
+    const url=await ebUploadImg(f,1400);if(!url){toast('표지 업로드 실패 — 다시');return}
+    bkCur.coverImg=url;save();ebBuzz(8);toast('표지 사진 적용 ✓');
+    const s=document.getElementById('ebSheet');if(s){ebCloseSheet();ebCover()}};
+  inp.click()}
+function ebRemoveCover(){bkCur.coverImg=null;save();ebCloseSheet();ebCover()}
 const EB_SLASH=[['h2','H','제목'],['bold','B','굵게'],['quote','❝','인용'],['callout','💡','강조'],['list','✓','체크리스트'],['img','🖼','사진'],['divider','—','구분선']];
 function ebMaybeSlash(){const sel=window.getSelection();if(!sel.rangeCount)return;const r=sel.getRangeAt(0).getBoundingClientRect();ebCloseSlash();
   const m=document.createElement('div');m.className='eb-slash';m.id='ebSlash';
@@ -1255,17 +1485,106 @@ function ebPushToSec(bid,cid,sid){const b=store.books.find(x=>x.id===bid);const 
   if(s.status==='empty')s.status='draft';save();ebCloseSheet();toast('전자책 꼭지에 붙였어요 ✓ (전자책 탭에서 확인)')}
 /* 미리보기·발행 */
 function ebPreview(){const b=bkCur;const w=document.createElement('div');w.className='eb-preview '+(bkTheme==='dark'?'':bkTheme);w.id='ebPreview';
-  w.innerHTML=`<div class="eb-pvtop"><button class="eb-back" onclick="ebClosePv()">‹ 닫기</button><button class="eb-pvth" onclick="ebCycleTheme()" id="ebThemeBtn">${ebThemeLabel()}</button><button class="eb-pvth" onclick="bkSerif=!bkSerif;ebRefreshPv()">${bkSerif?'고딕체':'명조체'}</button><button class="eb-pvpdf" onclick="window.print()">📄 PDF 저장</button></div><div class="eb-pvpage" id="ebPvPage">${ebPvHtml(b)}</div>`;
+  w.innerHTML=`<div class="eb-pvtop"><button class="eb-back" onclick="ebClosePv()">‹ 닫기</button><button class="eb-pvth" onclick="ebCycleTheme()" id="ebThemeBtn">${ebThemeLabel()}</button><button class="eb-pvth" onclick="bkSerif=!bkSerif;ebRefreshPv()">${bkSerif?'고딕체':'명조체'}</button><button class="eb-pvth" onclick="ebPublishInfo()">ℹ️ 설명</button><button class="eb-pvpdf" onclick="window.print()">📄 PDF</button><button class="eb-pvepub" onclick="ebExportEpub(bkCur)">📖 EPUB</button></div><div class="eb-pvpage" id="ebPvPage">${ebPvHtml(b)}</div>`;
   document.body.appendChild(w)}
 function ebThemeLabel(){return bkTheme==='dark'?'🌙 다크':bkTheme==='sepia'?'📜 세피아':'☀️ 화이트'}
 function ebCycleTheme(){bkTheme=bkTheme==='dark'?'sepia':bkTheme==='sepia'?'light':'dark';const p=document.getElementById('ebPreview');p.className='eb-preview '+(bkTheme==='dark'?'':bkTheme);document.getElementById('ebThemeBtn').textContent=ebThemeLabel()}
 function ebRefreshPv(){document.getElementById('ebPvPage').innerHTML=ebPvHtml(bkCur)}
-function ebPvHtml(b){return `<div class="eb-pvcover" style="background:linear-gradient(160deg,${b.color}33,rgba(0,0,0,.15))"><div class="eb-pce">${b.emoji}</div><div class="eb-pct">${esc(b.title)}</div><div class="eb-pcby">${esc(ebAuthor())}</div></div>
+function ebPvHtml(b){const wm=ebWmText(b);const ci=b.coverImg?`background-image:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.55)),url('${(b.coverImg||'').replace(/'/g,'%27')}');background-size:cover;background-position:center`:`background:linear-gradient(160deg,${b.color}33,rgba(0,0,0,.15))`;
+  return `<div class="eb-pvwrap" style="${wm?ebWmBg(wm,ebWmOp(b)):''}"><div class="eb-pvcover ${b.coverImg?'hasimg':''}" style="${ci}">${b.coverImg?'':`<div class="eb-pce">${b.emoji}</div>`}<div class="eb-pct">${esc(b.title)}</div><div class="eb-pcby">${esc(ebAuthor())}</div></div>
+  ${b.copyright!==false?`<div class="eb-pvcopy">© ${ebYear()} ${esc(ebAuthor())}<br><span>무단 전재·복제·배포를 금합니다.</span></div>`:''}
   ${b.dedication?`<div class="eb-pvded">"${esc(b.dedication)}"</div>`:''}
   <div class="eb-pvtoc"><h3>목 차</h3>${b.chapters.map(c=>`<div class="eb-ptc">${esc(c.title)}</div>${c.secs.map(s=>`<div class="eb-pts">· ${esc(s.title)}</div>`).join('')}`).join('')}</div>
   <div class="eb-pvbody ${bkSerif?'serif':''}">${b.chapters.map(c=>c.secs.map(s=>`<div class="eb-pvct">${esc(c.title)}</div><div class="eb-pvst">${esc(s.title)}</div><div class="eb-pvsb ${ebPlain(s.html)?'':'empty'}">${ebPlain(s.html)?s.html:'(아직 안 쓴 꼭지예요)'}</div>`).join('')).join('')}</div>
-  ${b.authorBio?`<div class="eb-pvauthor"><h4>지은이</h4><p>${esc(b.authorBio).replace(/\n/g,'<br>')}</p></div>`:''}`}
+  ${b.authorBio?`<div class="eb-pvauthor"><h4>지은이</h4><p>${esc(b.authorBio).replace(/\n/g,'<br>')}</p></div>`:''}</div>`}
 function ebClosePv(){const e=document.getElementById('ebPreview');if(e)e.remove()}
+
+/* ═══ 진짜 전자책 파일: EPUB 내보내기 (순수 JS, ZIP 직접 인코딩) ═══ */
+function ebCrc32(u8){let t=ebCrc32._t;if(!t){t=ebCrc32._t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0}}
+  let crc=0xFFFFFFFF;for(let i=0;i<u8.length;i++)crc=(crc>>>8)^t[(crc^u8[i])&0xFF];return (crc^0xFFFFFFFF)>>>0}
+function ebZip(files){const te=new TextEncoder();
+  const w16=n=>Uint8Array.of(n&255,(n>>8)&255),w32=n=>Uint8Array.of(n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255);
+  const cat=list=>{let t=0;list.forEach(a=>t+=a.length);const o=new Uint8Array(t);let p=0;list.forEach(a=>{o.set(a,p);p+=a.length});return o};
+  const locals=[],central=[];let offset=0;
+  files.forEach(f=>{const nb=te.encode(f.name),data=f.data,crc=ebCrc32(data),sz=data.length;
+    const local=cat([w32(0x04034b50),w16(20),w16(0),w16(0),w16(0),w16(0),w32(crc),w32(sz),w32(sz),w16(nb.length),w16(0),nb,data]);
+    const off=offset;locals.push(local);offset+=local.length;
+    central.push(cat([w32(0x02014b50),w16(20),w16(20),w16(0),w16(0),w16(0),w16(0),w32(crc),w32(sz),w32(sz),w16(nb.length),w16(0),w16(0),w16(0),w16(0),w32(0),w32(off),nb]));});
+  const cd=cat(central);
+  const eocd=cat([w32(0x06054b50),w16(0),w16(0),w16(files.length),w16(files.length),w32(cd.length),w32(offset),w16(0)]);
+  return cat([...locals,cd,eocd]);}
+function ebXe(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function ebXhtml(html){try{const doc=new DOMParser().parseFromString('<body>'+(html||'')+'</body>','text/html');const s=new XMLSerializer();let out='';doc.body.childNodes.forEach(n=>out+=s.serializeToString(n));return out||'<p></p>'}catch(e){return '<p>'+ebXe((html||'').replace(/<[^>]*>/g,''))+'</p>'}}
+function ebWmBg(text,op){op=(op==null?0.10:op);const svg="<svg xmlns='http://www.w3.org/2000/svg' width='330' height='210'><text x='16' y='120' font-family='sans-serif' font-size='15' fill='rgba(130,130,130,"+op+")' transform='rotate(-28 165 105)'>"+ebXe(text)+"</text></svg>";
+  return "background-image:url(\"data:image/svg+xml,"+encodeURIComponent(svg)+"\");background-repeat:repeat;"}
+function ebWmText(b){return b.wmOn?((b.watermark||'').trim()||ebAuthor()):''}
+function ebWmOp(b){return (typeof b.wmStrength==='number')?b.wmStrength:0.10}
+async function ebExportEpub(b){
+  const te=new TextEncoder(),E=ebXe,author=ebAuthor(),wm=ebWmText(b);
+  const now=new Date().toISOString().replace(/\.\d+Z$/,'Z');
+  // ── 이미지 수집 → 다운로드 → EPUB 안에 embed ──
+  toast('전자책 파일 만드는 중…');
+  const urls=[]; if(b.coverImg)urls.push(b.coverImg);
+  b.chapters.forEach(c=>c.secs.forEach(s=>{(String(s.html||'').match(/<img[^>]+src="([^"]+)"/g)||[]).forEach(t=>{const u=(t.match(/src="([^"]+)"/)||[])[1];if(u&&!urls.includes(u))urls.push(u)})}));
+  const imgFiles=[], imgItems=[], srcMap={}; let ic=0;
+  for(const u of urls){ try{ const r=await fetch(u); if(!r.ok)continue; const data=new Uint8Array(await r.arrayBuffer());
+    const fn='img'+(ic++)+'.jpg'; imgFiles.push({name:'OEBPS/images/'+fn,data}); imgItems.push('<item id="'+fn.replace('.','')+'" href="images/'+fn+'" media-type="image/jpeg"/>'); srcMap[u]='images/'+fn; }catch(e){} }
+  const remap=str=>{Object.keys(srcMap).forEach(u=>{str=str.split('src="'+u+'"').join('src="'+srcMap[u]+'"')});return str};
+  const css='@charset "utf-8";\nbody{font-family:serif;line-height:1.9;margin:6% 7%;color:#222;'+(wm?ebWmBg(wm,ebWmOp(b)):'')+'}\n'
+    +'h1{font-size:1.9em;line-height:1.3}h2.chap{color:#999;font-size:.85em;letter-spacing:.08em;margin:2.8em 0 .2em}h3{font-size:1.45em;margin:.2em 0 1em}\n'
+    +'p{margin:0 0 1em}blockquote{border-left:3px solid #6a9b2e;margin:1.2em 0;padding:2px 0 2px 16px;color:#555;font-style:italic}\n'
+    +'img{max-width:100%;height:auto;display:block;margin:1.2em auto;border-radius:6px}\n'
+    +'.eb-callout{background:#f4f7e6;border:1px solid #dce7b6;border-radius:8px;padding:12px 15px;margin:1.2em 0}\n'
+    +'.eb-pulled{background:#f3eefb;border:1px solid #e2d6f3;border-radius:8px;padding:12px 15px;margin:1.2em 0}.eb-pusrc{display:block;font-size:.8em;color:#8a5fd0;margin-bottom:5px}\n'
+    +'hr{border:none;border-top:1px solid #ddd;margin:2em 0}\n'
+    +'.copy{text-align:center;color:#999;font-size:.85em;margin:1em 0 3em;line-height:1.7}\n'
+    +'.cover{text-align:center}.cv{margin-top:14%}.cvimg{max-width:78%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.25)}.cv-emoji{font-size:88px}.cv-title{font-size:2em;font-weight:800;margin-top:.6em}.cv-by{color:#888;margin-top:1.4em}.cv-ded{font-style:italic;color:#999;margin-top:2.4em}';
+  const head=t=>'<?xml version="1.0" encoding="utf-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><title>'+E(t)+'</title><link rel="stylesheet" type="text/css" href="style.css"/></head>';
+  const coverImgTag=(b.coverImg&&srcMap[b.coverImg])?'<img class="cvimg" src="'+srcMap[b.coverImg]+'" alt=""/>':'<div class="cv-emoji">'+E(b.emoji)+'</div>';
+  const cover=head('표지')+'<body class="cover"><div class="cv">'+coverImgTag+'<div class="cv-title">'+E(b.title)+'</div><div class="cv-by">'+E(author)+'</div>'+(b.dedication?'<div class="cv-ded">"'+E(b.dedication)+'"</div>':'')+'</div></body></html>';
+  let textBody='';
+  if(b.copyright!==false) textBody+='<div class="copy">© '+ebYear()+' '+E(author)+'<br/>무단 전재·복제·배포를 금합니다.</div>';
+  b.chapters.forEach((c,ci)=>{ textBody+='<h2 class="chap" id="c'+ci+'">'+E(c.title)+'</h2>';
+    c.secs.forEach((s,si)=>{ textBody+='<h3 id="c'+ci+'s'+si+'">'+E(s.title)+'</h3>'+(ebPlain(s.html)||/\<img/.test(s.html||'')?remap(ebXhtml(s.html)):'<p></p>'); }); });
+  if(b.authorBio) textBody+='<h2 class="chap">지은이</h2><p>'+E(b.authorBio).replace(/\n/g,'<br/>')+'</p>';
+  const text=head(b.title)+'<body>'+textBody+'</body></html>';
+  const nav=head('목차').replace('<html ','<html xmlns:epub="http://www.idpf.org/2007/ops" ')+'<body><nav epub:type="toc" id="toc"><h1>목차</h1><ol>'
+    +b.chapters.map((c,ci)=>'<li><a href="text.xhtml#c'+ci+'">'+E(c.title)+'</a><ol>'+c.secs.map((s,si)=>'<li><a href="text.xhtml#c'+ci+'s'+si+'">'+E(s.title)+'</a></li>').join('')+'</ol></li>').join('')
+    +'</ol></nav></body></html>';
+  const opf='<?xml version="1.0" encoding="utf-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">'
+    +'<dc:identifier id="bookid">urn:uuid:'+E(b.id)+'</dc:identifier><dc:title>'+E(b.title)+'</dc:title><dc:creator>'+E(author)+'</dc:creator><dc:language>ko</dc:language><meta property="dcterms:modified">'+now+'</meta></metadata>'
+    +'<manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="css" href="style.css" media-type="text/css"/><item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/><item id="text" href="text.xhtml" media-type="application/xhtml+xml"/>'+imgItems.join('')+'</manifest>'
+    +'<spine><itemref idref="cover"/><itemref idref="text"/></spine></package>';
+  const container='<?xml version="1.0" encoding="utf-8"?>\n<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>';
+  const files=[
+    {name:'mimetype',data:te.encode('application/epub+zip')},
+    {name:'META-INF/container.xml',data:te.encode(container)},
+    {name:'OEBPS/style.css',data:te.encode(css)},
+    {name:'OEBPS/nav.xhtml',data:te.encode(nav)},
+    {name:'OEBPS/cover.xhtml',data:te.encode(cover)},
+    {name:'OEBPS/text.xhtml',data:te.encode(text)},
+    {name:'OEBPS/content.opf',data:te.encode(opf)},
+    ...imgFiles,
+  ];
+  const zip=ebZip(files);
+  const blob=new Blob([zip],{type:'application/epub+zip'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=(b.title||'전자책').replace(/[\\/:*?"<>|]/g,'').slice(0,40)+'.epub';a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+  toast('EPUB 파일 저장됨 ✓ 애플 북·플레이북에서 열려요');
+  ebBuzz(14);
+}
+/* 발행 상세 설명 시트 */
+function ebPublishInfo(){const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebSheet2';
+  sh.innerHTML='<div class="eb-sheetc"><button class="eb-sheetx" onclick="document.getElementById(\'ebSheet2\').remove()">✕</button>'
+   +'<div class="eb-sheeth">📤 발행 안내 — 어떤 파일로 낼까요?</div>'
+   +'<div class="eb-info"><div class="eb-infoh">📄 PDF</div><p>문서·인쇄물 형태예요. <b>폰·PC·프린터 어디서나</b> 똑같이 열려요. 카톡·메일로 보내거나 <b>인쇄·판매</b>하기 좋아요. 대부분의 "전자책"이 사실 이 PDF예요.<br><span class="eb-infot">👉 저장법: [📄 PDF 저장] → 프린터에서 <b>"PDF로 저장"</b> 선택</span></p></div>'
+   +'<div class="eb-info"><div class="eb-infoh">📖 EPUB <span class="eb-badge">진짜 전자책</span></div>'
+   +'<p>전자책 <b>표준 포맷</b>이에요. 폰의 <b>애플 북 / 구글 플레이북 / e리더</b>에서 진짜 책처럼 열려요 — <b>표지 나오고, 글자 크기 조절되고, 페이지 넘겨지고</b>, 목차로 점프돼요. <code>.epub</code> 파일 하나로 딱 떨어져요.<br><span class="eb-infot">👉 저장 후 파일을 애플 북(아이폰)이나 구글 플레이북(안드로이드)으로 "열기/공유"하면 서재에 들어가요.</span></p></div>'
+   +'<div class="eb-info"><div class="eb-infoh">🛡️ 워터마크 (무단복제 방지)</div>'
+   +'<p>페이지 전체에 <b>아주 옅게 이름·로고를 반복해서 새기는</b> 기능이에요. 캡처·복제해도 흐릿한 표시가 남아서 <b>함부로 퍼뜨리기 부담</b>스러워져요. 100% 막진 못하지만 <b>강력한 심리적 억제</b>가 돼요.<br><span class="eb-infot">👉 [🎨 표지 꾸미기]에서 켜고, 넣을 글자(예: 이름·브랜드)를 정하세요. 미리보기·PDF·EPUB에 모두 적용돼요.</span><br><span class="eb-infot">💡 팁: 파는 책이면 <b>구매자 이름</b>을 넣으면 "누가 유출했는지" 추적까지 돼요.</span></p></div>'
+   +'</div>';
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)sh.remove()}}
 const MOODS=['😀','🙂','😐','😞','🔥'];
 const WD=['일','월','화','수','목','금','토'];
 function ymdKey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
@@ -1867,6 +2186,16 @@ render();
     for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
     return new Blob([u],{type:mime});
   }
+  /* ---- 전자책 이미지 업로드 헬퍼(버킷) — 전자책 코드에서 호출 ---- */
+  window.__idfUpload = async function(blob){
+    try{
+      if(!sb || !CURRENT) return null;
+      const path = CURRENT+'/bk_'+((crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now()+'_'+Math.random().toString(36).slice(2))+'.jpg';
+      const {error} = await sb.storage.from(BUCKET).upload(path, blob, {contentType:'image/jpeg', upsert:true});
+      if(error) return null;
+      return pubUrl(path);
+    }catch(e){ return null; }
+  };
   function rowToItem(r){
     const it={ id:r.id, ws:r.ws, group:r.grp||'유형 미지정',
       ts:r.created_at?Date.parse(r.created_at):Date.now(),
