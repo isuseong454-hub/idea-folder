@@ -274,6 +274,24 @@
   .tk-send{background:rgba(var(--lime-rgb),.1);border:1px solid rgba(var(--lime-rgb),.35);color:var(--lime);
     border-radius:9px;font-size:12px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}
   .tk-send:active{transform:scale(.96)}
+  .tk-newbtn{width:100%;background:var(--lime);color:#0D0D0D;border:none;border-radius:14px;font-weight:800;font-size:15.5px;
+    padding:15px;cursor:pointer;font-family:inherit;margin-bottom:14px;box-shadow:0 6px 20px rgba(var(--lime-rgb),.22);transition:transform .12s}
+  .tk-newbtn:active{transform:scale(.98)}
+  .tk-post{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px 16px;margin-bottom:10px;cursor:pointer;
+    box-shadow:0 1px 2px rgba(0,0,0,.2),0 6px 16px rgba(0,0,0,.16);transition:transform .12s,border-color .15s}
+  .tk-post:active{transform:scale(.99)}
+  .tk-post:hover{border-color:rgba(var(--lime-rgb),.3)}
+  .tk-post-t{font-size:15.5px;font-weight:800;letter-spacing:-.01em;margin-bottom:5px;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tk-post-b{font-size:13.5px;color:var(--ink-dim);line-height:1.55;margin-bottom:9px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tk-post-f{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--ink-faint)}
+  .tk-post-f .tk-del{background:none;border:none;color:var(--ink-faint);font-size:13px;cursor:pointer;padding:2px 6px}
+  .tk-post-f .tk-del:hover{color:#ff6b6b}
+  .eb-thinktitle{width:100%;border:none;background:none;outline:none}
+  .tk-moodrow{display:flex;gap:8px;margin:2px 0 16px}
+  .tk-moodrow .tk-mood{font-size:22px;cursor:pointer;opacity:.35;transition:opacity .15s,transform .15s;line-height:1}
+  .tk-moodrow .tk-mood.on{opacity:1;transform:scale(1.15)}
   .tk-safe{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-faint);margin:0 4px 14px}
   .tk-backup{margin-left:auto;background:rgba(var(--lime-rgb),.08);border:1px solid rgba(var(--lime-rgb),.3);color:var(--lime);
     border-radius:8px;font-size:12px;font-weight:700;padding:5px 11px;cursor:pointer;font-family:inherit}
@@ -1218,6 +1236,8 @@ const EB_COVERS=['#2f6feb','#a15bff','#e6842b','#1f9d55','#d9455f','#0d9488','#C
 const EB_EMOJIS=['📘','📖','✍️','📝','💡','🔥','💇','💄','🎯','🌱','⭐','🏆'];
 const EB_TIPS=['제목은 "약속"을 담으세요. 얻을 걸 보여주면 끝까지 읽어요.','첫 문장이 90%. 질문이나 장면으로 시작해보세요.','한 꼭지 = 한 메시지. 하나만 확실히.','어렵게 쓰지 마세요. 말하듯 쓰면 제일 잘 읽혀요.','오늘은 딱 이 한 꼭지만. 완벽보다 채우는 게 이기는 거예요.'];
 let bkCur=null,bkSec=null,bkCreating=false,bkSerif=false,bkTheme='dark',bkTocEdit=false,bkFocus=false,bkNewType='howto',bkNewTitle='',bkPending=null;
+let ebActiveBody=null, ebOnEdit=function(){}, ebActiveId=null;   // 공유 에디터 엔진(전자책·내생각 공용)
+let curThink=null;                               // 내 생각 편집중 항목
 
 function ebProgress(b){let tot=0,done=0;b.chapters.forEach(c=>c.secs.forEach(s=>{tot++;if(s.status==='done')done++}));return{tot,done,pct:tot?Math.round(done/tot*100):0}}
 function ebNext(b){for(const c of b.chapters)for(const s of c.secs)if(s.status!=='done')return{c,s};return null}
@@ -1349,11 +1369,9 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('ebEdBody'),title=document.getElementById('ebEdTitle');
+  ebActiveBody=body; ebActiveId=s.id; ebOnEdit=function(){bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()};
   ebAutoGrow(title);
-  // 플로팅 선택 툴바 생성(1회)
-  if(!document.getElementById('ebSelBar')){const bar=document.createElement('div');bar.id='ebSelBar';bar.className='eb-selbar';
-    bar.innerHTML=[['bold','<b>굵게</b>'],['h2','제목'],['quote','❝'],['callout','💡'],['list','✓']].map(([k,l])=>`<button onmousedown="ebFp(event)" onclick="ebFmt('${k}');ebBuzz(6)">${l}</button>`).join('');
-    document.body.appendChild(bar)}
+  ebEnsureSelBar();
   title.addEventListener('input',()=>{ebAutoGrow(title);s.title=title.value;ebMark()});
   body.addEventListener('input',()=>{ebSmartType();s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
   body.addEventListener('keydown',e=>{
@@ -1377,13 +1395,16 @@ function ebMdSpace(e){const sel=window.getSelection();if(!sel.rangeCount)return;
   if(txt==='#')kind='h2';else if(txt==='-'||txt==='*')kind='list';else if(txt==='>')kind='quote';
   if(!kind)return;e.preventDefault();n.textContent=n.textContent.slice(o);ebSetCaret(n,0);ebFmt(kind);ebBuzz(6)}
 /* 선택하면 뜨는 플로팅 서식 툴바 */
-function ebSelBar(){let bar=document.getElementById('ebSelBar');const body=document.getElementById('ebEdBody');const sel=window.getSelection();
+function ebEnsureSelBar(){if(document.getElementById('ebSelBar'))return;const bar=document.createElement('div');bar.id='ebSelBar';bar.className='eb-selbar';
+  bar.innerHTML=[['bold','<b>굵게</b>'],['h2','제목'],['quote','❝'],['callout','💡'],['list','✓']].map(([k,l])=>`<button onmousedown="ebFp(event)" onclick="ebFmt('${k}');ebBuzz(6)">${l}</button>`).join('');
+  document.body.appendChild(bar)}
+function ebSelBar(){let bar=document.getElementById('ebSelBar');const body=ebActiveBody;const sel=window.getSelection();
   if(!body||!bar||!sel.rangeCount||sel.isCollapsed||!body.contains(sel.anchorNode)){if(bar)bar.classList.remove('on');return}
   const rect=sel.getRangeAt(0).getBoundingClientRect();if(!rect.width&&!rect.height){bar.classList.remove('on');return}
   bar.classList.add('on');let top=rect.top-48;if(top<58)top=rect.bottom+10;
   const bw=bar.offsetWidth||220;bar.style.top=top+'px';bar.style.left=Math.max(8,Math.min(rect.left+rect.width/2-bw/2,innerWidth-bw-8))+'px'}
 function ebAutoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
-function ebUpdWc(){const b=document.getElementById('ebEdBody');if(b)document.getElementById('ebWc').textContent=ebPlain(b.innerHTML)+'자'}
+function ebUpdWc(){const b=ebActiveBody,w=document.getElementById('ebWc');if(b&&w)w.textContent=ebPlain(b.innerHTML)+'자'}
 let ebSaveTmr;
 function ebMark(){ebMarkToday();clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(bkSec)ebHistPush(bkSec.s.id,bkSec.s.html);ebFlashSaved()},450)}
 function ebFlashSaved(){const b=document.getElementById('ebSaveBtn');if(!b)return;b.textContent='✓ 저장됨';b.classList.add('saved');clearTimeout(b._t);b._t=setTimeout(()=>{b.textContent='💾 저장';b.classList.remove('saved')},1600)}
@@ -1397,15 +1418,15 @@ function ebHistPush(sid,html){if(!sid)return;const now=Date.now();if(ebHistLast[
   const keys=Object.keys(all);while(keys.length>60){delete all[keys.shift()]}
   try{localStorage.setItem('idf_bkhist',JSON.stringify(all))}catch(e){}ebHistLast[sid]=now}
 function ebPlainText(html){const d=document.createElement('div');d.innerHTML=html||'';return (d.textContent||'').trim()}
-function ebHistOpen(){const sid=bkSec&&bkSec.s.id;const arr=(ebHistGet()[sid]||[]).slice().reverse();window.__ebHist=arr;
+function ebHistOpen(){const sid=ebActiveId;const arr=(ebHistGet()[sid]||[]).slice().reverse();window.__ebHist=arr;
   const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebSheet';
   sh.innerHTML='<div class="eb-sheetc"><button class="eb-sheetx" onclick="ebCloseSheet()">✕</button><div class="eb-sheeth">🕐 되돌리기 (자동 저장 기록)</div><div class="eb-sheets">쓰는 동안 자동으로 남겨둔 시점들이에요. 실수로 지웠어도 되돌릴 수 있어요.</div>'
     +(arr.length?arr.map((h,i)=>{const t=ebPlainText(h.html).slice(0,70)||'(빈 내용)';return '<div class="eb-histrow"><div class="eb-histmain"><div class="eb-histt">'+new Date(h.t).toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+(i===0?' · 최근':'')+'</div><div class="eb-histp">'+esc(t)+'</div></div><button class="eb-send" onclick="ebHistRestore('+i+')">되돌리기</button></div>'}).join(''):'<div class="home-first">아직 기록이 없어요. 조금 쓰다 보면 25초마다 자동으로 쌓여요.</div>')
     +'</div>';
   document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebCloseSheet()}}
-function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!bkSec)return;if(!confirm('이 시점으로 되돌릴까요?\n지금 내용은 사라져요 (되돌리기엔 다시 남아요).'))return;
-  ebHistPush(bkSec.s.id,bkSec.s.html);ebHistLast[bkSec.s.id]=0; // 현재본도 기록에 남기고 throttle 해제
-  bkSec.s.html=h.html;const body=document.getElementById('ebEdBody');if(body)body.innerHTML=h.html;ebUpdWc();save();ebCloseSheet();toast('되돌렸어요 ✓');ebBuzz(10)}
+function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!ebActiveId)return;if(!confirm('이 시점으로 되돌릴까요?\n지금 내용은 사라져요 (되돌리기엔 다시 남아요).'))return;
+  if(ebActiveBody)ebHistPush(ebActiveId,ebActiveBody.innerHTML);ebHistLast[ebActiveId]=0; // 현재본도 기록에 남기고 throttle 해제
+  if(ebActiveBody)ebActiveBody.innerHTML=h.html;ebOnEdit();ebCloseSheet();toast('되돌렸어요 ✓');ebBuzz(10)}
 function ebSelHandler(){if(bkFocus)ebHiFocus();ebSelBar()}
 function ebCloseEdit(){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
 function ebGoSec(cid,sid){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
@@ -1419,18 +1440,18 @@ function ebCelebrate(){ebBuzz(30);const ov=document.createElement('div');ov.clas
   ov.innerHTML=`<div class="eb-cele-fall">${dots}</div><div class="eb-cele-card"><div class="eb-cele-big">🏆</div><div class="eb-cele-t">책 완성! 🎉</div><div class="eb-cele-s">「${esc(bkCur.title)}」<br>모든 꼭지를 다 쓰셨어요. 정말 대단해요!</div><button class="eb-primary" onclick="document.getElementById('ebCele').remove();ebPreview()">📖 완성된 책 보기</button><button class="eb-cele-x" onclick="document.getElementById('ebCele').remove()">닫기</button></div>`;
   document.body.appendChild(ov)}
 function ebFp(e){e.preventDefault()}
-function ebToggleFocus(){bkFocus=!bkFocus;const b=document.getElementById('ebEdBody');b.classList.toggle('eb-focusmode',bkFocus);document.getElementById('ebFocusBtn').classList.toggle('on',bkFocus);if(bkFocus)ebHiFocus();else b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'))}
+function ebToggleFocus(){bkFocus=!bkFocus;const b=ebActiveBody;if(!b)return;b.classList.toggle('eb-focusmode',bkFocus);const fb=document.getElementById('ebFocusBtn');if(fb)fb.classList.toggle('on',bkFocus);if(bkFocus)ebHiFocus();else b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'))}
 function ebFocusSel(){if(bkFocus)ebHiFocus()}
-function ebHiFocus(){const b=document.getElementById('ebEdBody');if(!b)return;const sel=window.getSelection();b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'));if(!sel.anchorNode)return;let n=sel.anchorNode;while(n&&n.parentNode!==b)n=n.parentNode;if(n&&n.classList)n.classList.add('active')}
-function ebFmt(kind){const body=document.getElementById('ebEdBody');body.focus();
+function ebHiFocus(){const b=ebActiveBody;if(!b)return;const sel=window.getSelection();b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'));if(!sel.anchorNode)return;let n=sel.anchorNode;while(n&&n.parentNode!==b)n=n.parentNode;if(n&&n.classList)n.classList.add('active')}
+function ebFmt(kind){const body=ebActiveBody;if(!body)return;body.focus();
+  if(kind==='img'){ebPickImg();return}
   if(kind==='bold')document.execCommand('bold');
   else if(kind==='h2')document.execCommand('formatBlock',false,'h2');
   else if(kind==='list')document.execCommand('insertUnorderedList');
   else if(kind==='quote')ebInsert('<blockquote>인용할 문장을 여기에…</blockquote>');
   else if(kind==='callout')ebInsert('<div class="eb-callout">💡 강조하고 싶은 핵심 메시지</div>');
-  else if(kind==='img')ebInsert('<div class="eb-imgph">🖼 사진이 여기 들어가요 (탭해서 업로드)</div>');
   else if(kind==='divider')ebInsert('<hr class="eb-divider">');
-  bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()}
+  ebOnEdit()}
 function ebInsert(html){document.execCommand('insertHTML',false,html+'<p><br></p>');ebBuzz(6)}
 /* 이미지: 압축 → 버킷 업로드(URL) → 실패 시 base64 폴백 */
 function ebCompress(file,max){max=max||1100;return new Promise(res=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(b=>res(b||null),'image/jpeg',0.74)};img.onerror=()=>res(null);img.src=URL.createObjectURL(file)})}
@@ -1439,9 +1460,9 @@ async function ebUploadImg(file,max){const blob=await ebCompress(file,max);if(!b
 function ebPickImg(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
   inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;toast('사진 올리는 중…');
     const url=await ebUploadImg(f,1100);if(!url){toast('사진 업로드 실패 — 다시');return}
-    const body=document.getElementById('ebEdBody');if(!body)return;body.focus();
+    const body=ebActiveBody;if(!body)return;body.focus();
     document.execCommand('insertHTML',false,'<img class="eb-img" src="'+url+'" alt=""/><p><br></p>');
-    bkSec.s.html=body.innerHTML;ebUpdWc();ebMark();ebBuzz(8);toast('사진 넣었어요 ✓')};
+    ebOnEdit();ebBuzz(8);toast('사진 넣었어요 ✓')};
   inp.click()}
 function ebPickCover(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
   inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;toast('표지 올리는 중…');
@@ -1462,7 +1483,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.eb-slash')&&!e.targ
 let ebRec=null,ebRecActive=false;
 function ebToggleMic(){if(ebRecActive){ebStopMic();return}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('이 브라우저는 음성입력 미지원 (크롬 권장)');return}
   ebRec=new SR();ebRec.lang='ko-KR';ebRec.continuous=true;ebRec.interimResults=false;
-  ebRec.onresult=e=>{let txt='';for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)txt+=e.results[i][0].transcript;if(txt){const body=document.getElementById('ebEdBody');body.focus();document.execCommand('insertText',false,txt+' ');bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()}};
+  ebRec.onresult=e=>{let txt='';for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)txt+=e.results[i][0].transcript;if(txt){const body=ebActiveBody;if(body){body.focus();document.execCommand('insertText',false,txt+' ');ebOnEdit()}}};
   ebRec.onend=()=>{if(ebRecActive){try{ebRec.start()}catch(e){}}};ebRec.onerror=()=>{};
   try{ebRec.start();ebRecActive=true;const b=document.getElementById('ebMicBtn');b.classList.add('rec');b.textContent='● 듣는 중';toast('말씀하세요 — 글로 받아써요')}catch(e){toast('마이크 권한을 허용해주세요')}}
 function ebStopMic(){ebRecActive=false;if(ebRec){try{ebRec.stop()}catch(e){}}const b=document.getElementById('ebMicBtn');if(b){b.classList.remove('rec');b.textContent='🎤 음성'}}
@@ -1471,9 +1492,9 @@ function ebMaterial(){const items=ebMaterials();const sh=document.createElement(
   sh.innerHTML=`<div class="eb-sheetc"><button class="eb-sheetx" onclick="ebCloseSheet()">✕</button><div class="eb-sheeth">🧲 글감 가져오기</div><div class="eb-sheets">내 생각·아이디어에 써둔 걸 이 꼭지에 붙여요.</div>
     ${items.length?items.map((t,i)=>`<div class="eb-mat"><div class="eb-matsrc">${t.src}</div>${t.title?`<div class="eb-matt">${esc(t.title)}</div>`:''}<div class="eb-matb">${esc(t.body)}</div><div style="margin-top:10px"><button class="eb-send" onclick="ebInsertMat(${i})">＋ 이 꼭지에 붙이기</button></div></div>`).join(''):'<div class="home-first">가져올 글감이 없어요.</div>'}</div>`;
   window.__ebMats=items;document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebCloseSheet()}}
-function ebInsertMat(i){const t=(window.__ebMats||[])[i];if(!t)return;const body=document.getElementById('ebEdBody');body.focus();
+function ebInsertMat(i){const t=(window.__ebMats||[])[i];if(!t)return;const body=ebActiveBody;if(!body)return;body.focus();
   const html=`<div class="eb-pulled"><span class="eb-pusrc">🧲 ${esc(t.src)}에서${t.title?' · '+esc(t.title):''}</span>${esc(t.body).replace(/\n/g,'<br>')}</div><p><br></p>`;
-  document.execCommand('insertHTML',false,html);bkSec.s.html=body.innerHTML;ebUpdWc();ebMark();ebCloseSheet();toast('글감을 붙였어요 ✓')}
+  document.execCommand('insertHTML',false,html);ebOnEdit();ebCloseSheet();toast('글감을 붙였어요 ✓')}
 /* 내 생각 → 전자책 (Stage3에서 renderThink가 호출) */
 function ebSendThought(th){bkPending=th;if(!store.books||!store.books.length){toast('먼저 전자책을 만들어주세요');return}
   const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebSheet';let rows='';
@@ -1685,25 +1706,18 @@ function renderThink(){
   const items=store.items.filter(i=>i.ws==='think').sort((a,b)=>b.ts-a.ts);
   const q=thinkSearch.trim().toLowerCase();
   let view=items;
-  if(q) view=items.filter(i=>((i.title||'')+' '+(i.text||'')).toLowerCase().includes(q));
+  if(q) view=items.filter(i=>((i.title||'')+' '+ebPlainText(i.text||'')).toLowerCase().includes(q));
   else if(thinkSelDate) view=items.filter(i=>ymdKey(new Date(i.ts))===thinkSelDate);
   const groups={},order=[];
   view.forEach(i=>{const k=ymdKey(new Date(i.ts));
     if(!groups[k]){groups[k]=[];order.push(k)}groups[k].push(i)});
   const mark=(s)=>{s=esc(s||'');return q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<span class="tk-hl">$1</span>'):s};
   let h=`
-    <div class="tk-write">
-      <input id="tkTitle" class="tk-title" placeholder="제목 (예: 단골 만드는 대화법) — 선택">
-      <textarea id="tkText" placeholder="오늘 떠오른 생각·하루를 자유롭게 적어보세요…"></textarea>
-      <div class="tk-row">
-        <div class="tk-moods" id="tkMoods">${MOODS.map((m,idx)=>`<span class="tk-mood ${idx===1?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
-        <button class="tk-save" id="tkSave">저장</button>
-      </div>
-    </div>
+    <button class="tk-newbtn" id="tkNew">✍️ 새 생각 쓰기</button>
     <div class="tk-searchbar">🔍 <input id="tkSearch" placeholder="제목·내용 검색" value="${esc(thinkSearch)}"></div>
     <div class="tk-safe">☁️ 모든 생각은 클라우드에 자동 저장돼요 <button class="tk-backup" id="tkBackup">⬇ 백업</button></div>
     ${q?'':thinkCalHtml(items)}`;
-  if(!items.length) h+=`<div class="home-first" style="margin-top:22px">첫 생각을 적어보세요. 짧아도 좋아요. (사진·레퍼런스는 다른 탭, 여긴 내 생각만)</div>`;
+  if(!items.length) h+=`<div class="home-first" style="margin-top:22px">첫 생각을 적어보세요. 위 <b style="color:var(--lime)">[✍️ 새 생각 쓰기]</b>로 블로그 글처럼 길게, 사진도 넣어가며 정리할 수 있어요.</div>`;
   else if(!view.length) h+=`<div class="home-first" style="margin-top:22px">${q?'검색 결과가 없어요.':'이 날엔 기록이 없어요.'}</div>`;
   order.forEach(k=>{
     const gi=groups[k], d=new Date(gi[0].ts), isToday=d.toDateString()===new Date().toDateString();
@@ -1711,23 +1725,21 @@ function renderThink(){
     h+=`<div class="tk-daygrp"><div class="tk-dayhd">${label}</div>`;
     gi.forEach(i=>{
       const tm=new Date(i.ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-      h+=`<div class="tk-item">${i.title?`<div class="tk-ttl">${mark(i.title)}</div>`:''}
-        <div class="tk-meta">${esc(tm)}${i.memo?' · '+esc(i.memo):''}<button class="tk-del" data-del="${i.id}">✕</button></div>
-        <div class="tk-body">${mark(i.text||'')}</div>
-        <div class="tk-acts"><button class="tk-send" data-send="${i.id}">📖 전자책으로 보내기</button></div></div>`;
+      const pv=ebPlainText(i.text||''); const title=i.title||pv.slice(0,26)||'(제목 없음)';
+      h+=`<div class="tk-post" data-open="${i.id}">
+        <div class="tk-post-t">${mark(title)}</div>
+        ${pv?`<div class="tk-post-b">${mark(pv.slice(0,120))}</div>`:''}
+        <div class="tk-post-f"><span>${esc(tm)}${i.memo?' · '+esc(i.memo):''}</span><button class="tk-del" data-del="${i.id}">✕</button></div>
+      </div>`;
     });
     h+=`</div>`;
   });
   const feed=document.getElementById('feed'); feed.innerHTML=h;
-  const moods=[...feed.querySelectorAll('.tk-mood')];
-  moods.forEach(m=>m.onclick=()=>moods.forEach(x=>x.classList.toggle('on',x===m)));
-  document.getElementById('tkSave').onclick=saveThought;
-  document.getElementById('tkText').onkeydown=e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();saveThought()}};
+  document.getElementById('tkNew').onclick=()=>thinkNew();
   document.getElementById('tkBackup').onclick=backupThoughts;
   const srch=document.getElementById('tkSearch');
   if(srch)srch.oninput=()=>{const pos=srch.selectionStart;thinkSearch=srch.value;renderThink();const s2=document.getElementById('tkSearch');if(s2){s2.focus();try{s2.setSelectionRange(pos,pos)}catch(e){}}};
-  feed.querySelectorAll('[data-send]').forEach(b=>b.onclick=e=>{e.stopPropagation();
-    const it=store.items.find(x=>x.id===b.dataset.send);if(it)ebSendThought({title:it.title||'',body:it.text||''})});
+  feed.querySelectorAll('[data-open]').forEach(c=>c.onclick=e=>{if(e.target.closest('[data-del]'))return;thinkEdit(c.dataset.open)});
   feed.querySelectorAll('.tk-del').forEach(b=>b.onclick=e=>{e.stopPropagation();
     if(confirm('이 생각을 삭제할까요?')){store.items=store.items.filter(x=>x.id!==b.dataset.del);save();render()}});
   // 캘린더 이벤트
@@ -1746,6 +1758,52 @@ function renderThink(){
     if(thinkSelDate){const dg=feed.querySelector('.tk-daygrp');if(dg)dg.scrollIntoView({behavior:'smooth',block:'start'});}
   });
 }
+/* ── 내 생각: 전자책과 같은 풀 에디터 ── */
+function thinkNew(){const it={id:uid(),ws:'think',type:'journal',title:'',text:'',memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};store.items.unshift(it);save();thinkEdit(it.id);ebBuzz(6)}
+function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;curThink=it;const d=new Date(it.ts);
+  const w=document.createElement('div');w.className='eb-editor';w.id='thinkEditor';
+  w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
+      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebToggleFocus()">🎯 집중</button>
+      <button class="eb-savebtn" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button>
+      <button class="eb-done" onclick="thinkSendToBook()">📖 전자책</button></div>
+    <div class="eb-fmt">
+      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('h2')">제목</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')"><b>굵게</b></button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')">❝ 인용</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')">💡 강조</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('list')">✓ 체크</button>
+      <button onmousedown="ebFp(event)" onclick="ebPickImg()">🖼 사진</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('divider')">— 구분선</button>
+      <button onmousedown="ebFp(event)" onclick="ebHistOpen()">🕐 되돌리기</button>
+      <span class="eb-wc" id="ebWc">0자</span></div>
+    <div class="eb-edscroll"><div class="eb-edinner">
+      <div class="eb-edchap">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
+      <input class="eb-edtitle eb-thinktitle" id="thinkTitle" placeholder="제목 (선택)" value="${esc(it.title||'')}">
+      <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
+      <div class="eb-edbody" id="thinkBody" contenteditable="true" data-ph="여기에 자유롭게 길게 써 내려가세요. 엔터로 줄바꿈되고, 위 도구로 제목·인용·사진도 넣을 수 있어요. ✍️">${it.text||''}</div>
+    </div></div>`;
+  document.body.appendChild(w);
+  const body=document.getElementById('thinkBody'),title=document.getElementById('thinkTitle');
+  ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();thinkMark()};bkFocus=false;
+  ebEnsureSelBar();
+  title.addEventListener('input',()=>{curThink.title=title.value;thinkMark()});
+  body.addEventListener('input',()=>{ebSmartType();curThink.text=body.innerHTML;ebUpdWc();thinkMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');curThink.text=body.innerHTML;thinkMark();return}}if(e.key===' ')ebMdSpace(e)});
+  body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
+  document.querySelectorAll('#thinkMoods .tk-mood').forEach(m=>m.onclick=()=>{document.querySelectorAll('#thinkMoods .tk-mood').forEach(x=>x.classList.toggle('on',x===m));curThink.memo=m.dataset.m;thinkMark();ebBuzz(5)});
+  document.addEventListener('selectionchange',ebSelHandler);
+  ebUpdWc();ebHistPush(it.id,it.text||'');setTimeout(()=>body.focus(),180);
+}
+function thinkMark(){clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved()},450)}
+function thinkSaveNow(){if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;}save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved();toast('저장했어요 ✓');ebBuzz(10)}
+function thinkSendToBook(){if(!curThink)return;const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;save();ebSendThought({title:curThink.title||'',body:ebPlainText(curThink.text||'')})}
+function thinkClose(){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
+  if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;
+    if(!(curThink.title||'').trim() && !ebPlainText(curThink.text||'').trim()){store.items=store.items.filter(x=>x.id!==curThink.id);} // 빈 글은 저장 안 함
+    save();}
+  ebActiveBody=null;ebActiveId=null;curThink=null;
+  const e=document.getElementById('thinkEditor');if(e)e.remove();render()}
 function backupThoughts(){
   const items=store.items.filter(i=>i.ws==='think').sort((a,b)=>a.ts-b.ts);
   if(!items.length){toast('백업할 생각이 없어요');return;}
@@ -1754,7 +1812,7 @@ function backupThoughts(){
   items.forEach(i=>{const d=new Date(i.ts),dk=ymdKey(d);
     if(dk!==curDay){curDay=dk;txt+='\n─── '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+WD[d.getDay()]+') ───\n';}
     const tm=d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    txt+='['+tm+']'+(i.memo?' '+i.memo:'')+'\n'+(i.title?'【'+i.title+'】\n':'')+(i.text||'')+'\n\n';
+    txt+='['+tm+']'+(i.memo?' '+i.memo:'')+'\n'+(i.title?'【'+i.title+'】\n':'')+ebPlainText(i.text||'')+'\n\n';
   });
   const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
