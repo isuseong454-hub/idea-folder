@@ -292,6 +292,11 @@
   .tk-moodrow{display:flex;gap:8px;margin:2px 0 16px}
   .tk-moodrow .tk-mood{font-size:22px;cursor:pointer;opacity:.35;transition:opacity .15s,transform .15s;line-height:1}
   .tk-moodrow .tk-mood.on{opacity:1;transform:scale(1.15)}
+  .tk-catrow{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 12px}
+  .tk-catchip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;color:var(--ink-dim);cursor:pointer}
+  .tk-catchip .cd{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .tk-catchip.on{color:var(--ink)}
+  .tk-cattag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;margin-right:6px;vertical-align:middle}
   .tk-safe{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-faint);margin:0 4px 14px}
   .tk-backup{margin-left:auto;background:rgba(var(--lime-rgb),.08);border:1px solid rgba(var(--lime-rgb),.3);color:var(--lime);
     border-radius:8px;font-size:12px;font-weight:700;padding:5px 11px;cursor:pointer;font-family:inherit}
@@ -321,7 +326,7 @@
   .cal-cell.empty{cursor:default}
   .cal-cell.has{color:var(--ink);background:rgba(var(--lime-rgb),.08);font-weight:700}
   .cal-cell.has::before{content:'';position:absolute;bottom:3px;width:3px;height:3px;border-radius:50%;
-    background:var(--lime);box-shadow:0 0 5px var(--lime)}
+    background:var(--cd,var(--lime));box-shadow:0 0 5px var(--cd,var(--lime))}
   .cal-cell.today{border-color:rgba(var(--lime-rgb),.55)}
   .cal-cell.sel{background:var(--lime);color:#0D0D0D;font-weight:800}
   .cal-cell.sel::before{display:none}
@@ -782,6 +787,142 @@
   /* 미리보기 표지 = 3D 책 목업 느낌 */
   .eb-pvcover{border-radius:3px 12px 12px 3px;box-shadow:inset 4px 0 4px -2px rgba(255,255,255,.12),8px 12px 40px rgba(0,0,0,.55)!important;position:relative}
   .eb-pvcover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(90deg,rgba(0,0,0,.4),transparent);border-radius:3px 0 0 3px;pointer-events:none}
+  /* ④ 🔮 서점 진열 미리보기 (완성 상상) */
+  .eb-imagine{width:100%;margin:2px 0 14px;background:var(--surface);border:1px dashed rgba(200,255,0,.45);color:var(--lime);border-radius:14px;padding:14px;font-weight:800;font-size:14px;cursor:pointer;transition:transform .12s}
+  .eb-imagine:active{transform:scale(.99)}
+  .ebst .ebst-lead{font-size:12px;color:var(--lime);font-weight:800;margin-bottom:14px}
+  .ebst .ebst-lead span{color:var(--ink-faint);font-weight:600}
+  .ebst-row{display:flex;gap:15px}
+  .ebst-mini{width:104px;height:146px;flex:0 0 auto;border-radius:2px 8px 8px 2px;padding:12px 10px;display:flex;flex-direction:column;box-shadow:inset 3px 0 3px -2px rgba(255,255,255,.12),8px 12px 26px rgba(0,0,0,.55);position:relative;overflow:hidden}
+  .ebst-mtag{font-size:6.5px;letter-spacing:.14em;font-weight:800}
+  .ebst-mt{font-size:12px;font-weight:900;line-height:1.2;margin-top:8px;color:#fff}
+  .ebst-ma{font-size:8px;color:rgba(255,255,255,.7);margin-top:auto}
+  .ebst-info{flex:1;min-width:0}
+  .ebst-rank{display:inline-block;background:rgba(200,255,0,.15);color:var(--lime);font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;margin-bottom:7px}
+  .ebst-bt{font-size:15px;font-weight:900;line-height:1.3}
+  .ebst-ba{font-size:11.5px;color:var(--ink-faint);margin-top:3px}
+  .ebst-stars{font-size:12px;margin-top:9px;color:#ffd93d}.ebst-stars span{color:var(--ink-faint);margin-left:4px}
+  .ebst-price{font-size:18px;font-weight:900;margin-top:9px}
+  .ebst-buy{display:flex;gap:7px;margin-top:11px}
+  .ebst-buy button{flex:1;border:none;border-radius:9px;padding:9px;font-weight:800;font-size:12px;cursor:pointer}
+  .ebst-buy .b1{background:var(--lime);color:#0D0D0D}.ebst-buy .b2{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+  .ebst-prog{margin-top:15px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink-dim);text-align:center}
+  .ebst-prog b{color:var(--lime)}
+  .ebst-foot{font-size:11.5px;color:var(--ink-faint);text-align:center;margin-top:13px;line-height:1.5}
+  /* ⑤ 책 페이지 보기 설정 (배경·글자·글꼴) — 에디터 */
+  .eb-edbody.serif,.eb-edtitle.serif{font-family:Georgia,'Nanum Myeongjo','AppleMyungjo','Batang',serif}
+  .eb-editor.pg-cream .eb-edscroll{background:#f3ead6}
+  .eb-editor.pg-cream .eb-edbody,.eb-editor.pg-cream .eb-edtitle,.eb-editor.pg-cream .eb-edchap{color:#2c2620!important}
+  .eb-editor.pg-cream .eb-edbody{caret-color:#b06a2c}
+  .eb-editor.pg-sepia .eb-edscroll{background:#e6d6b8}
+  .eb-editor.pg-sepia .eb-edbody,.eb-editor.pg-sepia .eb-edtitle,.eb-editor.pg-sepia .eb-edchap{color:#3a3126!important}
+  .eb-editor.pg-sepia .eb-edbody{caret-color:#7a5a2a}
+  .eb-vspop{position:absolute;top:52px;right:12px;z-index:90;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px;width:214px;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+  .eb-vsr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .eb-vsr:last-child{margin-bottom:0}
+  .eb-vsr>span{font-size:12px;color:var(--ink-dim);font-weight:700}
+  .eb-vsbg{display:flex;gap:6px}
+  .eb-vsbg button{width:26px;height:26px;border-radius:7px;border:2px solid var(--line);cursor:pointer;padding:0}
+  .eb-vsbg button.on{border-color:var(--lime)}
+  .eb-vsfs{display:flex;align-items:center;gap:8px}
+  .eb-vsfs button{width:34px;height:30px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:8px;font-weight:800;cursor:pointer}
+  .eb-vsfs b{font-size:12px;color:var(--ink-dim);min-width:22px;text-align:center;font-variant-numeric:tabular-nums}
+  .eb-vsfam{display:flex;gap:6px}
+  .eb-vsfam button{padding:7px 11px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:8px;font-size:12px;font-weight:800;cursor:pointer}
+  .eb-vsfam button.on{border-color:var(--lime);color:var(--lime)}
+  /* ⑥ 33분 몰입 소개 + 작가의 시간 */
+  .ebflow-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--lime);background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.3);border-radius:999px;padding:5px 12px;margin-bottom:10px}
+  .ebflow-title{font-size:21px;font-weight:900;letter-spacing:-.02em;line-height:1.3;margin-bottom:10px}
+  .ebflow-lead{font-size:13px;color:var(--ink-dim);line-height:1.7;margin-bottom:14px}
+  .ebflow-lead b{color:var(--ink)}
+  .ebflow-step{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:7px}
+  .ebflow-step .n{width:20px;height:20px;flex:0 0 auto;border-radius:50%;background:rgba(200,255,0,.15);color:var(--lime);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .ebflow-step .tx{font-size:12.5px;line-height:1.5;color:var(--ink)}
+  .ebflow-step .tx b{font-weight:700}
+  .eb-flowskip{width:100%;background:none;border:1px solid var(--line);color:var(--ink-dim);border-radius:12px;padding:11px;font-weight:700;font-size:13px;cursor:pointer;margin-top:8px}
+  #ebAtChip{color:var(--lime);cursor:pointer}
+  /* ⑦ 작가의 시간 대시보드 */
+  .atd-h{font-size:16px;font-weight:900;margin-bottom:12px}
+  .atd-today{background:linear-gradient(180deg,#181818,#111);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:6px}
+  .atd-today .atd-lb{font-size:11px;color:var(--ink-dim);font-weight:700}
+  .atd-big{font-size:34px;font-weight:900;letter-spacing:-.02em;margin:5px 0 6px;color:var(--lime)}
+  .atd-meta{font-size:12.5px;color:var(--ink-dim)}
+  .atd-note{font-size:11px;color:var(--ink-faint);margin-top:9px;border-top:1px solid var(--line);padding-top:9px;line-height:1.5}
+  .atd-note b{color:var(--lime)}
+  .atd-st{font-size:12.5px;font-weight:800;color:var(--ink-dim);margin:16px 0 9px}
+  .atd-week{display:flex;align-items:flex-end;gap:6px;height:100px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 10px 8px}
+  .atd-day{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+  .atd-v{font-size:9px;color:var(--ink-faint);margin-bottom:3px;font-variant-numeric:tabular-nums}
+  .atd-bar{width:100%;max-width:20px;background:var(--surface-2);border-radius:4px 4px 2px 2px;min-height:3px}
+  .atd-day.today .atd-bar{background:var(--lime)}.atd-day.has .atd-bar{background:rgba(200,255,0,.35)}
+  .atd-d{font-size:10px;color:var(--ink-faint);margin-top:5px}.atd-day.today .atd-d{color:var(--lime);font-weight:800}
+  .atd-bk{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:7px}
+  .atd-bk .nm{flex:1;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .atd-bk .tm{font-size:13px;font-weight:900;color:var(--lime);font-variant-numeric:tabular-nums}
+  .atd-heat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+  .atd-hg{display:grid;grid-template-columns:38px repeat(7,1fr);gap:3px;align-items:center}
+  .atd-dh{font-size:9px;color:var(--ink-faint);text-align:center}
+  .atd-rl{font-size:9px;color:var(--ink-faint);text-align:right;padding-right:3px}
+  .atd-cell{aspect-ratio:1;border-radius:4px}
+  .atd-peak{margin-top:10px;font-size:12px;color:var(--lime);font-weight:700;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.25);border-radius:9px;padding:8px 11px}
+  /* 🎭 선보이기 (OSMU) */
+  .osw .os-empty{color:var(--ink-faint);font-size:13px;text-align:center;padding:30px 10px;line-height:1.7}
+  .osw .os-srch{font-size:12.5px;color:var(--ink-dim);font-weight:800;margin:6px 2px 10px}
+  .osw .os-src{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:12px 13px;margin-bottom:8px;cursor:pointer}
+  .osw .os-src:active{transform:scale(.99)}
+  .osw .os-src .t{font-size:14px;font-weight:800;margin-bottom:3px}
+  .osw .os-src .m{font-size:11px;color:var(--ink-faint)}
+  .osw .os-back{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-bottom:12px}
+  .osw .os-cur{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:12px}
+  .osw .os-cur .l{font-size:10px;color:var(--lime);font-weight:800;letter-spacing:.05em}
+  .osw .os-cur .t{font-size:14px;font-weight:800;margin-top:3px}
+  .osw .os-tones,.osw .os-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}
+  .osw .os-tones::-webkit-scrollbar,.osw .os-tabs::-webkit-scrollbar{height:0}
+  .osw .os-tone,.osw .os-tab{flex:0 0 auto;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:800;cursor:pointer}
+  .osw .os-tone.on,.osw .os-tab.on{background:var(--lime);border-color:var(--lime);color:#0D0D0D}
+  .osw .os-hh{font-size:11px;font-weight:800;color:var(--ink-dim);margin-bottom:7px}
+  .osw .os-hook{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:6px;cursor:pointer;font-size:13px;font-weight:700}
+  .osw .os-hook.on{border-color:var(--lime);color:var(--lime);background:rgba(200,255,0,.07)}
+  .osw .os-cards{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+  .osw .os-card{flex:0 0 auto;width:124px;height:220px;border-radius:12px;background:linear-gradient(160deg,#181818,#0e0e0e);border:1px solid var(--line);padding:13px 11px;display:flex;flex-direction:column;position:relative}
+  .osw .os-card.cover{border-color:rgba(200,255,0,.4)}
+  .osw .os-card.cta{border-color:rgba(255,92,138,.4)}
+  .osw .os-card .no{position:absolute;top:7px;right:9px;font-size:9px;color:var(--ink-faint)}
+  .osw .os-card .hk{font-size:14px;font-weight:900;line-height:1.3}
+  .osw .os-card .bd{font-size:11px;line-height:1.55;display:flex;align-items:center;height:100%}
+  .osw .os-card .cta2{font-size:12.5px;font-weight:800;margin:auto 0;white-space:pre-line}
+  .osw .os-card .nx{position:absolute;bottom:7px;right:10px;color:var(--ink-faint)}
+  .osw mark{background:rgba(200,255,0,.22);color:var(--lime);border-radius:3px;padding:0 2px;font-weight:700}
+  .osw .os-seg{background:var(--surface);border:1px solid var(--line);border-left:3px solid #ff6b6b;border-radius:12px;padding:11px 13px;margin-bottom:8px}
+  .osw .os-seg .st{font-size:10.5px;font-weight:800;color:#ff6b6b;margin-bottom:5px}
+  .osw .os-seg .big{font-size:15px;font-weight:900;line-height:1.4}
+  .osw .os-seg ul{margin:3px 0 0;padding-left:16px}.osw .os-seg li{font-size:12.5px;line-height:1.6;margin-bottom:2px}
+  .osw .os-blog{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 15px}
+  .osw .os-blog h1{font-size:18px;font-weight:900;margin:0 0 8px;line-height:1.3}
+  .osw .os-blog h3{font-size:14px;font-weight:800;color:#5cffb0;margin:14px 0 6px}
+  .osw .os-blog p{font-size:13px;line-height:1.8;color:var(--ink-dim);margin:0 0 9px}
+  .osw .os-tw{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:8px;position:relative}
+  .osw .os-tw.hook{border-color:rgba(122,184,255,.45)}
+  .osw .os-tw .num{position:absolute;top:11px;right:13px;font-size:10.5px;font-weight:800;color:#7ab8ff}
+  .osw .os-tw .tx{font-size:13px;line-height:1.6;padding-right:32px}
+  .osw .os-cap{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 15px}
+  .osw .os-cap .cl{font-size:13.5px;line-height:1.7;margin-bottom:10px;white-space:pre-line}
+  .osw .os-cap .qb{font-size:12.5px;color:#ffd93d;font-weight:700;margin-bottom:12px}
+  .osw .os-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+  .osw .os-tag{background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.28);color:#ffd93d;border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:700}
+  .osw .os-hint{font-size:10.5px;color:var(--ink-faint);line-height:1.6;margin-top:11px}
+  /* 🖼 갤러리 (아이디어 탭) */
+  .idea-vtoggle{display:flex;gap:7px;margin-bottom:14px}
+  .idea-vtoggle button{flex:1;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:11px;padding:10px;font-weight:800;font-size:13px;cursor:pointer}
+  .idea-vtoggle button.on{background:rgba(200,255,0,.14);border-color:rgba(200,255,0,.4);color:var(--lime)}
+  .idea-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .idea-gcell{aspect-ratio:1;border-radius:10px;background-size:cover;background-position:center;cursor:pointer;position:relative;border:1px solid var(--line)}
+  .idea-gcell:active{transform:scale(.98)}
+  .idea-gm{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;font-size:10px;padding:14px 6px 5px;border-radius:0 0 10px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gal-ov{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;flex-direction:column}
+  .gal-box{max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center}
+  .gal-box img{max-width:100%;max-height:76vh;border-radius:12px;display:block}
+  .gal-cap{color:var(--ink-dim);font-size:12.5px;text-align:center;margin-top:12px;line-height:1.5}
 
   /* ② 부드러운 전환 모션 — 목록 스태거 등장 */
   @keyframes ebRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -956,7 +1097,8 @@ const WS=[
   {key:'idea',ic:'💡',title:'아이디어',accent:'아이디어',desc:'사진·소재·아이디어를 유형별 폴더로 한눈에. 큰 주제로 정리해 꺼내 쓰세요.',
     groups:['후킹','정보','전환','문제해결','꿀팁','콘텐츠','강의','사업','이미지 생성','카피','기획','유형 미지정']},
   {key:'think',ic:'💭',title:'내 생각',accent:'생각',desc:'떠오른 생각·하루를 자유롭게 적는 일기장. 제목 달아 검색하고 전자책으로 보낼 수 있어요.',groups:[]},
-  {key:'book',ic:'📖',title:'전자책',accent:'전자책',desc:'하루 한 꼭지씩. 쓰다 보면 어느덧 한 권이 완성돼요.',groups:[]}
+  {key:'book',ic:'📖',title:'전자책',accent:'전자책',desc:'하루 한 꼭지씩. 쓰다 보면 어느덧 한 권이 완성돼요.',groups:[]},
+  {key:'osmu',ic:'🎭',title:'선보이기',accent:'선보이기',desc:'전자책 꼭지·내 생각 글을 카드뉴스·릴스·블로그로 자동 재조립.',groups:[]}
 ];
 /* 옛 탭 키 → 새 탭 키 이사 (전부 idea 폴더로 통합) */
 const WS_MAP={benchmark:'idea',reels:'idea',prompt:'idea',content:'idea',etc:'idea'};
@@ -980,6 +1122,7 @@ const TYPES={
 
 let store=load();
 let activeWs='home';
+let ideaGallery=false;
 let curType='image',curGroup='',curTags=[],curImg=null,curWs='idea';
 let search='';
 const DEST_WS=WS.filter(w=>w.key==='idea'); // 담기 목적지 = 아이디어 폴더 하나로 통합
@@ -1181,13 +1324,25 @@ function render(){
 
   if(activeWs==='think'){ renderThink(); return; }
   if(activeWs==='book'){ renderBook(); return; }
+  if(activeWs==='osmu'){ renderOsmu(); return; }
 
   titleEl.innerHTML=`<div class="wt-top"><span class="wt-ic">${w.ic}</span>
     <h2>${esc(w.title)}</h2></div><div class="wt-desc">${esc(w.desc)}</div>`;
 
   const items=store.items.filter(i=>i.ws===w.key);
   const groups=groupsFor(w.key);
-  let html=items.length?sortBarHtml():'';
+  let ideaToggle='';
+  if(w.key==='idea'){
+    ideaToggle=`<div class="idea-vtoggle"><button class="${!ideaGallery?'on':''}" onclick="ideaSetGal(0)">📁 폴더</button><button class="${ideaGallery?'on':''}" onclick="ideaSetGal(1)">🖼 갤러리</button></div>`;
+    if(ideaGallery){
+      const photos=store.items.filter(i=>i.img).sort((a,b)=>b.ts-a.ts);
+      let gh=ideaToggle;
+      if(!photos.length) gh+=`<div class="home-first" style="margin-top:22px">아직 사진이 없어요. 아이디어에 사진을 담으면 여기 갤러리에 모여요.</div>`;
+      else gh+=`<div class="idea-gal">${photos.map(i=>`<div class="idea-gcell" onclick="galOpen('${i.id}')" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')">${i.memo?`<span class="idea-gm">${esc(i.memo)}</span>`:''}</div>`).join('')}</div>`;
+      feed.innerHTML=gh; return;
+    }
+  }
+  let html=ideaToggle+(items.length?sortBarHtml():'');
   if(w.key==='idea' && items.length){
     const doneN=items.filter(isDone).length, pct=Math.round(doneN/items.length*100);
     html+=`<div class="exec-bar">
@@ -1236,6 +1391,7 @@ const EB_COVERS=['#2f6feb','#a15bff','#e6842b','#1f9d55','#d9455f','#0d9488','#C
 const EB_EMOJIS=['📘','📖','✍️','📝','💡','🔥','💇','💄','🎯','🌱','⭐','🏆'];
 const EB_TIPS=['제목은 "약속"을 담으세요. 얻을 걸 보여주면 끝까지 읽어요.','첫 문장이 90%. 질문이나 장면으로 시작해보세요.','한 꼭지 = 한 메시지. 하나만 확실히.','어렵게 쓰지 마세요. 말하듯 쓰면 제일 잘 읽혀요.','오늘은 딱 이 한 꼭지만. 완벽보다 채우는 게 이기는 거예요.'];
 let bkCur=null,bkSec=null,bkCreating=false,bkSerif=false,bkTheme='dark',bkTocEdit=false,bkFocus=false,bkNewType='howto',bkNewTitle='',bkPending=null;
+let edPref=(function(){try{return Object.assign({bg:'dark',fs:17,fam:'sans'},JSON.parse(localStorage.getItem('idf_edpref')||'{}'))}catch(e){return{bg:'dark',fs:17,fam:'sans'}}})();
 let ebActiveBody=null, ebOnEdit=function(){}, ebActiveId=null;   // 공유 에디터 엔진(전자책·내생각 공용)
 let curThink=null;                               // 내 생각 편집중 항목
 
@@ -1287,8 +1443,9 @@ function ebViewWorkspace(b){const p=ebProgress(b),nx=ebNext(b),dd=ebDday(b),st=e
       <div class="eb-ring" style="--p:${p.pct}"><svg width="56" height="56"><circle class="eb-rc" cx="28" cy="28" r="24"/><circle class="eb-rf" cx="28" cy="28" r="24"/></svg><div class="eb-rt">${p.pct}%</div></div></div>
     <div class="eb-statrow"><div class="eb-stat"><b>🔥 ${st}일</b><span>연속 집필</span></div><div class="eb-stat"><b>${ebDays(b)}일째</b><span>함께한 날</span></div>
       ${dd?`<div class="eb-stat dday" onclick="ebSetTarget()"><b>D-${dd.left>=0?dd.left:'지남'}</b><span>하루 ${dd.perDay}꼭지면 완성</span></div>`:`<div class="eb-stat set" onclick="ebSetTarget()"><b>＋</b><span>완성일 정하기</span></div>`}</div>
-    ${(()=>{const bs=ebStats(b);return `<div class="eb-bookstat">📊 총 <b>${bs.ch.toLocaleString()}자</b> · 약 ${bs.pages}페이지 · 읽는 시간 약 ${bs.mins}분</div>`})()}
+    ${(()=>{const bs=ebStats(b);return `<div class="eb-bookstat" onclick="atDashboard()" style="cursor:pointer">📊 총 <b>${bs.ch.toLocaleString()}자</b> · 약 ${bs.pages}페이지 · ⏱ 오늘 <b>${atFmt(atTodaySecs())}</b> · 이 책 ${atFmt(atGetBook()[b.id]||0)} ›</div>`})()}
     ${nx?`<div class="eb-today"><div class="eb-ttag">✍️ 오늘 쓸 한 꼭지</div><div class="eb-ttitle">${esc(nx.s.title)}</div><div class="eb-tchap">${esc(nx.c.title)}</div><button class="eb-tgo" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">이어 쓰기 →</button></div>`:`<div class="eb-today" style="border-color:rgba(var(--lime-rgb),.5)"><div class="eb-ttag">🎉 완성!</div><div class="eb-ttitle">모든 꼭지를 다 쓰셨어요</div><div class="eb-tchap">미리보기로 감상하고 PDF로 발행해보세요.</div></div>`}
+    <button class="eb-imagine" onclick="ebImagine()">🔮 완성된 내 책 상상해보기</button>
     <div class="eb-toch"><span class="eb-thT">📑 목차</span><button class="eb-thE ${bkTocEdit?'on':''}" onclick="bkTocEdit=!bkTocEdit;render()">${bkTocEdit?'완료':'＋ 편집'}</button></div>
     ${b.chapters.map(c=>`<div class="eb-chap"><div class="eb-chapt">${esc(c.title)}${bkTocEdit?`<button class="eb-cte" onclick="ebRenameChap('${c.id}')">✏️</button><button class="eb-cte" onclick="ebDelChap('${c.id}')">🗑</button>`:''}<span class="eb-ctline"></span></div>
       ${c.secs.map(s=>`<div class="eb-sec ${s.status}"><span class="eb-dot"></span><div class="eb-smain" onclick="ebEdit('${c.id}','${s.id}')"><div class="eb-st">${esc(s.title)}</div><div class="eb-ssub">${s.status==='done'?'완성 · '+ebPlain(s.html)+'자':s.status==='draft'?'초안 '+ebPlain(s.html)+'자':'아직 비어있어요'}</div></div>${bkTocEdit?`<div class="eb-seca"><button onclick="ebMoveSec('${c.id}','${s.id}',-1)">↑</button><button onclick="ebMoveSec('${c.id}','${s.id}',1)">↓</button><button onclick="ebRenameSec('${c.id}','${s.id}')">✏️</button><button onclick="ebDelSec('${c.id}','${s.id}')">🗑</button></div>`:`<span class="eb-arrow" onclick="ebEdit('${c.id}','${s.id}')">›</span>`}</div>`).join('')}
@@ -1340,12 +1497,33 @@ function ebWmAdjust(v){bkCur.wmStrength=(+v)/100;save();ebWmRefresh()}
 function ebWmRefresh(){const s=document.getElementById('ebWmSample');if(s)s.style.cssText=ebWmBg(ebWmText(bkCur)||'미리보기',ebWmOp(bkCur))}
 function ebCloseSheet(){const s=document.getElementById('ebSheet');if(s)s.remove()}
 
+/* 🔮 완성된 내 책 상상하기 (서점 진열 미리보기) */
+function ebImagine(){const b=bkCur;if(!b)return;const p=ebProgress(b),rem=p.tot-p.done,author=ebAuthor();
+  const coverStyle=b.coverImg?`background-image:url('${(b.coverImg||'').replace(/'/g,'%27')}');background-size:cover;background-position:center`:`background:linear-gradient(160deg,${b.color}66,#0e0f06)`;
+  const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebImagineSheet';
+  sh.innerHTML=`<div class="eb-sheetc ebst"><button class="eb-sheetx" onclick="ebCloseImagine()">✕</button>
+    <div class="ebst-lead">🔮 완성하면 이렇게 세상에 나옵니다 <span>(상상 미리보기)</span></div>
+    <div class="ebst-row">
+      <div class="ebst-mini" style="${coverStyle}">${b.coverImg?'':`<div class="ebst-mtag" style="color:${b.color}">E-BOOK</div><div class="ebst-mt">${esc(b.title)}</div><div class="ebst-ma">${esc(author)} 지음</div>`}</div>
+      <div class="ebst-info"><div class="ebst-rank">🏆 전자책 신간 1위</div>
+        <div class="ebst-bt">${esc(b.title)}</div><div class="ebst-ba">${esc(author)} 지음 · 전자책</div>
+        <div class="ebst-stars">★★★★★ <span>4.9 (128)</span></div><div class="ebst-price">₩12,000</div>
+        <div class="ebst-buy"><button class="b1">구매하기</button><button class="b2">미리보기</button></div></div>
+    </div>
+    <div class="ebst-prog">지금 <b>${p.pct}%</b> · ${rem>0?`완성까지 <b>${rem}꼭지</b> 남았어요`:'🎉 완성! 이제 진짜 세상에 내보낼 시간'}</div>
+    <div class="ebst-foot">지금 쓰는 한 문장이 모여<br>진짜 이 화면이 됩니다. 오늘 한 꼭지 어때요? ✍️</div>
+    ${rem>0?`<button class="eb-primary" style="width:100%;margin-top:14px" onclick="ebImagineWrite()">✍️ 오늘 한 꼭지 쓰러 가기</button>`:''}</div>`;
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebCloseImagine()};if(typeof ebBuzz==='function')ebBuzz(6)}
+function ebCloseImagine(){const s=document.getElementById('ebImagineSheet');if(s)s.remove()}
+function ebImagineWrite(){ebCloseImagine();const nx=ebNext(bkCur);if(nx)ebEdit(nx.c.id,nx.s.id)}
+
 /* 에디터 */
 function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs.find(x=>x.id===sid);bkSec={c,s};bkFocus=false;
   const flat=ebFlat(b),fi=flat.findIndex(x=>x.s.id===sid),prv=fi>0?flat[fi-1]:null,nxt=fi<flat.length-1?flat[fi+1]:null;
   const w=document.createElement('div');w.className='eb-editor';w.id='ebEditor';
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="ebCloseEdit()">‹ 목차</button>
-      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebToggleFocus()">🎯 집중</button>
+      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebToggleFocus()">🎯 몰입</button>
+      <button class="eb-focusbtn" onclick="ebViewSettings()" title="배경·글자·글꼴">Aa</button>
       <button class="eb-savebtn" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button>
       <button class="eb-done ${s.status==='done'?'is-done':''}" id="ebDoneBtn" onclick="ebToggleDone()">${s.status==='done'?'✓ 완성됨':'완성 표시'}</button></div>
     <div class="eb-fmt">
@@ -1357,9 +1535,10 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <button onmousedown="ebFp(event)" onclick="ebFmt('callout')">💡 강조</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('list')">✓ 체크</button>
       <button onmousedown="ebFp(event)" onclick="ebPickImg()">🖼 사진</button>
+      <button onmousedown="ebFp(event)" onclick="ebGalleryPick()">📎 갤러리</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('divider')">— 구분선</button>
       <button onmousedown="ebFp(event)" onclick="ebHistOpen()">🕐 되돌리기</button>
-      <span class="eb-wc" id="ebWc">0자</span></div>
+      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${esc(c.title)}</div>
       <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
@@ -1373,14 +1552,14 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
   ebAutoGrow(title);
   ebEnsureSelBar();
   title.addEventListener('input',()=>{ebAutoGrow(title);s.title=title.value;ebMark()});
-  body.addEventListener('input',()=>{ebSmartType();s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('input',()=>{atNote();ebSmartType();s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
   body.addEventListener('keydown',e=>{
     if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');ebBuzz(6);return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');s.html=body.innerHTML;ebMark();return}}
     if(e.key===' ')ebMdSpace(e);
   });
   body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
   document.addEventListener('selectionchange',ebSelHandler);
-  ebUpdWc();ebHistPush(s.id,s.html);setTimeout(()=>body.focus(),180);
+  ebUpdWc();ebHistPush(s.id,s.html);ebApplyPref();atStart();setTimeout(()=>body.focus(),180);
 }
 /* ── 고급 타이핑 디테일 ── */
 function ebBuzz(ms){try{navigator.vibrate&&navigator.vibrate(ms||8)}catch(e){}}
@@ -1428,7 +1607,7 @@ function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!ebActiveId)re
   if(ebActiveBody)ebHistPush(ebActiveId,ebActiveBody.innerHTML);ebHistLast[ebActiveId]=0; // 현재본도 기록에 남기고 throttle 해제
   if(ebActiveBody)ebActiveBody.innerHTML=h.html;ebOnEdit();ebCloseSheet();toast('되돌렸어요 ✓');ebBuzz(10)}
 function ebSelHandler(){if(bkFocus)ebHiFocus();ebSelBar()}
-function ebCloseEdit(){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
+function ebCloseEdit(){atStop();ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
 function ebGoSec(cid,sid){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
 function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';save();const btn=document.getElementById('ebDoneBtn');btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';
   const p=ebProgress(bkCur);
@@ -1440,8 +1619,167 @@ function ebCelebrate(){ebBuzz(30);const ov=document.createElement('div');ov.clas
   ov.innerHTML=`<div class="eb-cele-fall">${dots}</div><div class="eb-cele-card"><div class="eb-cele-big">🏆</div><div class="eb-cele-t">책 완성! 🎉</div><div class="eb-cele-s">「${esc(bkCur.title)}」<br>모든 꼭지를 다 쓰셨어요. 정말 대단해요!</div><button class="eb-primary" onclick="document.getElementById('ebCele').remove();ebPreview()">📖 완성된 책 보기</button><button class="eb-cele-x" onclick="document.getElementById('ebCele').remove()">닫기</button></div>`;
   document.body.appendChild(ov)}
 function ebFp(e){e.preventDefault()}
-function ebToggleFocus(){bkFocus=!bkFocus;const b=ebActiveBody;if(!b)return;b.classList.toggle('eb-focusmode',bkFocus);const fb=document.getElementById('ebFocusBtn');if(fb)fb.classList.toggle('on',bkFocus);if(bkFocus)ebHiFocus();else b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'))}
+function ebToggleFocus(){if(!bkFocus&&!localStorage.getItem('idf_flowIntroSeen')){ebFlowIntro();return}bkFocus=!bkFocus;const b=ebActiveBody;if(!b)return;b.classList.toggle('eb-focusmode',bkFocus);const fb=document.getElementById('ebFocusBtn');if(fb)fb.classList.toggle('on',bkFocus);if(bkFocus)ebHiFocus();else b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'))}
 function ebFocusSel(){if(bkFocus)ebHiFocus()}
+/* 📖 책 페이지 보기 설정 — 배경·글자 크기·글꼴 */
+function ebSavePref(){try{localStorage.setItem('idf_edpref',JSON.stringify(edPref))}catch(e){}}
+function ebApplyPref(){const ed=document.getElementById('ebEditor');if(!ed)return;
+  ed.classList.remove('pg-cream','pg-sepia');if(edPref.bg==='cream')ed.classList.add('pg-cream');else if(edPref.bg==='sepia')ed.classList.add('pg-sepia');
+  const body=document.getElementById('ebEdBody');if(body){body.style.fontSize=edPref.fs+'px';body.classList.toggle('serif',edPref.fam==='serif')}
+  const title=document.getElementById('ebEdTitle');if(title)title.classList.toggle('serif',edPref.fam==='serif')}
+function ebViewSettings(){let pop=document.getElementById('ebVsPop');if(pop){pop.remove();return}
+  pop=document.createElement('div');pop.className='eb-vspop';pop.id='ebVsPop';
+  pop.innerHTML=`<div class="eb-vsr"><span>배경</span><div class="eb-vsbg">
+      <button data-bg="dark" class="${edPref.bg==='dark'?'on':''}" style="background:#151515"></button>
+      <button data-bg="cream" class="${edPref.bg==='cream'?'on':''}" style="background:#f3ead6"></button>
+      <button data-bg="sepia" class="${edPref.bg==='sepia'?'on':''}" style="background:#e6d6b8"></button></div></div>
+    <div class="eb-vsr"><span>글자 크기</span><div class="eb-vsfs"><button data-fs="-1">가−</button><b id="ebVsFsv">${edPref.fs}</b><button data-fs="1">가＋</button></div></div>
+    <div class="eb-vsr"><span>글꼴</span><div class="eb-vsfam">
+      <button data-fam="sans" class="${edPref.fam==='sans'?'on':''}">고딕</button>
+      <button data-fam="serif" class="${edPref.fam==='serif'?'on':''}">명조</button></div></div>`;
+  const ed=document.getElementById('ebEditor');if(ed)ed.appendChild(pop);
+  pop.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{edPref.bg=b.dataset.bg;ebSavePref();ebApplyPref();pop.querySelectorAll('[data-bg]').forEach(x=>x.classList.toggle('on',x.dataset.bg===edPref.bg))});
+  pop.querySelectorAll('[data-fam]').forEach(b=>b.onclick=()=>{edPref.fam=b.dataset.fam;ebSavePref();ebApplyPref();pop.querySelectorAll('[data-fam]').forEach(x=>x.classList.toggle('on',x.dataset.fam===edPref.fam))});
+  pop.querySelectorAll('[data-fs]').forEach(b=>b.onclick=()=>{edPref.fs=Math.max(14,Math.min(24,edPref.fs+(+b.dataset.fs)));ebSavePref();ebApplyPref();document.getElementById('ebVsFsv').textContent=edPref.fs});}
+/* ⏱️ 작가의 시간 — 실제 쓴 시간(15분 관대) */
+let atTimer=null, atLastType=0, atStarted=false, atSess=0;
+function atRead(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return{}}}
+function atGet(){return atRead('idf_writetime')}
+function atGetBook(){return atRead('idf_writetime_book')}
+function atTodayKey(){return ymdKey(new Date())}
+function atTodaySecs(){return (atGet()[atTodayKey()]||0)+atSess}
+function atFmt(sec){const m=Math.floor(sec/60);if(m<1)return '0분';if(m<60)return m+'분';return Math.floor(m/60)+'시간 '+(m%60)+'분'}
+function atNote(){atLastType=Date.now();atStarted=true}
+function atStart(){atStarted=false;atLastType=0;atSess=0;if(atTimer)clearInterval(atTimer);atTimer=setInterval(atTick,1000);atRenderChip()}
+function atStop(){if(atTimer){clearInterval(atTimer);atTimer=null}atFlush()}
+function atTick(){if(!atStarted)return;if(Date.now()-atLastType>900000)return;atSess++;if(atSess%5===0)atFlush();atRenderChip()}
+function atFlush(){if(atSess<=0)return;const d=atGet(),k=atTodayKey();d[k]=(d[k]||0)+atSess;try{localStorage.setItem('idf_writetime',JSON.stringify(d))}catch(e){}
+  if(bkCur){const bd=atGetBook();bd[bkCur.id]=(bd[bkCur.id]||0)+atSess;try{localStorage.setItem('idf_writetime_book',JSON.stringify(bd))}catch(e){}}
+  const hm=atRead('idf_writetime_hm'),nw=new Date(),h=nw.getHours(),hb=(h<6?5:h<9?0:h<12?1:h<15?2:h<18?3:h<21?4:5),hk=nw.getDay()+'_'+hb;hm[hk]=(hm[hk]||0)+atSess;try{localStorage.setItem('idf_writetime_hm',JSON.stringify(hm))}catch(e){}
+  atSess=0}
+function atRenderChip(){const c=document.getElementById('ebAtChip');if(c)c.textContent='⏱ '+atFmt(atTodaySecs())}
+/* 🎯 33분 몰입 글쓰기 — 프리라이팅 소개 */
+function ebFlowIntro(){const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebFlowSheet';
+  sh.innerHTML=`<div class="eb-sheetc" style="text-align:center"><button class="eb-sheetx" onclick="ebFlowClose()">✕</button>
+    <div class="ebflow-badge">✦ 몰입 글쓰기 · FOCUS 33</div>
+    <div class="ebflow-title">${esc(ebAuthor())}의<br>33분 몰입 글쓰기</div>
+    <div class="ebflow-lead"><b>고치지 말고, 흐르는 대로.</b><br>이 습관이 어느새 한 권을 완성시켜요.</div>
+    <div style="text-align:left">
+      <div class="ebflow-step"><div class="n">1</div><div class="tx"><b>흐르는 대로</b> — 판단·수정은 잠깐 끄고 계속</div></div>
+      <div class="ebflow-step"><div class="n">2</div><div class="tx"><b>다 쓴 뒤 한 번에 다듬기</b> — 고치는 건 마지막에</div></div>
+      <div class="ebflow-step"><div class="n">3</div><div class="tx"><b>10분 쉬고 다시</b> — 걷거나 멍때리기</div></div></div>
+    <button class="eb-primary" style="width:100%;margin-top:16px" onclick="ebFlowGo()">🎯 지금 몰입 시작</button>
+    <button class="eb-flowskip" onclick="ebFlowClose()">그냥 쓸게요</button></div>`;
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebFlowClose()}}
+function ebFlowClose(){const s=document.getElementById('ebFlowSheet');if(s)s.remove()}
+function ebFlowGo(){try{localStorage.setItem('idf_flowIntroSeen','1')}catch(e){}ebFlowClose();bkFocus=false;ebToggleFocus()}
+/* ⏱️ 작가의 시간 대시보드 */
+function atStreak(){const d=atGet();let n=0,dt=new Date();for(;;){if((d[ymdKey(dt)]||0)>=60){n++;dt.setDate(dt.getDate()-1)}else break}return n}
+function atWeek(){const out=[],today=new Date(),dow=(today.getDay()+6)%7,mon=new Date(today);mon.setDate(today.getDate()-dow);const d=atGet(),names=['월','화','수','목','금','토','일'];
+  for(let i=0;i<7;i++){const dt=new Date(mon);dt.setDate(mon.getDate()+i);out.push({d:names[i],m:Math.round((d[ymdKey(dt)]||0)/60),today:ymdKey(dt)===ymdKey(today)})}return out}
+function atDashboard(){const sh=document.createElement('div');sh.className='eb-sheet';sh.id='atDashSheet';
+  const wk=atWeek(),maxM=Math.max(30,...wk.map(x=>x.m));
+  const bd=atGetBook(),books=(store.books||[]).map(b=>({nm:b.title,emoji:b.emoji,secs:bd[b.id]||0})).filter(x=>x.secs>0).sort((a,b)=>b.secs-a.secs);
+  const hm=atRead('idf_writetime_hm'),DAYS=['월','화','수','목','금','토','일'],ROWS=['아침','오전','점심','오후','저녁','밤'],colDow=[1,2,3,4,5,6,0];
+  let maxCell=0;for(const k in hm)maxCell=Math.max(maxCell,hm[k]);
+  let peak=null,peakV=0;for(let r=0;r<6;r++)for(let c=0;c<7;c++){const v=hm[colDow[c]+'_'+r]||0;if(v>peakV){peakV=v;peak={r,c}}}
+  const LV=['var(--surface-2)','rgba(200,255,0,.14)','rgba(200,255,0,.3)','rgba(200,255,0,.55)','rgba(200,255,0,.85)'],cellLv=v=>maxCell<=0?0:Math.min(4,Math.ceil(v/maxCell*4));
+  sh.innerHTML=`<div class="eb-sheetc atd"><button class="eb-sheetx" onclick="atCloseDash()">✕</button>
+    <div class="atd-h">⏱️ 작가의 시간</div>
+    <div class="atd-today"><div class="atd-lb">오늘 쓴 시간</div><div class="atd-big">${atFmt(atTodaySecs())}</div>
+      <div class="atd-meta">🔥 ${atStreak()}일 연속</div>
+      <div class="atd-note">앱 켠 시간이 아니라 <b>실제로 쓴 시간</b>만 · 손 떼도 15분까진 이어져요</div></div>
+    <div class="atd-st">📅 이번 주</div>
+    <div class="atd-week">${wk.map(x=>`<div class="atd-day ${x.today?'today':(x.m>0?'has':'')}"><div class="atd-v">${x.m||''}</div><div class="atd-bar" style="height:${Math.max(3,Math.round(x.m/maxM*70))}px"></div><div class="atd-d">${x.d}</div></div>`).join('')}</div>
+    ${books.length?`<div class="atd-st">📚 책별 누적</div>${books.map(b=>`<div class="atd-bk"><span>${b.emoji||'📖'}</span><span class="nm">${esc(b.nm)}</span><span class="tm">${atFmt(b.secs)}</span></div>`).join('')}`:''}
+    <div class="atd-st">🌟 골든타임 — 잘 써지는 시간</div>
+    <div class="atd-heat"><div class="atd-hg"><div></div>${DAYS.map(d=>`<div class="atd-dh">${d}</div>`).join('')}
+      ${ROWS.map((r,ri)=>`<div class="atd-rl">${r}</div>${DAYS.map((d,ci)=>{const v=hm[colDow[ci]+'_'+ri]||0;return `<div class="atd-cell" style="background:${LV[cellLv(v)]}"></div>`}).join('')}`).join('')}</div>
+      ${peak?`<div class="atd-peak">🌟 골든타임: <b>${DAYS[peak.c]}요일 ${ROWS[peak.r]}</b> — 이때 제일 잘 써져요</div>`:`<div class="atd-peak" style="color:var(--ink-faint);background:none;border-color:var(--line)">쓸수록 나만의 골든타임이 나타나요 ✍️</div>`}</div></div>`;
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)atCloseDash()}}
+function atCloseDash(){const s=document.getElementById('atDashSheet');if(s)s.remove()}
+/* 🎭 선보이기 (OSMU) — 한 글을 여러 콘텐츠로 */
+let osmuSrc=null, osmuTone='story', osmuFmt='card', osmuHook=0, osmuSources=[];
+const OSMU_TONES={info:{nm:'정보형',cta:'📌 저장해두고\n필요할 때 꺼내 보세요',qbait:'여러분은 어떻게 하고 계세요? 댓글로 알려주세요 👇'},
+  story:{nm:'스토리형',cta:'다음 이야기도\n놓치지 마세요 · 팔로우 👆',qbait:'여러분은 어떠셨나요?'},
+  prov:{nm:'도발형',cta:'찔렸다면 저장 👆\n아직 안 늦었어요',qbait:'아직도 그대로 두실 건가요? 👇'}};
+const OSMU_TAGS={'대형':['#인스타마케팅','#퍼스널브랜딩'],'중형':['#헤어디자이너','#미용실마케팅','#1인샵사장'],'롱테일':['#헤어디자이너인스타','#원장님마케팅','#미용실인스타마케팅']};
+const OSMU_FMTS=[{k:'card',ic:'📸',nm:'카드뉴스'},{k:'reel',ic:'🎬',nm:'릴스'},{k:'blog',ic:'✍️',nm:'블로그'},{k:'thread',ic:'🧵',nm:'스레드'},{k:'cap',ic:'💬',nm:'캡션·태그'}];
+function osmuHtmlToParas(html){let t=(html||'').replace(/<\/(div|p|h[1-6]|li|blockquote)>/gi,'\n').replace(/<br\s*\/?>/gi,'\n');const d=document.createElement('div');d.innerHTML=t;t=(d.textContent||'');
+  let arr=t.split(/\n+/).map(s=>s.trim()).filter(Boolean);if(arr.length<2)arr=(t.match(/[^.!?]+[.!?]*/g)||[]).map(s=>s.trim()).filter(Boolean);return arr.length?arr:[]}
+function osmuSents(){return ((osmuSrc.paras.join(' ')).match(/[^.!?]+[.!?]*/g)||[]).map(s=>s.trim()).filter(Boolean)}
+function osmuHi(t){return (t||'').replace(/(\d[\d,]*\s?[가-힣%원명개일년월]?)/g,'<mark>$1</mark>')}
+function osmuHookList(){const ss=osmuSents(),out=[];if(osmuSrc.title)out.push(osmuSrc.title);if(ss[0]&&out.indexOf(ss[0])<0)out.push(ss[0]);const num=ss.find(s=>/\d/.test(s));if(num&&out.indexOf(num)<0)out.push(num);ss.forEach(s=>{if(out.length<3&&out.indexOf(s)<0)out.push(s)});return out.length?out.slice(0,3):['(제목을 지어주세요)']}
+function osmuChunk(list,max){const out=[];let buf='';list.forEach(s=>{if((buf+' '+s).trim().length>max){if(buf)out.push(buf.trim());buf=s}else buf=(buf+' '+s).trim()});if(buf)out.push(buf.trim());return out}
+function renderOsmu(){const w=WS.find(x=>x.key==='osmu');
+  document.getElementById('wsTitle').innerHTML=`<div class="wt-top"><span class="wt-ic">🎭</span><h2>선보이기</h2></div><div class="wt-desc">${esc(w.desc)}</div>`;
+  const feed=document.getElementById('feed');let h='<div class="osw">';
+  if(!osmuSrc){ osmuSources=[];
+    (store.books||[]).forEach(b=>b.chapters.forEach(c=>c.secs.forEach(s=>{if(ebPlain(s.html)>20)osmuSources.push({kind:'📖 '+b.title,title:s.title,html:s.html})})));
+    store.items.filter(i=>i.ws==='think').sort((a,b)=>b.ts-a.ts).forEach(i=>{if(ebPlain(i.text)>20)osmuSources.push({kind:'💭 내 생각',title:i.title||'(제목 없음)',html:i.text})});
+    if(!osmuSources.length){h+=`<div class="os-empty">먼저 <b style="color:var(--lime)">전자책 꼭지</b>나 <b style="color:var(--lime)">내 생각 글</b>을 20자 이상 써주세요.<br>그 글을 카드뉴스·릴스·블로그·스레드·캡션으로 자동 변환해드려요.</div>`;}
+    else{h+=`<div class="os-srch">🔁 어떤 글을 여러 콘텐츠로 만들까요?</div>`;
+      osmuSources.forEach((s,i)=>{h+=`<div class="os-src" onclick="osmuPick(${i})"><div class="t">${esc(s.title)}</div><div class="m">${esc(s.kind)} · ${ebPlain(s.html)}자</div></div>`});}
+  } else {
+    const T=OSMU_TONES[osmuTone],hooks=osmuHookList(),hook=hooks[Math.min(osmuHook,hooks.length-1)];
+    h+=`<button class="os-back" onclick="osmuBack()">‹ 다른 글 고르기</button>
+      <div class="os-cur"><div class="l">📖 원본</div><div class="t">${esc(osmuSrc.title)}</div></div>
+      <div class="os-tones">${Object.keys(OSMU_TONES).map(k=>`<div class="os-tone ${k===osmuTone?'on':''}" onclick="osmuSetTone('${k}')">${OSMU_TONES[k].nm}</div>`).join('')}</div>
+      <div class="os-tabs">${OSMU_FMTS.map(f=>`<div class="os-tab ${f.k===osmuFmt?'on':''}" onclick="osmuSetFmt('${f.k}')">${f.ic} ${f.nm}</div>`).join('')}</div>`;
+    const hookPick=`<div class="os-hh">✨ 표지 훅 후보 — 골라보세요</div>`+hooks.map((hk,i)=>`<div class="os-hook ${i===osmuHook?'on':''}" onclick="osmuSetHook(${i})">${esc(hk)}</div>`).join('')+`<div style="height:12px"></div>`;
+    if(osmuFmt==='card'){
+      h+=hookPick+'<div class="os-cards">';
+      h+=`<div class="os-card cover"><div class="no">1</div><div class="hk">${esc(hook)}</div></div>`;
+      osmuSrc.paras.forEach((p,i)=>{const last=i===osmuSrc.paras.length-1;h+=`<div class="os-card"><div class="no">${i+2}</div><div class="bd">${osmuHi(esc(p))}</div>${last?'':'<span class="nx">…</span>'}</div>`});
+      h+=`<div class="os-card cta"><div class="no">${osmuSrc.paras.length+2}</div><div class="cta2">${T.cta}</div></div></div><div class="os-hint">문단 = 카드 한 장 · 표지 훅 후보 · 숫자 하이라이트 · 톤별 CTA.</div>`;
+    } else if(osmuFmt==='reel'){
+      const bullets=osmuSrc.paras.map(p=>(p.match(/^[^.!?]+[.!?]*/)||[p])[0].trim()).slice(0,4);
+      h+=hookPick+`<div class="os-seg"><div class="st">🎬 0–3초 · 훅</div><div class="big">${esc(hook)}</div></div>
+        <div class="os-seg"><div class="st">📝 전개 · 자막</div><ul>${bullets.map(b=>`<li>${osmuHi(esc(b))}</li>`).join('')}</ul></div>
+        <div class="os-seg"><div class="st">📣 CTA</div><div style="font-weight:800">${esc(T.cta.replace('\n',' '))}</div></div>
+        <div class="os-hint">비트별 배치 + 훅 후보 + 자막용 문장.</div>`;
+    } else if(osmuFmt==='blog'){
+      const sub=(osmuSents()[Math.floor(osmuSents().length/2)]||'').slice(0,22);
+      h+=`<div class="os-blog"><h1>${esc(hook)}</h1>${osmuSrc.paras.map((p,i)=>(i===Math.floor(osmuSrc.paras.length/2)&&sub?`<h3>${esc(sub)}…</h3>`:'')+`<p>${esc(p)}</p>`).join('')}</div><div class="os-hint">제목 = 훅 · 소제목 자동 · 문단 정리 (네이버 붙여넣기용).</div>`;
+    } else if(osmuFmt==='thread'){
+      const tws=osmuChunk(osmuSents().slice(1),75),tot=tws.length+2;
+      h+=`<div class="os-tw hook"><div class="num">1/${tot}</div><div class="tx">${esc(hook)}</div></div>`;
+      tws.forEach((t,i)=>{h+=`<div class="os-tw"><div class="num">${i+2}/${tot}</div><div class="tx">${i===1?'<b style="color:#7ab8ff">여기서부터 중요해요. </b>':''}${esc(t)}</div></div>`});
+      h+=`<div class="os-tw"><div class="num">${tot}/${tot}</div><div class="tx">${esc(T.qbait)} 도움이 됐다면 팔로우 🙏</div></div><div class="os-hint">1번 = 강훅 · 중간 리훅 · 1/n.</div>`;
+    } else if(osmuFmt==='cap'){
+      const ss=osmuSents(),cap=`${hook}\n\n${ss[0]||''} ${ss.length>1?ss[ss.length-1]:''}\n\n👇 전체 이야기는 프로필 링크에서`;
+      h+=`<div class="os-cap"><div class="cl">${esc(cap)}</div><div class="qb">💬 ${esc(T.qbait)}</div>`;
+      h+=Object.keys(OSMU_TAGS).map(g=>`<div style="font-size:9.5px;color:var(--ink-faint);font-weight:700;margin:8px 0 4px">${g}</div><div class="os-tags">${OSMU_TAGS[g].map(t=>`<span class="os-tag">${t}</span>`).join('')}</div>`).join('');
+      h+=`</div><div class="os-hint">첫 줄 훅 · 요약 · 댓글 유도 질문 · 해시태그 3단.</div>`;
+    }
+  }
+  feed.innerHTML=h+'</div>';
+}
+function osmuPick(i){const s=osmuSources[i];osmuSrc={title:s.title,paras:osmuHtmlToParas(s.html)};osmuTone='story';osmuFmt='card';osmuHook=0;render()}
+function osmuBack(){osmuSrc=null;render()}
+function osmuSetTone(t){osmuTone=t;osmuHook=0;render()}
+function osmuSetFmt(f){osmuFmt=f;render()}
+function osmuSetHook(i){osmuHook=i;render()}
+/* 🖼 갤러리 (아이디어 탭 안 · 사진 통합 보기) */
+function ideaSetGal(v){ideaGallery=!!v;render();window.scrollTo({top:0})}
+function galOpen(id){const i=store.items.find(x=>x.id===id);if(!i||!i.img)return;const ov=document.createElement('div');ov.className='gal-ov';ov.onclick=()=>ov.remove();
+  const cap=(i.memo?esc(i.memo):'')+(ebPlainText(i.text||'')?('<br>'+esc(ebPlainText(i.text).slice(0,80))):'');
+  ov.innerHTML=`<div class="gal-box"><img src="${(i.img||'').replace(/"/g,'&quot;')}">${cap?`<div class="gal-cap">${cap}</div>`:''}</div>`;
+  document.body.appendChild(ov)}
+/* 📎 사진 통합 — 에디터에서 갤러리 사진 골라 넣기 */
+function ebGalleryPick(){const body=ebActiveBody;if(!body)return;
+  const photos=store.items.filter(i=>i.img).sort((a,b)=>b.ts-a.ts);
+  const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebGalSheet';
+  sh.innerHTML=`<div class="eb-sheetc"><button class="eb-sheetx" onclick="ebGalClose()">✕</button>
+    <div class="eb-sheeth">📎 내 갤러리에서 고르기</div>
+    <div class="eb-sheets">아이디어에 담아둔 사진을 이 글에 넣어요.</div>
+    ${photos.length?`<div class="idea-gal" style="margin-top:8px;max-height:52vh;overflow-y:auto">${photos.map(i=>`<div class="idea-gcell" onclick="ebGalInsert('${i.id}')" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')"></div>`).join('')}</div>`:`<div class="home-first" style="margin:16px 0">아직 담아둔 사진이 없어요.<br>아이디어 탭에서 사진을 담으면 여기서 골라 넣을 수 있어요.</div>`}</div>`;
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebGalClose()}}
+function ebGalClose(){const s=document.getElementById('ebGalSheet');if(s)s.remove()}
+function ebGalInsert(id){const i=store.items.find(x=>x.id===id);if(!i||!i.img)return;const body=ebActiveBody;ebGalClose();if(!body)return;body.focus();
+  try{const sel=window.getSelection(),r=document.createRange();r.selectNodeContents(body);r.collapse(false);sel.removeAllRanges();sel.addRange(r)}catch(e){}
+  document.execCommand('insertHTML',false,'<img class="eb-img" src="'+(i.img||'').replace(/"/g,'&quot;')+'" alt=""/><p><br></p>');
+  if(typeof ebOnEdit==='function')ebOnEdit();ebBuzz(8);toast('갤러리 사진을 넣었어요 ✓')}
 function ebHiFocus(){const b=ebActiveBody;if(!b)return;const sel=window.getSelection();b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'));if(!sel.anchorNode)return;let n=sel.anchorNode;while(n&&n.parentNode!==b)n=n.parentNode;if(n&&n.classList)n.classList.add('active')}
 function ebFmt(kind){const body=ebActiveBody;if(!body)return;body.focus();
   if(kind==='img'){ebPickImg();return}
@@ -1666,9 +2004,13 @@ function homeCalHtml(){
     </div>
   </div>`;
 }
+const THINK_CATS_DEFAULT=[{id:'plain',nm:'그냥 생각',color:'#8a8a86'},{id:'hook',nm:'후킹',color:'#ff5c8a'},{id:'consult',nm:'상담·고객',color:'#7ab8ff'},{id:'shoot',nm:'촬영·구도',color:'#ff9d5c'},{id:'biz',nm:'사업',color:'#c88bff'},{id:'idea',nm:'아이디어',color:'#C8FF00'}];
+function tkCats(){try{const v=JSON.parse(localStorage.getItem('idf_thinkcats')||'null');return Array.isArray(v)&&v.length?v:THINK_CATS_DEFAULT}catch(e){return THINK_CATS_DEFAULT}}
+function tkCat(id){return id?tkCats().find(c=>c.id===id):null}
+function tkCatColor(id){const c=tkCat(id);return c?c.color:''}
 function thinkCalHtml(items){
-  // 날짜별 개수
-  const cnt={}; items.forEach(i=>{const k=ymdKey(new Date(i.ts));cnt[k]=(cnt[k]||0)+1});
+  // 날짜별 개수 + 카테고리 색
+  const cnt={},dayC={}; items.forEach(i=>{const k=ymdKey(new Date(i.ts));cnt[k]=(cnt[k]||0)+1;const col=tkCatColor(i.group);if(col&&!dayC[k])dayC[k]=col});
   const {y,m}=thinkCalYM;
   const first=new Date(y,m,1), start=first.getDay(), days=new Date(y,m+1,0).getDate();
   const todayK=ymdKey(new Date());
@@ -1679,7 +2021,7 @@ function thinkCalHtml(items){
   for(let d=1;d<=days;d++){
     const k=y+'-'+(m+1)+'-'+d, n=cnt[k]||0;
     const cls=['cal-cell']; if(n)cls.push('has'); if(k===todayK)cls.push('today'); if(k===thinkSelDate)cls.push('sel');
-    cells+=`<div class="${cls.join(' ')}" data-cald="${k}">
+    cells+=`<div class="${cls.join(' ')}" data-cald="${k}"${dayC[k]?` style="--cd:${dayC[k]}"`:''}>
       <span class="cal-d">${d}</span>${n?`<span class="cal-badge">${n>9?'9+':n}</span>`:''}</div>`;
   }
   return `<div class="tk-cal${collapsed?' collapsed':''}">
@@ -1725,9 +2067,9 @@ function renderThink(){
     h+=`<div class="tk-daygrp"><div class="tk-dayhd">${label}</div>`;
     gi.forEach(i=>{
       const tm=new Date(i.ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-      const pv=ebPlainText(i.text||''); const title=i.title||pv.slice(0,26)||'(제목 없음)';
-      h+=`<div class="tk-post" data-open="${i.id}">
-        <div class="tk-post-t">${mark(title)}</div>
+      const pv=ebPlainText(i.text||''); const title=i.title||pv.slice(0,26)||'(제목 없음)'; const cc=tkCat(i.group);
+      h+=`<div class="tk-post" data-open="${i.id}"${cc?` style="border-left:3px solid ${cc.color}"`:''}>
+        <div class="tk-post-t">${cc?`<span class="tk-cattag" style="background:${cc.color}22;color:${cc.color}">${esc(cc.nm)}</span>`:''}${mark(title)}</div>
         ${pv?`<div class="tk-post-b">${mark(pv.slice(0,120))}</div>`:''}
         <div class="tk-post-f"><span>${esc(tm)}${i.memo?' · '+esc(i.memo):''}</span><button class="tk-del" data-del="${i.id}">✕</button></div>
       </div>`;
@@ -1763,7 +2105,7 @@ function thinkNew(){const it={id:uid(),ws:'think',type:'journal',title:'',text:'
 function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;curThink=it;const d=new Date(it.ts);
   const w=document.createElement('div');w.className='eb-editor';w.id='thinkEditor';
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
-      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebToggleFocus()">🎯 집중</button>
+      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebToggleFocus()">🎯 몰입</button>
       <button class="eb-savebtn" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button>
       <button class="eb-done" onclick="thinkSendToBook()">📖 전자책</button></div>
     <div class="eb-fmt">
@@ -1774,12 +2116,14 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
       <button onmousedown="ebFp(event)" onclick="ebFmt('callout')">💡 강조</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('list')">✓ 체크</button>
       <button onmousedown="ebFp(event)" onclick="ebPickImg()">🖼 사진</button>
+      <button onmousedown="ebFp(event)" onclick="ebGalleryPick()">📎 갤러리</button>
       <button onmousedown="ebFp(event)" onclick="ebFmt('divider')">— 구분선</button>
       <button onmousedown="ebFp(event)" onclick="ebHistOpen()">🕐 되돌리기</button>
-      <span class="eb-wc" id="ebWc">0자</span></div>
+      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
       <input class="eb-edtitle eb-thinktitle" id="thinkTitle" placeholder="제목 (선택)" value="${esc(it.title||'')}">
+      <div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
       <div class="eb-edbody" id="thinkBody" contenteditable="true" data-ph="여기에 자유롭게 길게 써 내려가세요. 엔터로 줄바꿈되고, 위 도구로 제목·인용·사진도 넣을 수 있어요. ✍️">${it.text||''}</div>
     </div></div>`;
@@ -1788,17 +2132,19 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
   ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();thinkMark()};bkFocus=false;
   ebEnsureSelBar();
   title.addEventListener('input',()=>{curThink.title=title.value;thinkMark()});
-  body.addEventListener('input',()=>{ebSmartType();curThink.text=body.innerHTML;ebUpdWc();thinkMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('input',()=>{atNote();ebSmartType();curThink.text=body.innerHTML;ebUpdWc();thinkMark();if(bkFocus)ebHiFocus()});
   body.addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');curThink.text=body.innerHTML;thinkMark();return}}if(e.key===' ')ebMdSpace(e)});
   body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
   document.querySelectorAll('#thinkMoods .tk-mood').forEach(m=>m.onclick=()=>{document.querySelectorAll('#thinkMoods .tk-mood').forEach(x=>x.classList.toggle('on',x===m));curThink.memo=m.dataset.m;thinkMark();ebBuzz(5)});
+  document.querySelectorAll('#thinkCats .tk-catchip').forEach(el=>el.onclick=()=>{const id=el.dataset.cat;curThink.group=(curThink.group===id?'':id);
+    document.querySelectorAll('#thinkCats .tk-catchip').forEach(x=>{const on=x.dataset.cat===curThink.group;const cc=tkCat(x.dataset.cat);x.classList.toggle('on',on);x.style.borderColor=on&&cc?cc.color:'';x.style.background=on&&cc?cc.color+'22':''});thinkMark();ebBuzz(5)});
   document.addEventListener('selectionchange',ebSelHandler);
-  ebUpdWc();ebHistPush(it.id,it.text||'');setTimeout(()=>body.focus(),180);
+  ebUpdWc();ebHistPush(it.id,it.text||'');atStart();setTimeout(()=>body.focus(),180);
 }
 function thinkMark(){clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved()},450)}
 function thinkSaveNow(){if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;}save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved();toast('저장했어요 ✓');ebBuzz(10)}
 function thinkSendToBook(){if(!curThink)return;const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;save();ebSendThought({title:curThink.title||'',body:ebPlainText(curThink.text||'')})}
-function thinkClose(){ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
+function thinkClose(){atStop();ebStopMic();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
   if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;
     if(!(curThink.title||'').trim() && !ebPlainText(curThink.text||'').trim()){store.items=store.items.filter(x=>x.id!==curThink.id);} // 빈 글은 저장 안 함
     save();}
