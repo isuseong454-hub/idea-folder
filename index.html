@@ -701,6 +701,10 @@
   .ebs-slot.sel .ebs-shd{width:120px;height:14px;filter:blur(10px);background:rgba(0,0,0,.55)}
   .ebs-bk{position:relative;width:110px;height:var(--h,156px);transform-style:preserve-3d;transform:rotateY(90deg);transition:transform .7s cubic-bezier(.24,1.12,.3,1),filter .5s}
   .ebs-slot.sel .ebs-bk{transform:rotateY(-6deg) translateZ(105px) translateY(-8px)}
+  /* 마우스가 사정거리에 들면 살짝 비틀림(스케치 책 포함) */
+  .ebs-niche:not(.zoom) .ebs-slot:hover{z-index:6}
+  .ebs-niche:not(.zoom) .ebs-slot:hover .ebs-bk{transition:transform .34s cubic-bezier(.34,1.3,.5,1),filter .5s;transform:rotateY(72deg) translateZ(10px) translateY(-4px)}
+  .ebs-niche:not(.zoom) .ebs-slot:hover .ebs-shd{width:60px;filter:blur(7px)}
   .ebs-niche.zoom .ebs-slot:not(.sel) .ebs-bk,.ebs-niche.zoom .ebs-ghost,.ebs-niche.zoom .ebs-add{filter:blur(2.5px) brightness(.5)}
   .ebs-f{position:absolute;top:0;height:100%;backface-visibility:hidden}
   .ebs-fc{left:50%;width:110px;margin-left:-55px;transform:translateZ(calc(var(--thk,34px)/2));border-radius:2px 5px 5px 2px;padding:11px 9px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
