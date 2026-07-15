@@ -766,6 +766,8 @@
   .ebs-ctr .op.on{background:rgba(var(--lime-rgb),.14);border-color:rgba(var(--lime-rgb),.5);color:var(--lime)}
   .ebs-ctr .op.gl{font-size:13px;color:#F0D49A}
   .ebs-subin{width:100%;margin-top:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;color:var(--ink);font-size:13px;padding:11px 13px;font-family:inherit;outline:none}
+  .ebs-pricehint{font-size:11px;color:var(--ink-faint);margin-top:6px;line-height:1.5}
+  .ebs-pricehint b{color:var(--gold-hi)}
   .ebs-save{width:100%;margin-top:12px;background:var(--lime);color:#0b0b0b;border:none;border-radius:12px;font-weight:900;font-size:14px;padding:12px;cursor:pointer;font-family:inherit}
   .ebm-silk{background:linear-gradient(160deg,color-mix(in srgb,var(--c) 88%,#fff),var(--c) 40%,color-mix(in srgb,var(--c) 55%,#000));color:#fff}
   .ebm-linen{background-color:var(--c);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 2px,transparent 2px 4px),repeating-linear-gradient(-45deg,rgba(0,0,0,.05) 0 2px,transparent 2px 4px),linear-gradient(180deg,var(--c),color-mix(in srgb,var(--c) 68%,#000));color:#fff}
@@ -773,6 +775,20 @@
   .ebm-gold .ebs-ct,.ebm-gold .ebs-st{color:#F0D49A;text-shadow:0 0 6px rgba(216,179,106,.35)}
   .ebm-paper{background:linear-gradient(180deg,#efe9dc,#d9d2c0);color:#37322a}
   .ebm-paper .ebs-ct,.ebm-paper .ebs-st,.ebm-paper .ebs-csub,.ebm-paper .ebs-cau{color:#37322a;text-shadow:none}
+  .ebm-holo{background:linear-gradient(130deg,#8de1ff,#c9a8ff 28%,#ffb3d9 52%,#ffe6a1 72%,#a8ffd8);color:#221f2e}
+  .ebm-holo .ebs-ct,.ebm-holo .ebs-st,.ebm-holo .ebs-csub,.ebm-holo .ebs-cau,.ebm-holo .ebs-em{color:#221f2e;text-shadow:none}
+  /* 금박양장 금테 */
+  .ebs-gfr{position:absolute;inset:8px 9px;border:1px solid rgba(201,164,90,.55);border-radius:2px;z-index:1;pointer-events:none}
+  /* 띠지(정가) · 리본 — 표지 선택 장치 */
+  .ebs-obi{position:absolute;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(180deg,rgba(200,255,0,.96),rgba(170,220,0,.96));color:#0d0d0d;padding:5px 7px 6px;box-shadow:0 -3px 8px rgba(0,0,0,.32);pointer-events:none}
+  .ebs-obi .oh{font-size:7.5px;font-weight:900;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ebs-obi .op{font-size:7px;font-weight:800;opacity:.75;margin-top:1px}
+  .ebs-rib{position:absolute;top:0;right:16px;width:6px;height:44px;background:linear-gradient(180deg,#c0392b,#8e2a1f);z-index:5;box-shadow:1px 0 3px rgba(0,0,0,.4);pointer-events:none}
+  .ebs-rib::after{content:'';position:absolute;bottom:-5px;left:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:5px solid #8e2a1f}
+  .ebs-stand .ebs-obi{padding:7px 10px 8px}.ebs-stand .ebs-obi .oh{font-size:9.5px}.ebs-stand .ebs-obi .op{font-size:8.5px}
+  .ebs-stand .ebs-rib{width:7px;height:60px;right:20px}
+  .ebsc-book .ebs-obi{padding:7px 10px 8px}.ebsc-book .ebs-obi .oh{font-size:9.5px}.ebsc-book .ebs-obi .op{font-size:8.5px}
+  .ebsc-book .ebs-rib{width:7px;height:58px;right:20px}
   /* ── 완성상상 쇼케이스: 책 중앙 부유 + 하단바 ── */
   .ebsc-ov{position:fixed;inset:0;z-index:850;opacity:0;pointer-events:none;transition:opacity .4s;background:radial-gradient(90% 46% at 50% 22%,rgba(255,214,160,.12),transparent 62%),linear-gradient(180deg,rgba(8,7,5,.55),rgba(6,5,4,.72));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
   .ebsc-ov.on{opacity:1;pointer-events:auto}
@@ -893,6 +909,29 @@
   .eb-savebtn:active{transform:scale(.95)}
   .eb-savebtn.saved{background:rgba(var(--lime-rgb),.14);border-color:rgba(var(--lime-rgb),.45);color:var(--lime)}
   .eb-done{background:rgba(var(--lime-rgb),.12);border:1px solid rgba(var(--lime-rgb),.4);color:var(--lime);border-radius:9px;font-size:12.5px;font-weight:800;padding:7px 12px;cursor:pointer;font-family:inherit}.eb-done.is-done{background:var(--lime);color:#0D0D0D;border-color:var(--lime)}
+  /* ── 미니멀 에디터: 기능은 선택바 + ＋시트 + ⋯메뉴 + 상태바로 재배치 ── */
+  .eb-edtitle-mini{flex:1;text-align:center;font-size:13px;color:var(--ink-faint);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .eb-more{background:none;border:none;color:var(--ink-dim);font-size:18px;font-weight:800;cursor:pointer;padding:4px 9px;border-radius:8px;line-height:1;flex:none;font-family:inherit}
+  .eb-more:hover{background:var(--surface-2)}
+  .eb-focusbtn.hero{border-color:rgba(var(--lime-rgb),.45);color:var(--lime);box-shadow:0 0 12px rgba(var(--lime-rgb),.16)}
+  .eb-plus{position:fixed;right:18px;bottom:62px;z-index:90;width:48px;height:48px;border-radius:50%;background:var(--lime);color:#0b0b0b;border:none;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 10px 26px rgba(var(--lime-rgb),.32);display:flex;align-items:center;justify-content:center;transition:transform .15s;font-family:inherit}
+  .eb-plus:active{transform:scale(.9)}
+  .eb-edstatus{position:fixed;left:0;right:0;bottom:0;z-index:88;display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 14px;font-size:11.5px;color:var(--ink-faint);background:rgba(13,13,13,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+  .eb-edstatus .eb-savebtn{margin-left:0;padding:4px 10px;font-size:11.5px;border-radius:8px}
+  .eb-edstatus .eb-mic{padding:4px 10px;font-size:11.5px;border-radius:8px}
+  .eb-insheet{position:fixed;left:0;right:0;bottom:0;z-index:95;transform:translateY(102%);transition:transform .34s cubic-bezier(.22,.9,.3,1);background:rgba(22,22,22,.98);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 16px 22px;box-shadow:0 -18px 40px rgba(0,0,0,.5)}
+  .eb-insheet.on{transform:none}
+  .eb-insheet .grip{width:36px;height:4px;border-radius:99px;background:#3a3a36;margin:2px auto 12px}
+  .eb-insheet .ih{font-size:12px;color:var(--ink-faint);font-weight:800;margin:0 4px 10px}
+  .eb-ingrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .eb-ingrid button{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:13px 4px;color:var(--ink);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .eb-ingrid button .ic{font-size:19px}
+  .eb-ingrid button:active{background:rgba(var(--lime-rgb),.12);border-color:rgba(var(--lime-rgb),.4)}
+  .eb-inscrim{position:fixed;inset:0;z-index:94;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s}
+  .eb-inscrim.on{opacity:1;pointer-events:auto}
+  .eb-moremenu{position:fixed;z-index:96;background:rgba(28,28,28,.98);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid #333;border-radius:14px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.6);min-width:172px}
+  .eb-moremenu button{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:var(--ink);font-size:13px;font-weight:700;padding:10px 12px;border-radius:9px;cursor:pointer;font-family:inherit;text-align:left}
+  .eb-moremenu button:hover{background:rgba(255,255,255,.07)}
   .eb-edscroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .eb-edinner{max-width:680px;margin:0 auto;padding:22px 22px 130px}
   .eb-edchap{font-size:12px;font-weight:800;color:var(--lime);letter-spacing:.04em;margin-bottom:12px}
@@ -1785,10 +1824,29 @@ function ebFlat(b){const a=[];b.chapters.forEach(c=>c.secs.forEach(s=>a.push({c,
 function ebStats(b){let ch=0;b.chapters.forEach(c=>c.secs.forEach(s=>ch+=ebPlain(s.html)));return{ch,pages:Math.max(1,Math.round(ch/900)),mins:Math.max(1,Math.round(ch/500))}}
 function ebYear(){return new Date().getFullYear()}
 const EBS_COLORS=['#3566c9','#7a4fc9','#1f8a5f','#b4483f','#c9762f','#0e7f78','#23201b','#e8e2d4'];
-const EBS_MATS=[['silk','실크'],['linen','리넨'],['gold','금박양장'],['paper','페이퍼']];
+const EBS_MATS=[['silk','실크'],['linen','리넨'],['gold','금박양장'],['paper','페이퍼'],['holo','홀로 포일']];
 const EBS_EMS=['✦','❖','♛','✳','✒','☘'];
-let ebSel=null,bkNewSub='',bkNewColor='#3566c9',bkNewMat='silk',bkNewEm='✦',bkNewFont='gothic',bkNewStep=1,ebsCustSt=null;
-function ebShape(b){if(!b.mat)b.mat='silk';if(!b.em)b.em='✦';if(!b.font)b.font='gothic';if(b.sub==null)b.sub='';if(!b.color)b.color=EBS_COLORS[0];return b}
+let ebSel=null,bkNewSub='',bkNewColor='#3566c9',bkNewMat='silk',bkNewEm='✦',bkNewFont='gothic',bkNewStep=1,ebsCustSt=null,bkNewObi=false,bkNewRibbon=false,bkNewPrice=0;
+function ebPriceHint(n){return n===0?'<b>무료</b> — 리드 자석(이름·연락처 받기)'
+  :n<10000?'<b>가벼운 진입</b> — 부담 없이 많이 팔려요'
+  :n<30000?'<b>표준</b> — 실물 단행본과 같은 체감'
+  :n<100000?'<b>전문 노하우</b> — 목차가 두꺼워야 설득돼요'
+  :n<300000?'<b>프리미엄</b> — 강의·템플릿이 붙는 가격대'
+  :'<b>고가 패키지</b> — 컨설팅·1:1이 함께여야 해요'}
+function ebsPvPrice(){const inp=document.getElementById('ebsPriceIn');if(!inp)return;
+  const n=Math.max(0,Math.min(1000000,+inp.value||0));
+  const e=document.getElementById('ebsPvOp');if(e)e.textContent=n>0?'정가 '+ebWon(n):'무료 나눔';
+  const h=document.getElementById('ebsPriceHint');if(h)h.innerHTML=ebPriceHint(n)}
+function ebShape(b){if(!b.mat)b.mat='silk';if(!b.em)b.em='✦';if(!b.font)b.font='gothic';if(b.sub==null)b.sub='';if(!b.color)b.color=EBS_COLORS[0];if(b.obi==null)b.obi=false;if(b.ribbon==null)b.ribbon=false;if(b.price==null)b.price=0;return b}
+function ebWon(n){return (n||0).toLocaleString('ko-KR')+'원'}
+/* 표지에 붙는 띠지(정가)·리본 HTML */
+function ebObiHtml(b,opId){
+  if(!b.obi)return '';
+  const hook=(b.sub||'').trim()||'지금, 이 한 권';
+  return `<div class="ebs-obi"><div class="oh">${esc(hook)}</div><div class="op"${opId?` id="${opId}"`:''}>${b.price>0?'정가 '+ebWon(b.price):'무료 나눔'}</div></div>`;
+}
+function ebRibHtml(b){return b.ribbon?'<span class="ebs-rib"></span>':''}
+function ebGfrHtml(b){return b.mat==='gold'?'<span class="ebs-gfr"></span>':''}
 function ebSpineH(b){let h=0;const s=String(b.id);for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return 146+(h%5)*6}
 function renderBook(){
   if(!store.books)store.books=[];
@@ -1816,7 +1874,7 @@ function ebBookHtml(b){
   const sf=b.font==='serif'?' srf':'',au=ebAuthor();
   const thk=Math.round(24+p.pct/100*20);
   return `<div class="ebs-slot${sel?' sel':''}" style="--thk:${thk}px" onclick="ebPick('${b.id}')"><span class="ebs-shd"></span><div class="ebs-bk" style="--c:${b.color};--h:${h}px">
-    <div class="ebs-f ebs-fc ebm-${b.mat}${done?' ebs-done':''}"><span class="ebs-em">${b.em}</span><div><div class="ebs-ct${sf}">${esc(b.title)}</div>${b.sub?`<div class="ebs-csub${sf}">${esc(b.sub)}</div>`:''}<div class="ebs-cau">${esc(au)} 지음</div></div></div>
+    <div class="ebs-f ebs-fc ebm-${b.mat}${done?' ebs-done':''}">${ebGfrHtml(b)}${ebRibHtml(b)}<span class="ebs-em">${b.em}</span><div><div class="ebs-ct${sf}">${esc(b.title)}</div>${b.sub?`<div class="ebs-csub${sf}">${esc(b.sub)}</div>`:''}<div class="ebs-cau">${esc(au)} 지음</div></div>${ebObiHtml(b)}</div>
     <div class="ebs-f ebs-fb ebm-${b.mat}"></div>
     <div class="ebs-f ebs-fs${done?' done':''}"><span class="ebs-sk"><span class="ebs-st">${esc(b.title)}</span></span><span class="ebs-real ebm-${b.mat}" style="clip-path:inset(${100-p.pct}% 0 0 0)"><span class="ebs-st">${esc(b.title)}</span></span><span class="ebs-pq">${p.pct}%</span></div>
     <div class="ebs-f ebs-fp"></div>
@@ -1847,8 +1905,8 @@ function ebShowcase(id){
   ov=document.createElement('div');ov.className='ebsc-ov';ov.id='ebscOv';
   ov.innerHTML=`<button class="ebsc-close" onclick="ebShowcaseClose()">✕</button><div class="ebsc-beam"></div>
     <div class="ebsc-stage"><div class="ebsc-float"><div class="ebsc-book ebm-${b.mat}" style="--c:${b.color}">${gfr}
-      <span class="ebsc-badge">신간 1위</span><span class="ebsc-pg"></span><span class="ebsc-pgb"></span><span class="ebsc-pgc"></span>
-      <span class="ebs-em">${b.em}</span><div><div class="ebs-ct${sf}">${esc(b.title)}</div>${b.sub?`<div class="ebs-csub${sf}">${esc(b.sub)}</div>`:''}<div class="ebs-cau">${esc(au)} 지음</div></div>
+      <span class="ebsc-badge">신간 1위</span><span class="ebsc-pg"></span><span class="ebsc-pgb"></span><span class="ebsc-pgc"></span>${ebRibHtml(b)}
+      <span class="ebs-em">${b.em}</span><div><div class="ebs-ct${sf}">${esc(b.title)}</div>${b.sub?`<div class="ebs-csub${sf}">${esc(b.sub)}</div>`:''}<div class="ebs-cau">${esc(au)} 지음</div></div>${ebObiHtml(b)}
     </div><div class="ebsc-shd"></div></div></div>
     <div class="ebsc-sheet">
       <div class="ebsc-grip"></div>
@@ -1871,7 +1929,7 @@ function ebImagineFor(id){const b=store.books.find(x=>x.id===id);if(!b)return;bk
 function ebDisp(id){const b=store.books.find(x=>x.id===id);if(!b)return;ebShape(b);
   const sf=b.font==='serif'?' srf':'',au=ebAuthor();
   const p=document.createElement('div');p.className='ebs-dispov';
-  p.innerHTML=`<div class="ebs-stand ebm-${b.mat}" style="--c:${b.color}"><span class="ebs-em">${b.em}</span><div><div class="ebs-ct${sf}">${esc(b.title)}</div>${b.sub?`<div class="ebs-csub${sf}">${esc(b.sub)}</div>`:''}<div class="ebs-cau">${esc(au)} 지음</div></div></div>
+  p.innerHTML=`<div class="ebs-stand ebm-${b.mat}" style="--c:${b.color}">${ebGfrHtml(b)}${ebRibHtml(b)}<span class="ebs-em">${b.em}</span><div><div class="ebs-ct${sf}">${esc(b.title)}</div>${b.sub?`<div class="ebs-csub${sf}">${esc(b.sub)}</div>`:''}<div class="ebs-cau">${esc(au)} 지음</div></div>${ebObiHtml(b)}</div>
     ${b.sub?`<div class="ebs-ovone">“${esc(b.sub)}”</div>`:''}<div class="ebs-ovx">아무 곳이나 눌러 닫기</div>`;
   p.onclick=()=>p.remove();document.body.appendChild(p);}
 function ebMilestones(){
@@ -1881,17 +1939,25 @@ function ebMilestones(){
       toast(tier===100?`🏆 『${b.title}』 완성! 금테를 둘렀어요`:tier===50?`📖 『${b.title}』 절반을 넘었어요! 🎉`:`✨ 『${b.title}』 30% — 책의 형태가 보이기 시작해요`);break;}}}
 function ebsCustHtml(s,pvTitle,pvSub){
   const sf=s.font==='serif'?' srf':'';
+  const pv={mat:s.mat,obi:s.obi,ribbon:s.ribbon,price:s.price||0,sub:(pvSub||s.sub||'')};
   return `<div class="ebs-custbody">
-    <div class="ebs-cpvwrap"><div class="ebs-cpv ebm-${s.mat}" style="--c:${s.color}"><span class="ebs-em">${s.em}</span><div><div class="ebs-ct${sf}" id="ebsPvT">${esc(pvTitle)||'제목'}</div><div class="ebs-csub${sf}" id="ebsPvS">${esc(pvSub||'')}</div></div></div></div>
+    <div class="ebs-cpvwrap"><div class="ebs-cpv ebm-${s.mat}" style="--c:${s.color}">${ebGfrHtml(pv)}${ebRibHtml(pv)}<span class="ebs-em">${s.em}</span><div><div class="ebs-ct${sf}" id="ebsPvT">${esc(pvTitle)||'제목'}</div><div class="ebs-csub${sf}" id="ebsPvS">${esc(pvSub||'')}</div></div>${ebObiHtml(pv,'ebsPvOp')}</div></div>
     <div class="ebs-ctr">
       <div class="lb">색</div><div class="sws">${EBS_COLORS.map(c=>`<span class="sw${c===s.color?' on':''}" style="background:${c}" onclick="${s._new?`bkNewColor='${c}';render()`:`ebsCustSet('color','${c}')`}"></span>`).join('')}</div>
       <div class="lb">재질</div><div class="ops">${EBS_MATS.map(m=>`<button class="op${m[0]===s.mat?' on':''}" onclick="${s._new?`bkNewMat='${m[0]}';render()`:`ebsCustSet('mat','${m[0]}')`}">${m[1]}</button>`).join('')}</div>
       <div class="lb">금박 엠블럼</div><div class="ops">${EBS_EMS.map(e=>`<button class="op gl${e===s.em?' on':''}" onclick="${s._new?`bkNewEm='${e}';render()`:`ebsCustSet('em','${e}')`}">${e}</button>`).join('')}</div>
       <div class="lb">글꼴</div><div class="ops"><button class="op${s.font==='gothic'?' on':''}" onclick="${s._new?`bkNewFont='gothic';render()`:`ebsCustSet('font','gothic')`}">고딕</button><button class="op${s.font==='serif'?' on':''}" onclick="${s._new?`bkNewFont='serif';render()`:`ebsCustSet('font','serif')`}">명조</button></div>
+      <div class="lb">진짜 책 장치</div><div class="ops">
+        <button class="op${s.obi?' on':''}" onclick="${s._new?`bkNewObi=!bkNewObi;render()`:`ebsCustSet('obi',${!s.obi})`}">🎗 띠지</button>
+        <button class="op${s.ribbon?' on':''}" onclick="${s._new?`bkNewRibbon=!bkNewRibbon;render()`:`ebsCustSet('ribbon',${!s.ribbon})`}">🔖 리본</button></div>
+      <div class="lb">가격 (정가)</div>
+      <input class="ebs-subin" style="margin-top:0" type="number" inputmode="numeric" min="0" max="1000000" step="1000" id="ebsPriceIn" value="${s.price||0}" placeholder="0 = 무료"
+        oninput="${s._new?`bkNewPrice=Math.max(0,Math.min(1000000,+this.value||0))`:`ebsCustSt.price=Math.max(0,Math.min(1000000,+this.value||0))`};ebsPvPrice()">
+      <div class="ebs-pricehint" id="ebsPriceHint">${ebPriceHint(s.price||0)}</div>
     </div></div>`;
 }
 function ebCustomize(id){const b=store.books.find(x=>x.id===id);if(!b)return;ebShape(b);
-  ebsCustSt={id,color:b.color,mat:b.mat,em:b.em,font:b.font,sub:b.sub};ebsCustRender();}
+  ebsCustSt={id,color:b.color,mat:b.mat,em:b.em,font:b.font,sub:b.sub,obi:b.obi,ribbon:b.ribbon,price:b.price||0};ebsCustRender();}
 function ebsCustRender(){
   let ov=document.getElementById('ebsCust');
   if(!ov){ov=document.createElement('div');ov.id='ebsCust';ov.className='ebs-custov';document.body.appendChild(ov);ov.addEventListener('click',e=>{if(e.target===ov)ebsCustClose()});}
@@ -1901,16 +1967,18 @@ function ebsCustRender(){
     <input class="ebs-subin" id="ebsSubIn" value="${esc(s.sub||'')}" placeholder="핵심 메시지 — 이 책은 ○○다" oninput="ebsCustSt.sub=this.value;var t=document.getElementById('ebsPvS');if(t)t.textContent=this.value">
     <button class="ebs-save" onclick="ebsCustSave()">저장 ✓</button></div>`;
 }
-function ebsCustSet(k,v){if(!ebsCustSt)return;const si=document.getElementById('ebsSubIn');if(si)ebsCustSt.sub=si.value;ebsCustSt[k]=v;ebsCustRender();}
+function ebsCustSet(k,v){if(!ebsCustSt)return;const si=document.getElementById('ebsSubIn');if(si)ebsCustSt.sub=si.value;const pi=document.getElementById('ebsPriceIn');if(pi)ebsCustSt.price=Math.max(0,Math.min(1000000,+pi.value||0));ebsCustSt[k]=v;ebsCustRender();}
 function ebsCustClose(){const o=document.getElementById('ebsCust');if(o)o.remove();ebsCustSt=null;}
 function ebsCustSave(){const s=ebsCustSt;if(!s)return;const b=store.books.find(x=>x.id===s.id);
-  if(b){const si=document.getElementById('ebsSubIn');b.color=s.color;b.mat=s.mat;b.em=s.em;b.font=s.font;b.sub=((si?si.value:s.sub)||'').trim();save();}
+  if(b){const si=document.getElementById('ebsSubIn'),pi=document.getElementById('ebsPriceIn');
+    b.color=s.color;b.mat=s.mat;b.em=s.em;b.font=s.font;b.sub=((si?si.value:s.sub)||'').trim();
+    b.obi=!!s.obi;b.ribbon=!!s.ribbon;b.price=pi?Math.max(0,Math.min(1000000,+pi.value||0)):(s.price||0);save();}
   ebsCustClose();render();toast('표지가 바뀌었어요 ✓');}
-function ebStart(){bkCreating=true;bkNewStep=1;bkNewType='howto';bkNewTitle='';bkNewSub='';bkNewMat='silk';bkNewEm='✦';bkNewFont='gothic';bkNewColor=EBS_COLORS[(store.books||[]).length%EBS_COLORS.length];render()}
+function ebStart(){bkCreating=true;bkNewStep=1;bkNewType='howto';bkNewTitle='';bkNewSub='';bkNewMat='silk';bkNewEm='✦';bkNewFont='gothic';bkNewObi=false;bkNewRibbon=false;bkNewPrice=0;bkNewColor=EBS_COLORS[(store.books||[]).length%EBS_COLORS.length];render()}
 function ebNewNext(){if(!(bkNewTitle||'').trim()){toast('책 제목을 정해주세요');const el=document.getElementById('ebNewTitle');if(el)el.focus();return}bkNewStep=2;render();window.scrollTo({top:0,behavior:'smooth'})}
 function ebNewPrev(){bkNewStep=1;render()}
 function ebViewCreate(){
-  const s={color:bkNewColor,mat:bkNewMat,em:bkNewEm,font:bkNewFont,_new:true};
+  const s={color:bkNewColor,mat:bkNewMat,em:bkNewEm,font:bkNewFont,obi:bkNewObi,ribbon:bkNewRibbon,price:bkNewPrice,_new:true};
   const steps=`<div class="ebw-steps"><span class="${bkNewStep>=1?'on':''}">1 · 표지</span><span class="ebw-line"></span><span class="${bkNewStep>=2?'on':''}">2 · 목차</span></div>`;
   if(bkNewStep===1){
     return `<button class="eb-back" onclick="ebCancelCreate()">‹ 책장</button>${steps}
@@ -1928,7 +1996,7 @@ function ebViewCreate(){
 }
 function ebCancelCreate(){bkCreating=false;render()}
 function ebCreate(){const title=(bkNewTitle||'').trim()||'제목 없는 책';const t=EB_TEMPLATES[bkNewType];
-  const book={id:uid(),title,type:bkNewType,emoji:t.ic,color:bkNewColor,mat:bkNewMat,em:bkNewEm,font:bkNewFont,sub:(bkNewSub||'').trim(),created:Date.now(),targetDate:null,dedication:'',authorBio:'',
+  const book={id:uid(),title,type:bkNewType,emoji:t.ic,color:bkNewColor,mat:bkNewMat,em:bkNewEm,font:bkNewFont,sub:(bkNewSub||'').trim(),obi:bkNewObi,ribbon:bkNewRibbon,price:bkNewPrice||0,created:Date.now(),targetDate:null,dedication:'',authorBio:'',
     chapters:t.toc.map(c=>({id:uid(),title:c.title,secs:c.secs.map(s=>({id:uid(),title:s.t,guide:s.g,html:'',status:'empty'}))}))};
   store.books.push(book);save();bkCreating=false;bkCur=null;ebSel=book.id;render();toast('책장에 꽂혔어요 📚')}
 function ebOpen(id){bkCur=store.books.find(b=>b.id===id);bkTocEdit=false;render()}
@@ -2020,36 +2088,27 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
   const flat=ebFlat(b),fi=flat.findIndex(x=>x.s.id===sid),prv=fi>0?flat[fi-1]:null,nxt=fi<flat.length-1?flat[fi+1]:null;
   const w=document.createElement('div');w.className='eb-editor';w.id='ebEditor';
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="ebCloseEdit()">‹ 목차</button>
-      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
-      <button class="eb-focusbtn" onclick="ebViewSettings()" title="배경·글자·글꼴">Aa</button>
-      <button class="eb-savebtn" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button>
-      <button class="eb-done ${s.status==='done'?'is-done':''}" id="ebDoneBtn" onclick="ebToggleDone()">${s.status==='done'?'✓ 완성됨':'완성 표시'}</button></div>
-    <div class="eb-fmt">
-      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
-      <button class="eb-mat" onmousedown="ebFp(event)" onclick="ebMaterial()">🧲 글감</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('h2')">제목</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')"><b>굵게</b></button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')">❝ 인용</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')">💡 강조</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('list')">✓ 체크</button>
-      <button onmousedown="ebFp(event)" onclick="ebPickImg()">🖼 사진</button>
-      <button onmousedown="ebFp(event)" onclick="ebGalleryPick()">📎 갤러리</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('divider')">— 구분선</button>
-      <button onmousedown="ebFp(event)" onclick="ebHistOpen()">🕐 되돌리기</button>
-      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>
+      <span class="eb-edtitle-mini" id="ebEdTitleMini">${esc(s.title||'제목 없는 꼭지')}</span>
+      <button class="eb-focusbtn hero" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
+      <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${esc(c.title)}</div>
       <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
       ${s.guide?`<div class="eb-guide" id="ebGuide"><button class="eb-gx" onclick="document.getElementById('ebGuide').remove()">✕</button><div class="eb-gh">💬 이 꼭지엔 이런 걸 써보세요</div><div class="eb-gq">${esc(s.guide)}</div></div>`:''}
       <div class="eb-edbody" id="ebEdBody" contenteditable="true" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
       <div class="eb-edtip">💡 ${ebTip()}</div>
-      <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>`;
+      <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>
+    <button class="eb-plus" onclick="ebInsSheet()" aria-label="넣기">＋</button>
+    <div class="eb-edstatus">
+      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
+      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span>
+      <button class="eb-savebtn" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('ebEdBody'),title=document.getElementById('ebEdTitle');
   ebActiveBody=body; ebActiveId=s.id; ebOnEdit=function(){bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()};
   ebAutoGrow(title);
   ebEnsureSelBar();
-  title.addEventListener('input',()=>{ebAutoGrow(title);s.title=title.value;ebMark()});
+  title.addEventListener('input',()=>{ebAutoGrow(title);s.title=title.value;const tm=document.getElementById('ebEdTitleMini');if(tm)tm.textContent=title.value||'제목 없는 꼭지';ebMark()});
   body.addEventListener('input',()=>{atNote();ebSmartType();s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
   body.addEventListener('keydown',e=>{
     if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');ebBuzz(6);return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');s.html=body.innerHTML;ebMark();return}}
@@ -2110,9 +2169,9 @@ function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!ebActiveId)re
   if(ebActiveBody)ebHistPush(ebActiveId,ebActiveBody.innerHTML);ebHistLast[ebActiveId]=0; // 현재본도 기록에 남기고 throttle 해제
   if(ebActiveBody)ebActiveBody.innerHTML=h.html;ebOnEdit();ebCloseSheet();toast('되돌렸어요 ✓');ebBuzz(10)}
 function ebSelHandler(){if(bkFocus)ebHiFocus();ebSelBar()}
-function ebCloseEdit(){ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
-function ebGoSec(cid,sid){ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
-function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';save();const btn=document.getElementById('ebDoneBtn');btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';
+function ebCloseEdit(){ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
+function ebGoSec(cid,sid){ebInsClose();ebMoreClose();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
+function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';save();const btn=document.getElementById('ebDoneBtn');if(btn){btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';}
   const p=ebProgress(bkCur);
   if(p.pct<100)bkCur.celebrated=false;
   if(s.status==='done'){ebBuzz(16);if(p.pct===100&&!bkCur.celebrated){bkCur.celebrated=true;save();ebCelebrate()}else toast('한 꼭지 완성! 잘하셨어요 🎉')}else ebBuzz(8)}
@@ -2122,6 +2181,42 @@ function ebCelebrate(){ebBuzz(30);const ov=document.createElement('div');ov.clas
   ov.innerHTML=`<div class="eb-cele-fall">${dots}</div><div class="eb-cele-card"><div class="eb-cele-big">🏆</div><div class="eb-cele-t">책 완성! 🎉</div><div class="eb-cele-s">「${esc(bkCur.title)}」<br>모든 꼭지를 다 쓰셨어요. 정말 대단해요!</div><button class="eb-primary" onclick="document.getElementById('ebCele').remove();ebPreview()">📖 완성된 책 보기</button><button class="eb-cele-x" onclick="document.getElementById('ebCele').remove()">닫기</button></div>`;
   document.body.appendChild(ov)}
 function ebFp(e){e.preventDefault()}
+/* ── 미니멀 에디터: ＋ 삽입 시트 / ⋯ 메뉴 (기능 재배치, 삭제 없음) ── */
+function ebInsClose(){
+  const s=document.getElementById('ebInsSheet'),c=document.getElementById('ebInsScrim');
+  if(s){s.classList.remove('on');setTimeout(()=>{if(s.parentNode)s.remove()},360)}
+  if(c){c.classList.remove('on');setTimeout(()=>{if(c.parentNode)c.remove()},360)}
+}
+function ebInsDo(fn){ebInsClose();setTimeout(fn,110)}
+function ebInsSheet(){
+  if(document.getElementById('ebInsSheet')){ebInsClose();return}
+  const sc=document.createElement('div');sc.className='eb-inscrim';sc.id='ebInsScrim';sc.onclick=ebInsClose;document.body.appendChild(sc);
+  const sh=document.createElement('div');sh.className='eb-insheet';sh.id='ebInsSheet';
+  const isBook=!!document.getElementById('ebEditor');
+  const items=[['🖼','사진','ebPickImg()'],['📎','갤러리','ebGalleryPick()']]
+    .concat(isBook?[['🧲','글감','ebMaterial()']]:[])
+    .concat([['—','구분선',"ebFmt('divider')"],['H','제목',"ebFmt('h2')"],['❝','인용',"ebFmt('quote')"],['💡','강조',"ebFmt('callout')"],['✓','체크',"ebFmt('list')"]]);
+  sh.innerHTML='<div class="grip"></div><div class="ih">넣기</div><div class="eb-ingrid">'
+    +items.map(it=>`<button onmousedown="ebFp(event)" onclick="ebInsDo(function(){${it[2]}})"><span class="ic">${it[0]}</span>${it[1]}</button>`).join('')+'</div>';
+  document.body.appendChild(sh);void sh.offsetWidth;
+  setTimeout(()=>{sh.classList.add('on');sc.classList.add('on')},20);
+}
+function ebMoreClose(){const m=document.getElementById('ebMoreMenu');if(m)m.remove();document.removeEventListener('click',ebMoreOutside,true)}
+function ebMoreOutside(e){const m=document.getElementById('ebMoreMenu');if(m&&!m.contains(e.target))ebMoreClose()}
+function ebMoreMenu(e){
+  if(document.getElementById('ebMoreMenu')){ebMoreClose();return}
+  if(e&&e.stopPropagation)e.stopPropagation();
+  const isBook=!!document.getElementById('ebEditor'),s=bkSec?bkSec.s:null;
+  const m=document.createElement('div');m.className='eb-moremenu';m.id='ebMoreMenu';
+  m.innerHTML='<button onclick="ebMoreClose();ebViewSettings()">🅰 배경·글자·글꼴</button>'
+    +(isBook&&s?`<button id="ebDoneBtn" onclick="ebToggleDone();ebMoreClose()">${s.status==='done'?'✓ 완성됨':'✓ 완성 표시'}</button>`:'')
+    +(!isBook?'<button onclick="ebMoreClose();thinkSendToBook()">📖 전자책으로 보내기</button>':'')
+    +'<button onclick="ebMoreClose();ebHistOpen()">🕐 되돌리기</button>';
+  document.body.appendChild(m);
+  const r=(e&&e.currentTarget&&e.currentTarget.getBoundingClientRect)?e.currentTarget.getBoundingClientRect():{bottom:50,right:innerWidth-10};
+  m.style.top=(r.bottom+8)+'px';m.style.right=Math.max(8,innerWidth-r.right)+'px';
+  setTimeout(()=>document.addEventListener('click',ebMoreOutside,true),0);
+}
 function ebToggleFocus(){if(!bkFocus&&!localStorage.getItem('idf_flowIntroSeen')){ebFlowIntro();return}bkFocus=!bkFocus;const b=ebActiveBody;if(!b)return;b.classList.toggle('eb-focusmode',bkFocus);const fb=document.getElementById('ebFocusBtn');if(fb)fb.classList.toggle('on',bkFocus);if(bkFocus)ebHiFocus();else b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'))}
 function ebFocusSel(){if(bkFocus)ebHiFocus()}
 /* 📖 책 페이지 보기 설정 — 배경·글자 크기·글꼴 */
@@ -2140,7 +2235,7 @@ function ebViewSettings(){let pop=document.getElementById('ebVsPop');if(pop){pop
     <div class="eb-vsr"><span>글꼴</span><div class="eb-vsfam">
       <button data-fam="sans" class="${edPref.fam==='sans'?'on':''}">고딕</button>
       <button data-fam="serif" class="${edPref.fam==='serif'?'on':''}">명조</button></div></div>`;
-  const ed=document.getElementById('ebEditor');if(ed)ed.appendChild(pop);
+  const ed=document.getElementById('ebEditor')||document.getElementById('thinkEditor');if(ed)ed.appendChild(pop);
   pop.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{edPref.bg=b.dataset.bg;ebSavePref();ebApplyPref();pop.querySelectorAll('[data-bg]').forEach(x=>x.classList.toggle('on',x.dataset.bg===edPref.bg))});
   pop.querySelectorAll('[data-fam]').forEach(b=>b.onclick=()=>{edPref.fam=b.dataset.fam;ebSavePref();ebApplyPref();pop.querySelectorAll('[data-fam]').forEach(x=>x.classList.toggle('on',x.dataset.fam===edPref.fam))});
   pop.querySelectorAll('[data-fs]').forEach(b=>b.onclick=()=>{edPref.fs=Math.max(14,Math.min(24,edPref.fs+(+b.dataset.fs)));ebSavePref();ebApplyPref();document.getElementById('ebVsFsv').textContent=edPref.fs});}
@@ -2724,28 +2819,21 @@ function thinkNew(){const it={id:uid(),ws:'think',type:'journal',title:'',text:'
 function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;curThink=it;const d=new Date(it.ts);
   const w=document.createElement('div');w.className='eb-editor';w.id='thinkEditor';
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
-      <button class="eb-focusbtn" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
-      <button class="eb-savebtn" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button>
-      <button class="eb-done" onclick="thinkSendToBook()">📖 전자책</button></div>
-    <div class="eb-fmt">
-      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('h2')">제목</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')"><b>굵게</b></button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')">❝ 인용</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')">💡 강조</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('list')">✓ 체크</button>
-      <button onmousedown="ebFp(event)" onclick="ebPickImg()">🖼 사진</button>
-      <button onmousedown="ebFp(event)" onclick="ebGalleryPick()">📎 갤러리</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('divider')">— 구분선</button>
-      <button onmousedown="ebFp(event)" onclick="ebHistOpen()">🕐 되돌리기</button>
-      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>
+      <span class="eb-edtitle-mini" id="thinkTitleMini">${esc(it.title||((d.getMonth()+1)+'월 '+d.getDate()+'일'))}</span>
+      <button class="eb-focusbtn hero" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
+      <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
       <input class="eb-edtitle eb-thinktitle" id="thinkTitle" placeholder="제목 (선택)" value="${esc(it.title||'')}">
       <div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
-      <div class="eb-edbody" id="thinkBody" contenteditable="true" data-ph="여기에 자유롭게 길게 써 내려가세요. 엔터로 줄바꿈되고, 위 도구로 제목·인용·사진도 넣을 수 있어요. ✍️">${it.text||''}</div>
-    </div></div>`;
+      <div class="eb-edbody" id="thinkBody" contenteditable="true" data-ph="여기에 자유롭게 길게 써 내려가세요. 글자를 긁으면 서식이, ＋를 누르면 사진·인용이 나와요. ✍️">${it.text||''}</div>
+    </div></div>
+    <button class="eb-plus" onclick="ebInsSheet()" aria-label="넣기">＋</button>
+    <div class="eb-edstatus">
+      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
+      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span>
+      <button class="eb-savebtn" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('thinkBody'),title=document.getElementById('thinkTitle');
   ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();thinkMark()};bkFocus=false;
@@ -2767,7 +2855,7 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
 function thinkMark(){clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved()},450)}
 function thinkSaveNow(){if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;}save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved();toast('저장했어요 ✓');ebBuzz(10)}
 function thinkSendToBook(){if(!curThink)return;const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;save();ebSendThought({title:curThink.title||'',body:ebPlainText(curThink.text||'')})}
-function thinkClose(){ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
+function thinkClose(){ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
   if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;
     if(!(curThink.title||'').trim() && !ebPlainText(curThink.text||'').trim()){store.items=store.items.filter(x=>x.id!==curThink.id);} // 빈 글은 저장 안 함
     save();}
