@@ -347,7 +347,7 @@
   .tk-ds-n{font-size:12px;color:var(--ink-faint);background:var(--surface-2);padding:2px 9px;border-radius:99px}
   .tk-backup2{background:none;border:none;color:var(--ink-faint);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
   .tk-empty{text-align:center;color:var(--ink-faint);font-size:13px;padding:26px 12px;line-height:1.6}
-  .tk-fab{position:fixed;right:18px;bottom:84px;width:60px;height:60px;border:none;background:transparent;padding:0;cursor:pointer;z-index:60}
+  .tk-fab{position:fixed;right:18px;bottom:calc(90px + env(safe-area-inset-bottom));width:60px;height:60px;border:none;background:transparent;padding:0;cursor:pointer;z-index:60}
   .tk-fab img{width:60px;height:60px;display:block;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5)) drop-shadow(0 0 12px rgba(var(--lime-rgb),.3))}
   .tk-fab:active{transform:scale(.94)}
   .cal-clear{display:block;width:100%;max-width:420px;margin-top:10px;background:rgba(var(--lime-rgb),.08);border:1px solid rgba(var(--lime-rgb),.3);
@@ -832,7 +832,7 @@
   .ebsc-btn.pri{background:var(--lime);color:#0b0b0b;border-color:var(--lime);box-shadow:0 10px 26px rgba(var(--lime-rgb),.34)}
   .ebsc-btn .sm{display:block;font-size:10px;font-weight:700;opacity:.6;margin-top:3px}
   .ebs-hint{text-align:center;font-size:12px;color:var(--ink-faint);padding:14px 0 2px}
-  .ebs-fab{position:fixed;right:18px;bottom:84px;width:58px;height:58px;border-radius:50%;border:none;background:var(--lime);color:#0b0b0b;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:60;box-shadow:0 8px 22px rgba(var(--lime-rgb),.42)}
+  .ebs-fab{position:fixed;right:18px;bottom:calc(90px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;border:none;background:var(--lime);color:#0b0b0b;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:60;box-shadow:0 8px 22px rgba(var(--lime-rgb),.42)}
   .ebs-fab svg{width:26px;height:26px;stroke:currentColor;stroke-width:2.6;fill:none;stroke-linecap:round}
   .ebs-fab:active{transform:scale(.94)}
   .ebw-steps{display:flex;align-items:center;justify-content:center;gap:8px;margin:2px 0 18px}
@@ -858,6 +858,19 @@
   .eb-tcard{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:15px 16px;color:var(--ink);display:flex;gap:13px;align-items:flex-start;cursor:pointer;font-family:inherit}
   .eb-tcard.on{border-color:var(--lime);background:rgba(var(--lime-rgb),.06)}
   .eb-tcic{font-size:26px;line-height:1}.eb-tct{font-weight:800;font-size:15px;margin-bottom:3px;display:block}.eb-tcd{font-size:12.5px;color:var(--ink-dim);line-height:1.55;display:block}.eb-tctoc{font-size:11.5px;color:var(--ink-faint);margin-top:7px;display:block}
+  /* 템플릿 카드: 라인 아이콘 + 누르면 목차 펼쳐서 고르기 */
+  .eb-tsvg{width:26px;height:26px;color:var(--ink-dim);flex:none;transition:color .2s}
+  .eb-tcard.on .eb-tsvg{color:var(--lime)}
+  .eb-tcbody{flex:1;min-width:0}
+  .eb-toclist{margin-top:11px;border-top:1px solid var(--line);padding-top:9px;display:flex;flex-direction:column;gap:2px}
+  .eb-tocrow{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:.15s}
+  .eb-tocrow:hover{background:rgba(255,255,255,.05)}
+  .eb-tocchk{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--lime);background:var(--lime);color:#0b0b0b;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex:none}
+  .eb-tocrow.off .eb-tocchk{background:transparent;border-color:#3a3a34;color:transparent}
+  .eb-tocname{flex:1;font-size:13px;font-weight:700;color:var(--ink)}
+  .eb-tocrow.off .eb-tocname{color:var(--ink-faint);text-decoration:line-through}
+  .eb-toccnt{font-size:11px;color:var(--ink-faint);flex:none}
+  .eb-tochint{font-size:11px;color:var(--ink-faint);margin-top:9px;padding:0 8px}
   .eb-hero{background:linear-gradient(160deg,#1a1c12,#121212);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;gap:16px;align-items:center;margin-bottom:14px}
   .eb-hcover{width:66px;height:88px;border-radius:9px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 5px 16px rgba(0,0,0,.5)}
   .eb-hinfo{flex:1;min-width:0}.eb-htitle{font-size:17px;font-weight:800;line-height:1.3}.eb-hmeta{font-size:12px;color:var(--ink-faint);margin-top:4px}
@@ -898,6 +911,34 @@
   .eb-seca{display:flex;gap:4px}.eb-seca button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:7px;font-size:12px;padding:5px 8px;cursor:pointer}
   .eb-add{width:100%;background:none;border:1px dashed #383834;color:var(--ink-faint);border-radius:11px;font-size:13px;font-weight:700;padding:11px;margin-top:2px;cursor:pointer;font-family:inherit}
   .eb-wsacts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:20px 0 10px}
+  /* ── 작업실 재설계: 진짜 표지 히어로 · 한 줄 스탯 · 팝업 없는 목차 ── */
+  .eb-hcov{flex:none;perspective:600px;cursor:pointer}
+  .eb-hbk{width:64px;height:90px;border-radius:2px 5px 5px 2px;position:relative;padding:8px 6px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
+    box-shadow:-6px 8px 16px rgba(0,0,0,.6),inset 6px 0 9px rgba(0,0,0,.4);transform:rotateY(-13deg);transform-origin:right center;transition:transform .3s}
+  .eb-hcov:hover .eb-hbk{transform:rotateY(-4deg)}
+  .eb-hbk .ebs-em{font-size:11px;text-align:center;line-height:1}
+  .eb-hbk .ebs-ct{font-size:8px;line-height:1.25;text-align:center;font-weight:800}
+  .eb-hbk .ebs-gfr{inset:5px 5px}
+  .eb-hbk .ebs-obi{padding:3px 4px 4px}
+  .eb-hbk .ebs-obi .oh{font-size:5px}.eb-hbk .ebs-obi .op{font-size:4.5px}
+  .eb-hbk .ebs-rib{width:4px;height:26px;right:10px}
+  .eb-hbk .ebs-pgz{position:absolute;right:-3px;top:3px;bottom:3px;width:4px;background:repeating-linear-gradient(180deg,#e7e0cd 0 2px,#cfc6ac 2px 3px);border-radius:0 1px 1px 0}
+  .eb-hsub{font-size:11.5px;color:var(--ink-dim);margin-top:3px}
+  .eb-hchips{display:flex;gap:6px;margin-top:9px}
+  .eb-chip{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);font-size:11px;font-weight:700;padding:5px 10px;border-radius:99px;cursor:pointer;font-family:inherit}
+  .eb-chip:hover{border-color:rgba(var(--lime-rgb),.4);color:var(--lime)}
+  .eb-strip{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:14px;padding:9px 10px;background:var(--surface);border:1px solid var(--line);border-radius:11px;font-size:11px;color:var(--ink-faint);cursor:pointer;font-variant-numeric:tabular-nums}
+  .eb-strip b{color:var(--ink-dim);font-weight:800}
+  .eb-strip .fire{color:#ff9d5c;font-weight:800}
+  .eb-strip .dd{color:var(--gold-hi);font-weight:800}
+  .eb-grip{color:var(--ink-faint);font-size:14px;cursor:grab;flex:none;letter-spacing:-2px}
+  .eb-ctitle{outline:none;border-radius:5px}
+  .eb-st[contenteditable="true"],.eb-ctitle[contenteditable="true"]{background:rgba(var(--lime-rgb),.1);box-shadow:0 0 0 1.5px rgba(var(--lime-rgb),.5);padding:2px 6px;margin:-2px -6px}
+  .eb-sec.dragging{opacity:.4}
+  .eb-sec.over{box-shadow:0 -2px 0 var(--lime)}
+  .eb-undot{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#1d1d1d;border:1px solid var(--line);color:var(--ink);font-size:12.5px;font-weight:700;padding:11px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.28s;z-index:200;display:flex;align-items:center;gap:12px;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+  .eb-undot.on{opacity:1;pointer-events:auto;transform:translateX(-50%)}
+  .eb-undot button{background:none;border:none;color:var(--lime);font-weight:900;font-size:12.5px;cursor:pointer;font-family:inherit}
   /* editor */
   .eb-editor{position:fixed;inset:0;z-index:80;background:var(--bg);display:flex;flex-direction:column;animation:ebslide .28s cubic-bezier(.2,.8,.2,1)}
   @keyframes ebslide{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
@@ -914,9 +955,9 @@
   .eb-more{background:none;border:none;color:var(--ink-dim);font-size:18px;font-weight:800;cursor:pointer;padding:4px 9px;border-radius:8px;line-height:1;flex:none;font-family:inherit}
   .eb-more:hover{background:var(--surface-2)}
   .eb-focusbtn.hero{border-color:rgba(var(--lime-rgb),.45);color:var(--lime);box-shadow:0 0 12px rgba(var(--lime-rgb),.16)}
-  .eb-plus{position:fixed;right:18px;bottom:62px;z-index:90;width:48px;height:48px;border-radius:50%;background:var(--lime);color:#0b0b0b;border:none;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 10px 26px rgba(var(--lime-rgb),.32);display:flex;align-items:center;justify-content:center;transition:transform .15s;font-family:inherit}
+  .eb-plus{position:fixed;right:18px;bottom:calc(66px + env(safe-area-inset-bottom));z-index:90;width:48px;height:48px;border-radius:50%;background:var(--lime);color:#0b0b0b;border:none;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 10px 26px rgba(var(--lime-rgb),.32);display:flex;align-items:center;justify-content:center;transition:transform .15s;font-family:inherit}
   .eb-plus:active{transform:scale(.9)}
-  .eb-edstatus{position:fixed;left:0;right:0;bottom:0;z-index:88;display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 14px;font-size:11.5px;color:var(--ink-faint);background:rgba(13,13,13,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+  .eb-edstatus{position:fixed;left:0;right:0;bottom:0;z-index:88;display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));font-size:11.5px;color:var(--ink-faint);background:rgba(13,13,13,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line);font-variant-numeric:tabular-nums;flex-wrap:wrap}
   .eb-edstatus .eb-savebtn{margin-left:0;padding:4px 10px;font-size:11.5px;border-radius:8px}
   .eb-edstatus .eb-mic{padding:4px 10px;font-size:11.5px;border-radius:8px}
   .eb-insheet{position:fixed;left:0;right:0;bottom:0;z-index:95;transform:translateY(102%);transition:transform .34s cubic-bezier(.22,.9,.3,1);background:rgba(22,22,22,.98);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 16px 22px;box-shadow:0 -18px 40px rgba(0,0,0,.5)}
@@ -1815,10 +1856,26 @@ const EB_TEMPLATES={
       {title:'본문',secs:[{t:'팁 01',g:'한 문장 팁 + 짧은 이유·예시.'},{t:'팁 02',g:'한 문장 팁 + 짧은 이유·예시.'},{t:'팁 03',g:'한 문장 팁 + 짧은 이유·예시.'},{t:'팁 04',g:'한 문장 팁 + 짧은 이유·예시.'},{t:'팁 05',g:'한 문장 팁 + 짧은 이유·예시.'}]},
       {title:'마치며',secs:[{t:'가장 중요한 하나',g:'이 중 딱 하나만 기억한다면?'}]}]},
 };
+/* 템플릿 아이콘 — 이모지 대신 라인 아이콘(앱 톤) */
+const EB_TICONS={
+  howto:'<path d="M4 5.6A2.6 2.6 0 0 1 6.6 3H19.4v14.6H6.6A2.6 2.6 0 0 0 4 20.2z"/><path d="M7.6 7.4h7.6M7.6 11h5.2"/>',
+  essay:'<path d="M14.6 4.4l5 5L8.2 20.8H3.2v-5z"/><path d="M12.6 6.4l5 5"/>',
+  list:'<path d="M8.6 6.2h11M8.6 12h11M8.6 17.8h11"/><path d="M4 6.2h.01M4 12h.01M4 17.8h.01"/>'
+};
+function ebTSvg(k){return '<svg class="eb-tsvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+(EB_TICONS[k]||'')+'</svg>'}
 const EB_COVERS=['#2f6feb','#a15bff','#e6842b','#1f9d55','#d9455f','#0d9488','#C8FF00'];
 const EB_EMOJIS=['📘','📖','✍️','📝','💡','🔥','💇','💄','🎯','🌱','⭐','🏆'];
 const EB_TIPS=['제목은 "약속"을 담으세요. 얻을 걸 보여주면 끝까지 읽어요.','첫 문장이 90%. 질문이나 장면으로 시작해보세요.','한 꼭지 = 한 메시지. 하나만 확실히.','어렵게 쓰지 마세요. 말하듯 쓰면 제일 잘 읽혀요.','오늘은 딱 이 한 꼭지만. 완벽보다 채우는 게 이기는 거예요.'];
-let bkCur=null,bkSec=null,bkCreating=false,bkSerif=false,bkTheme='dark',bkTocEdit=false,bkFocus=false,bkNewType='howto',bkNewTitle='',bkPending=null;
+let bkCur=null,bkSec=null,bkCreating=false,bkSerif=false,bkTheme='dark',bkTocEdit=false,bkFocus=false,bkNewType='howto',bkNewTitle='',bkPending=null,bkNewSkip=[];
+/* 템플릿 고르기 — 누르면 그 목차가 펼쳐지고, 챕터를 빼고 넣을 수 있음 */
+function ebPickType(k){if(bkNewType!==k){bkNewType=k;bkNewSkip=[]}render()}
+function ebToggleChap(i){
+  const t=EB_TEMPLATES[bkNewType];if(!t)return;
+  const at=bkNewSkip.indexOf(i);
+  if(at>=0)bkNewSkip.splice(at,1);
+  else{ if(t.toc.length-bkNewSkip.length<=1){toast('최소 1개 챕터는 있어야 해요');return} bkNewSkip.push(i) }
+  render();
+}
 let edPref=(function(){try{return Object.assign({bg:'dark',fs:17,fam:'sans'},JSON.parse(localStorage.getItem('idf_edpref')||'{}'))}catch(e){return{bg:'dark',fs:17,fam:'sans'}}})();
 let ebActiveBody=null, ebOnEdit=function(){}, ebActiveId=null;   // 공유 에디터 엔진(전자책·내생각 공용)
 let curThink=null;                               // 내 생각 편집중 항목
@@ -1870,6 +1927,7 @@ function renderBook(){
   const feed=document.getElementById('feed');
   feed.innerHTML=bkCreating?ebViewCreate():bkCur?ebViewWorkspace(bkCur):ebViewList();
   if(!bkCreating&&!bkCur)setTimeout(ebMilestones,500);
+  if(bkCur)ebWireDrag();
 }
 function ebWireGlow(){
   if(window.__ebGlowWired)return;window.__ebGlowWired=true;
@@ -1989,7 +2047,7 @@ function ebsCustSave(){const s=ebsCustSt;if(!s)return;const b=store.books.find(x
     b.color=s.color;b.mat=s.mat;b.em=s.em;b.font=s.font;b.sub=((si?si.value:s.sub)||'').trim();
     b.obi=!!s.obi;b.ribbon=!!s.ribbon;b.price=pi?Math.max(0,Math.min(1000000,+pi.value||0)):(s.price||0);save();}
   ebsCustClose();render();toast('표지가 바뀌었어요 ✓');}
-function ebStart(){bkCreating=true;bkNewStep=1;bkNewType='howto';bkNewTitle='';bkNewSub='';bkNewMat='silk';bkNewEm='✦';bkNewFont='gothic';bkNewObi=false;bkNewRibbon=false;bkNewPrice=0;bkNewColor=EBS_COLORS[(store.books||[]).length%EBS_COLORS.length];render()}
+function ebStart(){bkCreating=true;bkNewStep=1;bkNewType='howto';bkNewSkip=[];bkNewTitle='';bkNewSub='';bkNewMat='silk';bkNewEm='✦';bkNewFont='gothic';bkNewObi=false;bkNewRibbon=false;bkNewPrice=0;bkNewColor=EBS_COLORS[(store.books||[]).length%EBS_COLORS.length];render()}
 function ebNewNext(){if(!(bkNewTitle||'').trim()){toast('책 제목을 정해주세요');const el=document.getElementById('ebNewTitle');if(el)el.focus();return}bkNewStep=2;render();window.scrollTo({top:0,behavior:'smooth'})}
 function ebNewPrev(){bkNewStep=1;render()}
 function ebViewCreate(){
@@ -1997,51 +2055,98 @@ function ebViewCreate(){
   const steps=`<div class="ebw-steps"><span class="${bkNewStep>=1?'on':''}">1 · 표지</span><span class="ebw-line"></span><span class="${bkNewStep>=2?'on':''}">2 · 목차</span></div>`;
   if(bkNewStep===1){
     return `<button class="eb-back" onclick="ebCancelCreate()">‹ 책장</button>${steps}
-    <div class="eb-createh">어떤 책인가요?</div><div class="eb-creates">제목과 핵심 메시지를 정하면 표지가 만들어져요.</div>
-    <div class="eb-lbl">책 제목</div><input class="eb-in" id="ebNewTitle" placeholder="예: 헤어디자이너 인스타 마케팅" value="${esc(bkNewTitle)}" oninput="bkNewTitle=this.value;var t=document.getElementById('ebsPvT');if(t)t.textContent=this.value||'제목'">
+    <div class="eb-lbl" style="margin-top:14px">책 제목</div><input class="eb-in" id="ebNewTitle" placeholder="예: 헤어디자이너 인스타 마케팅" value="${esc(bkNewTitle)}" oninput="bkNewTitle=this.value;var t=document.getElementById('ebsPvT');if(t)t.textContent=this.value||'제목'">
     <div class="eb-lbl">핵심 메시지 (한 줄)</div><input class="eb-in" id="ebNewSub" placeholder="이 책은 ○○다" value="${esc(bkNewSub)}" oninput="bkNewSub=this.value;var t=document.getElementById('ebsPvS');if(t)t.textContent=this.value">
     <div class="eb-lbl">표지 꾸미기</div>${ebsCustHtml(s,bkNewTitle,bkNewSub)}
     <button class="eb-primary" style="width:100%;margin-top:22px" onclick="ebNewNext()">다음 · 목차 정하기 →</button>`;
   }
   return `<button class="eb-back" onclick="ebNewPrev()">‹ 표지</button>${steps}
-    <div class="eb-createh">책의 뼈대를 골라요</div><div class="eb-creates">고르면 베스트셀러 구조로 목차를 깔아드려요 · 나중에 자유롭게 수정 가능.</div>
-    <div class="eb-types">
-      ${Object.entries(EB_TEMPLATES).map(([k,t])=>`<button class="eb-tcard ${bkNewType===k?'on':''}" onclick="bkNewType='${k}';render()"><span class="eb-tcic">${t.ic}</span><span><span class="eb-tct">${t.name}</span><span class="eb-tcd">${t.desc}</span><span class="eb-tctoc">목차 · ${t.toc.map(c=>c.title.replace(/^[0-9]+[부장]\s·\s/,'')).join(' / ')}</span></span></button>`).join('')}
-    </div><button class="eb-primary" style="width:100%;margin-top:22px" onclick="ebCreate()">📚 책장에 꽂기 →</button>`;
+    <div class="eb-types" style="margin-top:14px">
+      ${Object.entries(EB_TEMPLATES).map(([k,t])=>{
+        const on=bkNewType===k;
+        return `<div class="eb-tcard ${on?'on':''}" onclick="ebPickType('${k}')">
+          <span class="eb-tcic">${ebTSvg(k)}</span>
+          <div class="eb-tcbody">
+            <span class="eb-tct">${t.name}</span><span class="eb-tcd">${t.desc}</span>
+            ${on?`<div class="eb-toclist">${t.toc.map((c,i)=>{const off=bkNewSkip.indexOf(i)>=0;
+                return `<div class="eb-tocrow ${off?'off':''}" onclick="event.stopPropagation();ebToggleChap(${i})"><span class="eb-tocchk">✓</span><span class="eb-tocname">${esc(c.title)}</span><span class="eb-toccnt">${c.secs.length}꼭지</span></div>`}).join('')}</div>
+              <div class="eb-tochint">눌러서 뺄 챕터를 고르세요 · 나중에 자유롭게 수정 가능</div>`
+              :`<span class="eb-tctoc">목차 · ${t.toc.map(c=>c.title.replace(/^[0-9]+[부장]\s·\s/,'')).join(' / ')}</span>`}
+          </div></div>`}).join('')}
+    </div><button class="eb-primary" style="width:100%;margin-top:22px" onclick="ebCreate()">📚 책장에 꽂기 →</button>
+    <button class="eb-flowskip" onclick="ebCreate(true)">✏️ 목차 자세히 수정하기 (이름·꼭지 추가)</button>`;
 }
 function ebCancelCreate(){bkCreating=false;render()}
-function ebCreate(){const title=(bkNewTitle||'').trim()||'제목 없는 책';const t=EB_TEMPLATES[bkNewType];
+function ebCreate(openToc){const title=(bkNewTitle||'').trim()||'제목 없는 책';const t=EB_TEMPLATES[bkNewType];
   const book={id:uid(),title,type:bkNewType,emoji:t.ic,color:bkNewColor,mat:bkNewMat,em:bkNewEm,font:bkNewFont,sub:(bkNewSub||'').trim(),obi:bkNewObi,ribbon:bkNewRibbon,price:bkNewPrice||0,created:Date.now(),targetDate:null,dedication:'',authorBio:'',
-    chapters:t.toc.map(c=>({id:uid(),title:c.title,secs:c.secs.map(s=>({id:uid(),title:s.t,guide:s.g,html:'',status:'empty'}))}))};
-  store.books.push(book);save();bkCreating=false;bkCur=null;ebSel=book.id;render();toast('책장에 꽂혔어요 📚')}
+    chapters:t.toc.filter((c,i)=>bkNewSkip.indexOf(i)<0).map(c=>({id:uid(),title:c.title,secs:c.secs.map(s=>({id:uid(),title:s.t,guide:s.g,html:'',status:'empty'}))}))};
+  store.books.push(book);save();bkCreating=false;
+  if(openToc){bkCur=book;ebSel=null;bkTocEdit=true;render();toast('목차를 자유롭게 고쳐보세요 ✏️')}
+  else{bkCur=null;ebSel=book.id;render();toast('책장에 꽂혔어요 📚')}}
 function ebOpen(id){bkCur=store.books.find(b=>b.id===id);bkTocEdit=false;render()}
 
-function ebViewWorkspace(b){const p=ebProgress(b),nx=ebNext(b),dd=ebDday(b),st=ebStreak();
+function ebMiniCover(b){ebShape(b);const sf=b.font==='serif'?' srf':'';
+  return `<div class="eb-hcov" onclick="ebCustomize('${b.id}')" title="표지 꾸미기">
+    <div class="eb-hbk ebm-${b.mat}" style="--c:${b.color}">${ebGfrHtml(b)}${ebRibHtml(b)}<span class="eb-hbk-pg ebs-pgz"></span>
+      <span class="ebs-em">${b.em}</span><div class="ebs-ct${sf}">${esc(b.title)}</div>${ebObiHtml(b)}
+    </div></div>`;
+}
+function ebViewWorkspace(b){const p=ebProgress(b),nx=ebNext(b),dd=ebDday(b),st=ebStreak(),bs=ebStats(b);
   return `<button class="eb-backfix" onclick="ebBackList()" aria-label="책장으로">‹ 책장</button>
-    <button class="eb-back" onclick="ebBackList()">‹ 책장</button>
-    <div class="eb-hero"><div class="eb-hcover" style="${b.coverImg?`background-image:url('${(b.coverImg||'').replace(/'/g,'%27')}');background-size:cover;background-position:center`:`background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}`}">${b.coverImg?'':b.emoji}</div>
-      <div class="eb-hinfo"><div class="eb-htitle">${esc(b.title)}</div><div class="eb-hmeta">${EB_TEMPLATES[b.type].name} · ${p.done}/${p.tot} 꼭지</div></div>
+    <div class="eb-hero">${ebMiniCover(b)}
+      <div class="eb-hinfo"><div class="eb-htitle">${esc(b.title)}</div>${b.sub?`<div class="eb-hsub">${esc(b.sub)}</div>`:''}
+        <div class="eb-hmeta">${EB_TEMPLATES[b.type].name} · ${p.done}/${p.tot} 꼭지</div>
+        <div class="eb-hchips"><button class="eb-chip" onclick="ebCustomize('${b.id}')">🎨 표지</button><button class="eb-chip" onclick="ebImagine()">🔮 상상</button></div></div>
       <div class="eb-ring" style="--p:${p.pct}"><svg width="56" height="56"><circle class="eb-rc" cx="28" cy="28" r="24"/><circle class="eb-rf" cx="28" cy="28" r="24"/></svg><div class="eb-rt">${p.pct}%</div></div></div>
-    <div class="eb-statrow"><div class="eb-stat"><b>🔥 ${st}일</b><span>연속 집필</span></div><div class="eb-stat"><b>${ebDays(b)}일째</b><span>함께한 날</span></div>
-      ${dd?`<div class="eb-stat dday" onclick="ebSetTarget()"><b>D-${dd.left>=0?dd.left:'지남'}</b><span>하루 ${dd.perDay}꼭지면 완성</span></div>`:`<div class="eb-stat set" onclick="ebSetTarget()"><b>＋</b><span>완성일 정하기</span></div>`}</div>
-    ${(()=>{const bs=ebStats(b);return `<div class="eb-bookstat" onclick="atDashboard()" style="cursor:pointer">📊 총 <b>${bs.ch.toLocaleString()}자</b> · 약 ${bs.pages}페이지 · ⏱ 오늘 <b>${atFmt(atTodaySecs())}</b> · 이 책 ${atFmt(atGetBook()[b.id]||0)} ›</div>`})()}
+    <div class="eb-strip" onclick="atDashboard()">
+      ${st>0?`<span class="fire">🔥 ${st}일</span>·`:''}<span><b>${ebDays(b)}일째</b> 함께</span>·<span><b>${bs.ch.toLocaleString()}자</b></span>·<span>⏱ <b>${atFmt(atGetBook()[b.id]||0)}</b></span>·${dd?`<span class="dd" onclick="event.stopPropagation();ebSetTarget()">D-${dd.left>=0?dd.left:'지남'} · 하루 ${dd.perDay}꼭지</span>`:`<span class="dd" onclick="event.stopPropagation();ebSetTarget()">＋ 완성일</span>`}
+    </div>
     ${nx?`<div class="eb-today"><div class="eb-ttag">✍️ 오늘 쓸 한 꼭지</div><div class="eb-ttitle">${esc(nx.s.title)}</div><div class="eb-tchap">${esc(nx.c.title)}</div><button class="eb-tgo" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">이어 쓰기 →</button></div>`:`<div class="eb-today" style="border-color:rgba(var(--lime-rgb),.5)"><div class="eb-ttag">🎉 완성!</div><div class="eb-ttitle">모든 꼭지를 다 쓰셨어요</div><div class="eb-tchap">미리보기로 감상하고 PDF로 발행해보세요.</div></div>`}
-    <button class="eb-imagine" onclick="ebImagine()">🔮 완성된 내 책 상상해보기</button>
-    <div class="eb-toch"><span class="eb-thT">📑 목차</span><button class="eb-thE ${bkTocEdit?'on':''}" onclick="bkTocEdit=!bkTocEdit;render()">${bkTocEdit?'완료':'＋ 편집'}</button></div>
-    ${b.chapters.map(c=>`<div class="eb-chap"><div class="eb-chapt">${esc(c.title)}${bkTocEdit?`<button class="eb-cte" onclick="ebRenameChap('${c.id}')">✏️</button><button class="eb-cte" onclick="ebDelChap('${c.id}')">🗑</button>`:''}<span class="eb-ctline"></span></div>
-      ${c.secs.map(s=>`<div class="eb-sec ${s.status}"><span class="eb-dot"></span><div class="eb-smain" onclick="ebEdit('${c.id}','${s.id}')"><div class="eb-st">${esc(s.title)}</div><div class="eb-ssub">${s.status==='done'?'완성 · '+ebPlain(s.html)+'자':s.status==='draft'?'초안 '+ebPlain(s.html)+'자':'아직 비어있어요'}</div></div>${bkTocEdit?`<div class="eb-seca"><button onclick="ebMoveSec('${c.id}','${s.id}',-1)">↑</button><button onclick="ebMoveSec('${c.id}','${s.id}',1)">↓</button><button onclick="ebRenameSec('${c.id}','${s.id}')">✏️</button><button onclick="ebDelSec('${c.id}','${s.id}')">🗑</button></div>`:`<span class="eb-arrow" onclick="ebEdit('${c.id}','${s.id}')">›</span>`}</div>`).join('')}
+    <div class="eb-toch"><span class="eb-thT">목차</span><button class="eb-thE ${bkTocEdit?'on':''}" onclick="bkTocEdit=!bkTocEdit;render()">${bkTocEdit?'완료':'편집'}</button></div>
+    ${b.chapters.map(c=>`<div class="eb-chap"><div class="eb-chapt">${bkTocEdit?'<span class="eb-grip">⠿</span>':''}<span class="eb-ctitle"${bkTocEdit?` contenteditable="true" onblur="ebChapName('${c.id}',this)" onkeydown="ebNameKey(event)"`:''}>${esc(c.title)}</span><span class="eb-ctline"></span>${bkTocEdit?`<button class="eb-cte" onclick="ebDelChap('${c.id}')">✕</button>`:''}</div>
+      ${c.secs.map(s=>`<div class="eb-sec ${s.status}"${bkTocEdit?` draggable="true" data-c="${c.id}" data-s="${s.id}"`:''}>${bkTocEdit?'<span class="eb-grip">⠿</span>':'<span class="eb-dot"></span>'}<div class="eb-smain"${bkTocEdit?'':` onclick="ebEdit('${c.id}','${s.id}')"`}><div class="eb-st"${bkTocEdit?` contenteditable="true" onblur="ebSecName('${c.id}','${s.id}',this)" onkeydown="ebNameKey(event)"`:''}>${esc(s.title)}</div>${bkTocEdit?'':`<div class="eb-ssub">${s.status==='done'?'완성 · '+ebPlain(s.html)+'자':s.status==='draft'?'초안 '+ebPlain(s.html)+'자':'아직 비어있어요'}</div>`}</div>${bkTocEdit?`<button class="eb-cte" onclick="ebDelSec('${c.id}','${s.id}')">✕</button>`:`<span class="eb-arrow" onclick="ebEdit('${c.id}','${s.id}')">›</span>`}</div>`).join('')}
       ${bkTocEdit?`<button class="eb-add" onclick="ebAddSec('${c.id}')">＋ 꼭지 추가</button>`:''}</div>`).join('')}
     ${bkTocEdit?`<button class="eb-add" onclick="ebAddChap()">＋ 챕터 추가</button>`:''}
-    <div class="eb-wsacts"><button class="eb-ghost" onclick="ebCustomize(bkCur.id)">🎨 표지 꾸미기</button><button class="eb-ghost" onclick="ebPreview()">📖 미리보기 · 발행</button></div>`;
+    <div class="eb-wsacts" style="grid-template-columns:1fr"><button class="eb-ghost" onclick="ebPreview()">📖 미리보기 · 발행</button></div>`;
+}
+/* 목차 인라인 편집 — prompt/confirm 없이 */
+function ebNameKey(e){if(e.key==='Enter'){e.preventDefault();e.target.blur()}}
+function ebChapName(id,el){const c=bkCur.chapters.find(x=>x.id===id);if(!c)return;const v=(el.textContent||'').trim()||'새 챕터';if(v!==c.title){c.title=v;save()}el.textContent=v}
+function ebSecName(cid,sid,el){const c=bkCur.chapters.find(x=>x.id===cid);if(!c)return;const s=c.secs.find(x=>x.id===sid);if(!s)return;const v=(el.textContent||'').trim()||'새 꼭지';if(v!==s.title){s.title=v;save()}el.textContent=v}
+function ebFocusLast(sel){setTimeout(function(){const ns=document.querySelectorAll(sel);const el=ns[ns.length-1];if(!el)return;el.focus();try{document.execCommand('selectAll',false,null)}catch(e){}},40)}
+function ebUndoToast(msg,fn){
+  let t=document.getElementById('ebUndoT');
+  if(!t){t=document.createElement('div');t.id='ebUndoT';t.className='eb-undot';document.body.appendChild(t)}
+  t.innerHTML='<span>'+esc(msg)+'</span><button>되돌리기</button>';
+  const hide=()=>t.classList.remove('on');
+  t.querySelector('button').onclick=function(){fn();hide()};
+  t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(hide,4500);
+}
+/* 드래그로 꼭지 순서 바꾸기 (같은 챕터 안) */
+function ebWireDrag(){
+  if(window.__ebDragWired)return;window.__ebDragWired=true;let dragEl=null;
+  document.addEventListener('dragstart',function(e){const s=e.target.closest&&e.target.closest('.eb-sec[draggable]');if(!s)return;dragEl=s;s.classList.add('dragging')});
+  document.addEventListener('dragend',function(){if(dragEl){dragEl.classList.remove('dragging');dragEl=null}document.querySelectorAll('.eb-sec.over').forEach(x=>x.classList.remove('over'))});
+  document.addEventListener('dragover',function(e){const s=e.target.closest&&e.target.closest('.eb-sec[draggable]');if(!s||!dragEl)return;e.preventDefault();if(s===dragEl)return;
+    document.querySelectorAll('.eb-sec.over').forEach(x=>x.classList.remove('over'));s.classList.add('over')});
+  document.addEventListener('drop',function(e){const s=e.target.closest&&e.target.closest('.eb-sec[draggable]');if(!s||!dragEl||!bkCur)return;e.preventDefault();
+    const fc=dragEl.dataset.c,fs=dragEl.dataset.s,tc=s.dataset.c,ts=s.dataset.s;
+    if(fc!==tc){toast('같은 챕터 안에서만 옮길 수 있어요');return}
+    const ch=bkCur.chapters.find(x=>x.id===fc);if(!ch)return;
+    const i=ch.secs.findIndex(x=>x.id===fs),j=ch.secs.findIndex(x=>x.id===ts);if(i<0||j<0)return;
+    const it=ch.secs.splice(i,1)[0];ch.secs.splice(j,0,it);save();render()});
 }
 function ebBackList(){bkCur=null;bkTocEdit=false;ebSel=null;render()}
 function ebSetTarget(){const v=prompt('완성 목표 날짜 (예: 2026-09-01)',bkCur.targetDate||'2026-09-01');if(v===null)return;bkCur.targetDate=v.trim()||null;save();render()}
 function ebRenameChap(id){const c=bkCur.chapters.find(x=>x.id===id);const v=prompt('챕터 이름',c.title);if(v!==null){c.title=v.trim()||c.title;save();render()}}
-function ebDelChap(id){if(!confirm('이 챕터를 삭제할까요?'))return;bkCur.chapters=bkCur.chapters.filter(c=>c.id!==id);save();render()}
-function ebAddChap(){const v=prompt('새 챕터 이름','새 챕터');if(v===null)return;bkCur.chapters.push({id:uid(),title:v.trim()||'새 챕터',secs:[]});save();render()}
+function ebDelChap(id){const i=bkCur.chapters.findIndex(c=>c.id===id);if(i<0)return;const c=bkCur.chapters.splice(i,1)[0];save();render();
+  ebUndoToast('『'+(c.title||'챕터')+'』 지웠어요',function(){bkCur.chapters.splice(i,0,c);save();render()})}
+function ebAddChap(){bkCur.chapters.push({id:uid(),title:'새 챕터',secs:[]});bkTocEdit=true;save();render();ebFocusLast('.eb-ctitle[contenteditable]')}
 function ebRenameSec(cid,sid){const s=bkCur.chapters.find(c=>c.id===cid).secs.find(x=>x.id===sid);const v=prompt('꼭지 제목',s.title);if(v!==null){s.title=v.trim()||s.title;save();render()}}
-function ebDelSec(cid,sid){if(!confirm('이 꼭지를 삭제할까요?'))return;const c=bkCur.chapters.find(c=>c.id===cid);c.secs=c.secs.filter(x=>x.id!==sid);save();render()}
-function ebAddSec(cid){const c=bkCur.chapters.find(c=>c.id===cid);const v=prompt('새 꼭지 제목','새 꼭지');if(v===null)return;c.secs.push({id:uid(),title:v.trim()||'새 꼭지',guide:'',html:'',status:'empty'});save();render()}
+function ebDelSec(cid,sid){const c=bkCur.chapters.find(c=>c.id===cid);if(!c)return;const i=c.secs.findIndex(x=>x.id===sid);if(i<0)return;const s=c.secs.splice(i,1)[0];save();render();
+  ebUndoToast('『'+(s.title||'꼭지')+'』 지웠어요',function(){c.secs.splice(i,0,s);save();render()})}
+function ebAddSec(cid){const c=bkCur.chapters.find(c=>c.id===cid);if(!c)return;c.secs.push({id:uid(),title:'새 꼭지',guide:'',html:'',status:'empty'});bkTocEdit=true;save();render();
+  const idx=bkCur.chapters.indexOf(c);ebFocusLast('.eb-chap:nth-of-type('+(idx+1)+') .eb-st[contenteditable]')}
 function ebMoveSec(cid,sid,dir){const c=bkCur.chapters.find(c=>c.id===cid);const i=c.secs.findIndex(x=>x.id===sid);const j=i+dir;if(j<0||j>=c.secs.length)return;[c.secs[i],c.secs[j]]=[c.secs[j],c.secs[i]];save();render()}
 
 /* 표지 꾸미기 */
