@@ -1225,6 +1225,20 @@
   .idea-vtoggle{display:flex;gap:7px;margin-bottom:14px}
   .idea-vtoggle button{flex:1;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:11px;padding:10px;font-weight:800;font-size:13px;cursor:pointer}
   .idea-vtoggle button.on{background:rgba(200,255,0,.14);border-color:rgba(200,255,0,.4);color:var(--lime)}
+  /* 콘텐츠 세그먼트 바 */
+  .segwrap{margin:16px 0 4px}
+  .segbar{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .segbar::-webkit-scrollbar{display:none}
+  .seg{flex:0 0 auto;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;color:#cfcfca;
+    font-size:13.5px;font-weight:700;padding:9px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+    white-space:nowrap;transition:background .14s,border-color .14s,color .14s}
+  .seg:hover{border-color:#3a3a3a}
+  .seg.on{background:var(--lime);border-color:var(--lime);color:#0D0D0D;box-shadow:0 0 16px rgba(var(--lime-rgb),.28)}
+  .seg .sn{font-size:11px;background:rgba(255,255,255,.12);border-radius:999px;padding:1px 7px;font-weight:800}
+  .seg.on .sn{background:rgba(0,0,0,.16)}
+  .seg.rec{color:#7ab8ff}
+  .seg.rec.on{background:#7ab8ff;border-color:#7ab8ff;color:#0D0D0D;box-shadow:0 0 16px rgba(122,184,255,.28)}
+  .segdiv{flex:0 0 auto;width:1px;background:var(--line);margin:4px 2px;align-self:stretch}
   .idea-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
   .idea-gcell{aspect-ratio:1;border-radius:10px;background-size:cover;background-position:center;cursor:pointer;position:relative;border:1px solid var(--line)}
   .idea-gcell:active{transform:scale(.98)}
@@ -1500,6 +1514,7 @@ const TYPES={
 let store=load();
 let activeWs='home';
 let ideaGallery=false;
+let ideaSeg=(()=>{try{return localStorage.getItem('idf_ideaseg')||'home'}catch(e){return'home'}})();  // 콘텐츠 세그먼트(home=담기폼)
 let curType='image',curGroup='',curTags=[],curImg=null,curWs='idea';
 let search='';
 const DEST_WS=WS.filter(w=>w.key==='idea'); // 담기 목적지 = 아이디어 폴더 하나로 통합
@@ -1666,15 +1681,13 @@ function collectHubHtml(){
         </div></div>
 
         <button class="comp-save" id="cSave" disabled>담기</button>
-      </div>
-
-      ${store.items.length?homeCalHtml():''}
-      ${(!homeSelDate&&store.items.length)?homeInsightsHtml():''}
-      ${homeSelDate?(()=>{
-        const dayItems=store.items.filter(i=>ymdKey(new Date(i.ts))===homeSelDate).sort((a,b)=>b.ts-a.ts);
-        const lbl=homeSelDate.split('-')[1]+'월 '+homeSelDate.split('-')[2]+'일';
-        return `<div class="subgrp" style="margin-top:20px"><div class="sg-head"><span class="sg-name">${lbl}에 담은 것</span><span class="sg-n">${dayItems.length}</span><span class="sg-line"></span></div>${dayItems.length?`<div class="wgrid">${dayItems.map(cardHtml).join('')}</div>`:`<div class="home-first">이 날엔 담은 게 없어요.</div>`}</div>`;
-      })():''}`;
+      </div>`;
+}
+function homeDayItemsHtml(){
+  if(!homeSelDate) return '';
+  const dayItems=store.items.filter(i=>ymdKey(new Date(i.ts))===homeSelDate).sort((a,b)=>b.ts-a.ts);
+  const lbl=homeSelDate.split('-')[1]+'월 '+homeSelDate.split('-')[2]+'일';
+  return `<div class="subgrp" style="margin-top:20px"><div class="sg-head"><span class="sg-name">${lbl}에 담은 것</span><span class="sg-n">${dayItems.length}</span><span class="sg-line"></span></div>${dayItems.length?`<div class="wgrid">${dayItems.map(cardHtml).join('')}</div>`:`<div class="home-first">이 날엔 담은 게 없어요.</div>`}</div>`;
 }
 function wireHome(){
   const ta=document.getElementById('nhTa'),sv=document.getElementById('nhSave'),go=document.getElementById('nhGo');
@@ -1798,27 +1811,23 @@ function render(){
 
   const items=store.items.filter(i=>i.ws===w.key);
   const groups=groupsFor(w.key);
-  let ideaToggle='';
+
+  // ── 콘텐츠(idea) = 세그먼트 탭(홈=담기폼 / 기록 / 전체보기 / 각 유형 / 갤러리)
   if(w.key==='idea'){
-    ideaToggle=`<div class="idea-vtoggle"><button class="${!ideaGallery?'on':''}" onclick="ideaSetGal(0)">📁 폴더</button><button class="${ideaGallery?'on':''}" onclick="ideaSetGal(1)">🖼 갤러리</button></div>`;
-    if(ideaGallery){
-      const photos=store.items.filter(i=>i.img).sort((a,b)=>b.ts-a.ts);
-      let gh=ideaToggle;
-      if(!photos.length) gh+=`<div class="home-first" style="margin-top:22px">아직 사진이 없어요. 아이디어에 사진을 담으면 여기 갤러리에 모여요.</div>`;
-      else gh+=`<div class="idea-gal">${photos.map(i=>`<div class="idea-gcell" onclick="galOpen('${i.id}')" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')">${i.memo?`<span class="idea-gm">${esc(i.memo)}</span>`:''}</div>`).join('')}</div>`;
-      feed.innerHTML=gh; return;
-    }
+    // 유효하지 않은 세그(삭제된 유형 등) → 홈
+    const gHas={}; items.forEach(i=>{const g=i.group||'유형 미지정';gHas[g]=1;});
+    if(!(ideaSeg==='home'||ideaSeg==='rec'||ideaSeg==='all'||ideaSeg==='gal'||gHas[ideaSeg])) ideaSeg='home';
+    feed.innerHTML=ideaSegBarHtml(items,groups)+`<div id="ideaSegBody">${ideaSegBodyHtml(items,groups)}</div>`;
+    bindSortBar(); bindFeed();
+    if(ideaSeg==='home') initComposer();   // 담기폼이 있을 때만 배선(요소 없으면 터짐)
+    if(ideaSeg==='rec') bindHomeCal();
+    const bar=document.getElementById('ideaSegBar');
+    if(bar) bar.querySelectorAll('.seg').forEach(b=>b.onclick=()=>ideaSetSeg(b.dataset.seg));
+    return;
   }
-  const hubHtml=(w.key==='idea'?collectHubHtml():'');
-  let html=hubHtml+ideaToggle+(items.length?sortBarHtml():'');
-  if(w.key==='idea' && items.length){
-    const doneN=items.filter(isDone).length, pct=Math.round(doneN/items.length*100);
-    html+=`<div class="exec-bar">
-      <div class="exec-top"><span class="exec-t">💪 실행률</span><span class="exec-n">${doneN}/${items.length} · ${pct}%</span></div>
-      <div class="exec-track"><div class="exec-fill" style="width:${pct}%"></div></div>
-      <div class="exec-msg">${pct===100?'전부 실행 완료! 대단해요 🎉':pct>=50?'절반 넘게 실행했어요, 좋아요!':'아이디어는 실행해야 자산이 돼요. 하나씩 ✓'}</div>
-    </div>`;
-  }
+
+  // ── (기타 워크스페이스 — 현재는 도달하지 않음)
+  let html=(items.length?sortBarHtml():'');
   groups.forEach(g=>{
     let gi=items.filter(i=>(i.group||'유형 미지정')===g && (!favOnly||i.fav)).sort(sortFn);
     if(!gi.length && g!=='유형 미지정')return;
@@ -1828,17 +1837,10 @@ function render(){
       <div class="sg-head sg-toggle"><span class="sg-tw">▾</span><span class="sg-name">${esc(g)}</span><span class="sg-n">${gi.length}</span><span class="sg-line"></span></div>
       <div class="wgrid">${gi.map(cardHtml).join('')}${(g==='유형 미지정'&&!favOnly)?addCard(w.key,g):''}</div></div>`;
   });
-  if(favOnly && !items.some(i=>i.fav)) html+=`<div class="home-first" style="margin-top:22px">즐겨찾기(★)한 게 아직 없어요. 카드의 ☆를 눌러 고정해보세요.</div>`;
   html+=`<button class="wcat-add" data-addcat="${w.key}">＋ 주제 추가</button>`;
-  if(!items.length){
-    html=hubHtml+`<div class="subgrp wcat"><div class="sg-head"><span class="sg-name">여기에 담기</span><span class="sg-line"></span></div>
-      <div class="wgrid">${addCard(w.key,'유형 미지정')}</div></div>`
-      +`<button class="wcat-add" data-addcat="${w.key}">＋ 주제 추가</button>`;
-  }
   feed.innerHTML=html;
   bindSortBar();
   bindFeed();
-  if(w.key==='idea'){ initComposer(); bindHomeCal(); }
 }
 /* ═══════════ 전자책 (eb-*) ═══════════ */
 const EB_TEMPLATES={
@@ -2548,6 +2550,69 @@ function osmuSetFmt(f){osmuFmt=f;render()}
 function osmuSetHook(i){osmuHook=i;render()}
 /* 🖼 갤러리 (아이디어 탭 안 · 사진 통합 보기) */
 function ideaSetGal(v){ideaGallery=!!v;render();window.scrollTo({top:0})}
+/* ── 콘텐츠 세그먼트(홈=담기만 / 기록 / 전체보기 / 유형별 / 갤러리) ── */
+function ideaSetSeg(v){
+  ideaSeg=v||'home';                     // 세그먼트는 탭 방식(항상 하나 활성)
+  try{localStorage.setItem('idf_ideaseg',ideaSeg)}catch(e){}
+  if(v!=='rec') homeSelDate=null;        // 기록 아닌 데로 가면 날짜 선택 해제
+  render();
+}
+function ideaSegBarHtml(items,groups){
+  const seg=ideaSeg;
+  const gCounts={};
+  items.forEach(i=>{const g=i.group||'유형 미지정';gCounts[g]=(gCounts[g]||0)+1;});
+  let chips=`<button class="seg home${seg==='home'?' on':''}" data-seg="home">🏠 홈</button>`;
+  chips+=`<button class="seg rec${seg==='rec'?' on':''}" data-seg="rec">📊 기록</button>`;
+  chips+=`<span class="segdiv"></span>`;
+  chips+=`<button class="seg${seg==='all'?' on':''}" data-seg="all">전체보기 <span class="sn">${items.length}</span></button>`;
+  groups.forEach(g=>{
+    const n=gCounts[g]||0; if(!n && g!=='유형 미지정') return;
+    if(!n) return;
+    chips+=`<button class="seg${seg===g?' on':''}" data-seg="${esc(g)}">${esc(g)} <span class="sn">${n}</span></button>`;
+  });
+  const photoN=items.filter(i=>i.img).length;
+  if(photoN){ chips+=`<span class="segdiv"></span>`;
+    chips+=`<button class="seg${seg==='gal'?' on':''}" data-seg="gal">🖼 갤러리 <span class="sn">${photoN}</span></button>`; }
+  return `<div class="segwrap"><div class="segbar" id="ideaSegBar">${chips}</div></div>`;
+}
+function ideaGroupHtml(g,items){
+  let gi=items.filter(i=>(i.group||'유형 미지정')===g && (!favOnly||i.fav)).sort(sortFn);
+  if(!gi.length && g!=='유형 미지정')return'';
+  if(!gi.length && favOnly)return'';
+  const ck='idea/'+g, collapsed=!!collapseState[ck];
+  return `<div class="subgrp wcat${collapsed?' collapsed':''}" data-ck="${esc(ck)}">
+    <div class="sg-head sg-toggle"><span class="sg-tw">▾</span><span class="sg-name">${esc(g)}</span><span class="sg-n">${gi.length}</span><span class="sg-line"></span></div>
+    <div class="wgrid">${gi.map(cardHtml).join('')}${(g==='유형 미지정'&&!favOnly)?addCard('idea',g):''}</div></div>`;
+}
+function ideaSegBodyHtml(items,groups){
+  const seg=ideaSeg;
+  if(seg==='home'){
+    return collectHubHtml()+(items.length?'':`<div class="home-first" style="margin-top:18px">아직 담은 게 없어요. 위에 사진·문구·링크를 톡 넣어보세요.</div>`);
+  }
+  if(seg==='rec'){
+    return homeCalHtml()+homeInsightsHtml()+homeDayItemsHtml();
+  }
+  if(seg==='gal'){
+    const photos=items.filter(i=>i.img).sort((a,b)=>b.ts-a.ts);
+    if(!photos.length) return `<div class="home-first" style="margin-top:22px">아직 사진이 없어요. 콘텐츠에 사진을 담으면 여기 갤러리에 모여요.</div>`;
+    return `<div class="idea-gal">${photos.map(i=>`<div class="idea-gcell" onclick="galOpen('${i.id}')" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')">${i.memo?`<span class="idea-gm">${esc(i.memo)}</span>`:''}</div>`).join('')}</div>`;
+  }
+  if(seg==='all'){
+    let h=sortBarHtml();
+    const doneN=items.filter(isDone).length, pct=items.length?Math.round(doneN/items.length*100):0;
+    h+=`<div class="exec-bar">
+      <div class="exec-top"><span class="exec-t">💪 실행률</span><span class="exec-n">${doneN}/${items.length} · ${pct}%</span></div>
+      <div class="exec-track"><div class="exec-fill" style="width:${pct}%"></div></div>
+      <div class="exec-msg">${pct===100?'전부 실행 완료! 대단해요 🎉':pct>=50?'절반 넘게 실행했어요, 좋아요!':'아이디어는 실행해야 자산이 돼요. 하나씩 ✓'}</div>
+    </div>`;
+    groups.forEach(g=>{ h+=ideaGroupHtml(g,items); });
+    if(favOnly && !items.some(i=>i.fav)) h+=`<div class="home-first" style="margin-top:22px">즐겨찾기(★)한 게 아직 없어요. 카드의 ☆를 눌러 고정해보세요.</div>`;
+    h+=`<button class="wcat-add" data-addcat="idea">＋ 주제 추가</button>`;
+    return h;
+  }
+  // 특정 유형 하나만 (여기까지 오면 seg는 유효한 유형)
+  return sortBarHtml()+ideaGroupHtml(seg,items);
+}
 function galOpen(id){const i=store.items.find(x=>x.id===id);if(!i||!i.img)return;const ov=document.createElement('div');ov.className='gal-ov';ov.onclick=()=>ov.remove();
   const cap=(i.memo?esc(i.memo):'')+(ebPlainText(i.text||'')?('<br>'+esc(ebPlainText(i.text).slice(0,80))):'');
   ov.innerHTML=`<div class="gal-box"><img src="${(i.img||'').replace(/"/g,'&quot;')}">${cap?`<div class="gal-cap">${cap}</div>`:''}</div>`;
@@ -3355,6 +3420,13 @@ document.getElementById('saveBtn').onclick=()=>{
 
 let toastT;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;
   t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1700)}
+  // 어디서나 복사(HTTPS면 clipboard, 아니면 textarea+execCommand 폴백)
+  function copyText(t,msg){
+    const ok=()=>toast(msg||'복사됨 ✓');
+    try{ if(navigator.clipboard&&window.isSecureContext){ navigator.clipboard.writeText(t).then(ok,()=>fb()); return; } }catch(e){}
+    fb();
+    function fb(){ try{ const ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0;top:0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); ta.remove(); ok(); }catch(e){ toast('복사 실패 — 길게 눌러 복사하세요'); } }
+  }
 
 render();
 </script>
@@ -3370,6 +3442,14 @@ render();
   const SUPABASE_ANON = 'sb_publishable_Naq2_XethYcwMKG3pR4KUg_9KIxuHNM';
   const BUCKET  = 'idea-folder-photos';
   const SESS    = 'idea_folder_session';
+  const LOGINHIST = 'idea_folder_loginhist';   // 이 기기에서 로그인했던 코드 목록(편의용)
+  function getLoginHist(){ try{ return JSON.parse(localStorage.getItem(LOGINHIST)||'[]'); }catch(e){ return []; } }
+  function saveLoginHist(a){ try{ localStorage.setItem(LOGINHIST, JSON.stringify(a.slice(0,6))); }catch(e){} }
+  function recordLoginHist(code,name){
+    if(!code)return; let a=getLoginHist().filter(x=>x.code!==code);
+    a.unshift({code:code, name:name||''}); saveLoginHist(a);
+  }
+  function removeLoginHist(code){ saveLoginHist(getLoginHist().filter(x=>x.code!==code)); }
 
   const sb = (window.supabase && SUPABASE_URL && SUPABASE_ANON)
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
@@ -3622,6 +3702,7 @@ render();
         <div class="idf-t">아이디어 폴더</div>
         <div class="idf-s">코드와 PIN으로 로그인</div>
         <input id="idfCode" maxlength="6" placeholder="코드 6자리" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <div class="idf-hist" id="idfHist"></div>
         <div class="idf-pins" id="idfPins">
           <input class="idf-pin" maxlength="1" inputmode="numeric" type="password" autocomplete="off">
           <input class="idf-pin" maxlength="1" inputmode="numeric" type="password" autocomplete="off">
@@ -3641,6 +3722,25 @@ render();
     setTimeout(()=>{try{code.focus();code.click();}catch(e){}},150);   // 클릭 없이 바로 입력되게 자동 포커스
 
     wireCode(code,()=>pins[0].focus());
+
+    // 이 기기에서 로그인했던 코드 — 탭하면 코드 채움, X로 삭제
+    const histBox=document.getElementById('idfHist');
+    const renderHist=()=>{
+      const h=getLoginHist();
+      if(!h.length){ histBox.innerHTML=''; histBox.style.display='none'; return; }
+      histBox.style.display='flex';
+      histBox.innerHTML='<div class="idf-hist-t">최근 로그인</div>'+h.map(x=>
+        `<span class="idf-chip" data-code="${x.code}"><button class="idf-chip-pick" data-code="${x.code}">${x.name?esc(x.name)+' · ':''}${x.code}</button><button class="idf-chip-x" data-x="${x.code}" title="기록 삭제">✕</button></span>`
+      ).join('');
+      histBox.querySelectorAll('.idf-chip-pick').forEach(b=>b.onclick=()=>{
+        code.value=b.dataset.code; buzz(); pins[0].focus();
+      });
+      histBox.querySelectorAll('.idf-chip-x').forEach(b=>b.onclick=e=>{
+        e.stopPropagation(); removeLoginHist(b.dataset.x); renderHist();
+      });
+    };
+    renderHist();
+
     pins.forEach((p,i)=>{
       p.addEventListener('input',()=>{
         p.value=p.value.replace(/[^0-9]/g,'');
@@ -3653,6 +3753,14 @@ render();
           e.preventDefault(); pins[i-1].focus(); pins[i-1].value=''; pins[i-1].classList.remove('filled'); }
         else if(e.key==='Enter') go();
       });
+      // 붙여넣기: 숫자만 뽑아 i번째부터 각 칸에 분배
+      p.addEventListener('paste',e=>{
+        const d=((e.clipboardData||window.clipboardData).getData('text')||'').replace(/[^0-9]/g,'');
+        if(!d)return; e.preventDefault();
+        for(let k=0;k<d.length && i+k<pins.length;k++){ const q=pins[i+k]; q.value=d[k]; q.classList.add('filled'); }
+        const last=Math.min(i+d.length,pins.length)-1;
+        if(last>=3){ pins[3].blur(); setTimeout(go,140); } else pins[last+1].focus();
+      });
     });
 
     const go=async()=>{
@@ -3661,6 +3769,7 @@ render();
       const r=await tryLogin(codeClean(code.value), getPin());
       if(r.ok){
         if(r.mustSetPin){ ov.remove(); showSetPin(remember, r.expiresAt, r.name); return; }
+        recordLoginHist(codeClean(code.value), r.name);
         if(remember) localStorage.setItem(SESS, CURRENT); else localStorage.removeItem(SESS);
         ov.classList.add('done'); setTimeout(()=>ov.remove(),260); addLogoutBtn(r.expiresAt); applyNick(r.name);
         try{ await loadCloud(CURRENT); }catch(e){ toast('불러오기 실패 — 새로고침 해주세요'); } }
@@ -3839,7 +3948,16 @@ render();
     #idfLogin .idf-t{animation-delay:.12s}
     #idfLogin .idf-s{animation-delay:.18s}
     #idfLogin #idfCode{animation-delay:.24s}
+    #idfLogin .idf-hist{animation-delay:.27s}
     #idfLogin .idf-pins{animation-delay:.30s}
+    #idfLogin .idf-hist{display:none;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 2px}
+    #idfLogin .idf-hist-t{width:100%;text-align:left;font-size:11px;color:#6a6a64;margin-bottom:1px}
+    #idfLogin .idf-chip{display:inline-flex;align-items:center;background:#1a1a1a;border:1px solid #2c2c2c;border-radius:999px;overflow:hidden}
+    #idfLogin .idf-chip-pick{background:transparent;border:0;color:#dcdcd6;font-size:12.5px;font-weight:600;padding:6px 4px 6px 11px;cursor:pointer;letter-spacing:.02em}
+    #idfLogin .idf-chip:hover{border-color:rgba(var(--lime-rgb),.5)}
+    #idfLogin .idf-chip:hover .idf-chip-pick{color:#f2f2f0}
+    #idfLogin .idf-chip-x{background:transparent;border:0;color:#6a6a64;font-size:10px;padding:6px 9px 6px 5px;cursor:pointer;line-height:1}
+    #idfLogin .idf-chip-x:hover{color:#ff6b6b}
     #idfLogin .idf-err{animation-delay:.34s}
     #idfLogin #idfGo{animation-delay:.38s}
     @keyframes idfUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -4202,7 +4320,7 @@ render();
         ? `<span class="pw-wait">🔑 임시비번 ${esc(a.pin)} · 설정 대기중</span>`
         : `<span class="pw-done">🔒 비밀번호 설정 완료</span>`;
       return `<div class="adm-row" data-code="${a.code}">
-        <div class="ar-main"><div class="ar-top"><b>${a.code}</b> ${st}</div>
+        <div class="ar-main"><div class="ar-top"><button class="ar-code" data-act="copy" title="코드 복사">${a.code}<span class="ar-copy">📋</span></button> ${st}</div>
           <div class="ar-sub">${esc(a.name||'-')} · ${life?'평생':('만료 '+fmtDate(a.expires_at))}</div>
           <div class="ar-pw">${pinState}</div></div>
         <div class="ar-acts">
@@ -4216,6 +4334,7 @@ render();
       const code=row.dataset.code;
       row.querySelectorAll('[data-act]').forEach(btn=>btn.onclick=async()=>{
         const act=btn.dataset.act;
+        if(act==='copy'){ copyText(code,'코드 '+code+' 복사됨 ✓'); return; }
         if(act==='ext6') await extendCode(code,6);
         else if(act==='ext12') await extendCode(code,12);
         else if(act==='temp'){
@@ -4325,6 +4444,10 @@ render();
     #idfAdmin .adm-row{background:#1a1a1a;border:1px solid #262626;border-radius:12px;padding:11px 12px}
     #idfAdmin .ar-top{font-size:15px;color:#f2f2f0}
     #idfAdmin .ar-top b{letter-spacing:.05em}
+    #idfAdmin .ar-code{font:inherit;font-weight:800;letter-spacing:.05em;color:#f2f2f0;background:transparent;border:0;padding:2px 4px;margin:-2px -2px -2px -4px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
+    #idfAdmin .ar-code:hover,#idfAdmin .ar-code:active{background:rgba(var(--lime-rgb),.14)}
+    #idfAdmin .ar-copy{font-size:11px;opacity:.5}
+    #idfAdmin .ar-code:hover .ar-copy{opacity:.9}
     #idfAdmin .ar-sub{font-size:12px;color:#8a8a86;margin-top:3px}
     #idfAdmin .st{font-size:11px;font-weight:800;border-radius:8px;padding:2px 7px;margin-left:6px}
     #idfAdmin .st.ok{color:var(--lime);background:rgba(var(--lime-rgb),.12)}
