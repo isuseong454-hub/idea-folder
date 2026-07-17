@@ -536,6 +536,39 @@
   .nh-arrow svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
   .nh-hint{text-align:center;color:var(--ink-faint);font-size:12px;margin-top:15px;line-height:1.5}
   .nh-hint b{color:var(--ink-dim);font-weight:700}
+  /* ── 홈 전구 토글 (아이디어/생각 정리) ── */
+  .nh-moderow{display:flex;justify-content:center;gap:28px;margin-top:15px}
+  .nh-mode{appearance:none;background:none;border:0;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;opacity:.36;transition:opacity .4s;padding:2px 6px}
+  .nh-mode.on{opacity:1}
+  .nh-mode svg{width:24px;height:24px;stroke:#6a6a64;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:.5s}
+  .nh-mode.idea.on svg{stroke:var(--lime);fill:rgba(var(--lime-rgb),.22);filter:drop-shadow(0 0 7px rgba(var(--lime-rgb),.55))}
+  .nh-mode.diary.on svg{stroke:#a8a49c;fill:rgba(168,164,156,.2);filter:drop-shadow(0 0 7px rgba(168,164,156,.42))}
+  .nh-mode span{font-size:11px;font-weight:700;color:var(--ink-faint);transition:color .4s}
+  .nh-mode.idea.on span{color:var(--lime)}
+  .nh-mode.diary.on span{color:#a8a49c}
+  /* ── 생각 정리 모드 = 캔들 앰버 분위기 ── */
+  .nh-reflect,.nh-ic{transition:filter .9s ease,background .9s ease}
+  .nh.diary .nh-reflect{background:radial-gradient(58% 78% at 50% 0%,rgba(224,178,122,.4),rgba(224,178,122,.12) 46%,transparent 72%);filter:blur(20px)}
+  .nh.diary .nh-ic{filter:hue-rotate(-48deg) saturate(.62) brightness(1.05) drop-shadow(0 12px 26px rgba(0,0,0,.55))}
+  .nh.diary .nh-box:focus-within{border-color:rgba(224,178,122,.5);box-shadow:0 10px 34px rgba(0,0,0,.42),0 0 0 3px rgba(224,178,122,.09)}
+  .nh.diary .nh-save:hover:not(:disabled){border-color:rgba(224,178,122,.6);color:#E0B27A}
+  .nh.diary .nh-arrow:not(:disabled){background:#E0B27A;box-shadow:0 4px 16px rgba(224,178,122,.34)}
+  .nh.diary .nh-hint b{color:#E0B27A}
+  /* ── 내 생각 탭: 방(아이디어 노트/생각 정리) ── */
+  .tk-rooms{display:flex;gap:8px;margin:0 0 16px;max-width:420px;margin-left:auto;margin-right:auto}
+  .tk-room{flex:1;text-align:center;background:#171717;border:1px solid var(--line);border-radius:12px;padding:11px 8px;font-size:13.5px;font-weight:800;color:#cfcfca;cursor:pointer;transition:.15s}
+  .tk-room.on{background:rgba(var(--lime-rgb),.13);border-color:rgba(var(--lime-rgb),.45);color:var(--lime)}
+  .tk-room.diary.on{background:rgba(224,178,122,.13);border-color:rgba(224,178,122,.5);color:#E0B27A}
+  /* 달력 구분: 생각 정리 앰버 */
+  .cal-diarydot{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:#E0B27A;box-shadow:0 0 5px rgba(224,178,122,.6);pointer-events:none}
+  .tk-cal.amber .cal-cell.lv1{background:rgba(224,178,122,.13)}
+  .tk-cal.amber .cal-cell.lv2{background:rgba(224,178,122,.22)}
+  .tk-cal.amber .cal-cell.lv3{background:rgba(224,178,122,.32)}
+  .tk-cal.amber .cal-badge{background:#E0B27A;color:#141008}
+  .tk-cal.amber .cal-cell.sel{outline:2px solid #E0B27A}
+  /* 생각 정리 글 카드 */
+  .tk-post.diary{border-left:3px solid #E0B27A;background:#141210}
+  .tk-cattag.diary{background:rgba(224,178,122,.14);color:#E0B27A}
   /* ── 왼쪽 목록 서랍 ── */
   .lc-handle{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:400;width:30px;height:76px;border-radius:0 17px 17px 0;background:rgba(30,30,30,.9);border:1px solid var(--line);border-left:none;display:flex;align-items:center;justify-content:center;color:#c8c8c4;cursor:pointer;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);box-shadow:3px 0 12px rgba(0,0,0,.4);transition:.18s}
   .lc-handle:hover{color:var(--lime);background:rgba(38,38,38,.96);width:34px}
@@ -1525,6 +1558,8 @@ let thinkSelDate=null; // 선택한 날짜 'Y-M-D' (null=전체)
 let homeCalYM=(()=>{const d=new Date();return {y:d.getFullYear(),m:d.getMonth()}})();
 let homeSelDate=null;
 let thinkSearch='';
+let homeMode=(()=>{try{return localStorage.getItem('idf_homemode')||'idea'}catch(e){return'idea'}})();     // 홈 전구: idea|diary
+let thinkRoom=(()=>{try{return localStorage.getItem('idf_thinkroom')||'idea'}catch(e){return'idea'}})();  // 내 생각 방: idea|diary
 let sortMode='recent'; // recent | used | fav
 let favOnly=false;
 
@@ -1696,13 +1731,20 @@ function wireHome(){
   const upd=()=>{const has=ta.value.trim().length>0;sv.disabled=!has;go.disabled=!has;grow();};
   ta.addEventListener('input',upd);
   ta.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();if(!sv.disabled)sv.click();}});
-  sv.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeQuickSave(t);ta.value='';upd();ta.focus();toast('내 생각에 담았어요 💭');});
+  sv.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeQuickSave(t);ta.value='';upd();ta.focus();
+    toast(homeMode==='diary'?'생각 정리에 담았어요 🌙':'내 생각에 담았어요 💭');});
   go.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeGoWrite(t);});
+  // 전구 토글: 쓰던 글 유지한 채 모드 전환
+  const setMode=m=>{ if(homeMode===m)return; homeMode=m; try{localStorage.setItem('idf_homemode',m)}catch(e){}
+    const keep=ta.value; render(); const ta2=document.getElementById('nhTa'); if(ta2){ta2.value=keep;ta2.dispatchEvent(new Event('input'));ta2.focus();} ebBuzz(5); };
+  const mi=document.getElementById('nhModeIdea'),md=document.getElementById('nhModeDiary');
+  if(mi)mi.onclick=()=>setMode('idea');
+  if(md)md.onclick=()=>setMode('diary');
   requestAnimationFrame(grow);
 }
-function homeMakeThought(t){return {id:uid(),ws:'think',type:'journal',title:'',text:esc(t).replace(/\n/g,'<br>'),memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};}
-function homeQuickSave(t){const it=homeMakeThought(t);store.items.unshift(it);save();ebBuzz(6);}
-function homeGoWrite(t){const it=homeMakeThought(t);store.items.unshift(it);save();activeWs='think';thinkEdit(it.id);}
+function homeMakeThought(t,diary){return {id:uid(),ws:'think',type:'journal',diary:!!diary,title:'',text:esc(t).replace(/\n/g,'<br>'),memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};}
+function homeQuickSave(t){const it=homeMakeThought(t,homeMode==='diary');store.items.unshift(it);save();ebBuzz(6);}
+function homeGoWrite(t){const it=homeMakeThought(t,homeMode==='diary');store.items.unshift(it);save();activeWs='think';thinkRoom=(it.diary?'diary':'idea');try{localStorage.setItem('idf_thinkroom',thinkRoom)}catch(e){}thinkEdit(it.id);}
 
 /* ═══════════ 왼쪽 목록 서랍 (list drawer) ═══════════ */
 let lcWsCur='think', lcCollapsed={};
@@ -1714,10 +1756,13 @@ function lcCatHtml(id,nm,color,its){
   return `<div class="lc-cat${col?' col':''}" data-cat="${esc(id)}"><div class="lc-cat-h"><span class="lc-tw">▾</span><span class="lc-dot" style="background:${color}"></span><span class="lc-nm">${esc(nm)}</span><span class="lc-n">${its.length}</span></div><div class="lc-items">${rows}</div></div>`;
 }
 function lcRenderThink(){
-  const items=store.items.filter(i=>i.ws==='think');
+  const all=store.items.filter(i=>i.ws==='think');
+  const items=all.filter(i=>!i.diary);                       // 생각 정리(일기)는 카테고리에 안 섞임
   let html=tkCats().map(c=>lcCatHtml(c.id,c.nm,c.color,items.filter(i=>i.group===c.id).sort((a,b)=>b.ts-a.ts))).join('');
   const uncat=items.filter(i=>!i.group||!tkCat(i.group)).sort((a,b)=>b.ts-a.ts);
   if(uncat.length) html+=lcCatHtml('__none','미분류','#7a7a76',uncat);
+  const diary=all.filter(i=>i.diary).sort((a,b)=>b.ts-a.ts); // 별도 앰버 방
+  if(diary.length) html+=lcCatHtml('__diary','🌙 생각 정리','#E0B27A',diary);
   return html||`<div class="lc-empty" style="padding:14px">아직 담은 생각이 없어요</div>`;
 }
 function lcRenderBook(){
@@ -1774,9 +1819,17 @@ function render(){
   if(search){
     titleEl.innerHTML=`<div class="wt-top"><span class="wt-ic">🔍</span><h2>검색 <em>결과</em></h2></div>
       <div class="wt-desc">"${esc(search)}" — 전체에서 찾은 항목</div>`;
-    const hits=store.items.filter(matchSearch).sort(sortFn);
-    feed.innerHTML=hits.length?`<div class="subgrp"><div class="rail">${hits.map(cardHtml).join('')}</div></div>`
-      :`<div class="empty-hint">해당하는 게 없어요</div>`;
+    const hitsAll=store.items.filter(matchSearch).sort(sortFn);
+    const dHits=hitsAll.filter(i=>i.diary), hits=hitsAll.filter(i=>!i.diary);   // 생각 정리는 구분해서 표시
+    let sh=hits.length?`<div class="subgrp"><div class="rail">${hits.map(cardHtml).join('')}</div></div>`:'';
+    if(dHits.length){
+      sh+=`<div class="subgrp"><div class="sg-head" style="cursor:default"><span class="sg-name" style="color:#E0B27A">🌙 생각 정리</span><span class="sg-n" style="color:#E0B27A;background:rgba(224,178,122,.14)">${dHits.length}</span><span class="sg-line"></span></div>`
+        +dHits.map(i=>{const pv=ebPlainText(i.text||'');const d=new Date(i.ts);
+          return `<div class="tk-post diary" data-tkopen="${i.id}"><div class="tk-post-t"><span class="tk-cattag diary">🌙 생각 정리</span>${esc(i.title||pv.slice(0,26)||'(제목 없음)')}</div>${pv?`<div class="tk-post-b">${esc(pv.slice(0,120))}</div>`:''}<div class="tk-post-f"><span>${(d.getMonth()+1)}.${d.getDate()}</span></div></div>`;}).join('')
+        +`</div>`;
+    }
+    feed.innerHTML=sh||`<div class="empty-hint">해당하는 게 없어요</div>`;
+    feed.querySelectorAll('[data-tkopen]').forEach(c=>c.onclick=()=>thinkEdit(c.dataset.tkopen));
     bindFeed();return;
   }
 
@@ -1785,18 +1838,24 @@ function render(){
   // ── HOME
   if(activeWs==='home'){
     titleEl.innerHTML='';
+    const dj=homeMode==='diary';
+    const bulb='<svg viewBox="0 0 24 24"><path d="M9.5 18.5h5M10 21h4" fill="none"/><path d="M12 3.2a5.8 5.8 0 0 0-3.4 10.5c.7.6 1 1.1 1.1 2.1h4.6c.1-1 .4-1.5 1.1-2.1A5.8 5.8 0 0 0 12 3.2z"/></svg>';
     feed.innerHTML=`
-      <div class="nh">
+      <div class="nh${dj?' diary':''}" id="nhRoot">
         <div class="nh-stage"><div class="nh-emblem"><img class="nh-ic" src="${HOME_ICON}" alt=""><div class="nh-reflect"></div></div></div>
         <div class="nh-writewrap">
           <div class="nh-box">
-            <textarea class="nh-ta" id="nhTa" rows="1" placeholder="지금 떠오른 생각을 툭 적어보세요…"></textarea>
+            <textarea class="nh-ta" id="nhTa" rows="1" placeholder="${dj?'지금 마음에 걸리는 것을 그냥 흘려보내듯 적어보세요…':'지금 떠오른 생각을 툭 적어보세요…'}"></textarea>
             <div class="nh-bar">
               <button class="nh-save" id="nhSave" disabled>저장</button>
               <button class="nh-arrow" id="nhGo" disabled aria-label="더 쓰러 가기"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
             </div>
           </div>
-          <div class="nh-hint">저장하면 <b>내 생각</b>에 쌓여요 · 화살표로 이어서 길게 쓰기</div>
+          <div class="nh-moderow">
+            <button class="nh-mode idea${dj?'':' on'}" id="nhModeIdea">${bulb}<span>아이디어</span></button>
+            <button class="nh-mode diary${dj?' on':''}" id="nhModeDiary">${bulb}<span>생각 정리</span></button>
+          </div>
+          <div class="nh-hint">${dj?'저장하면 <b>생각 정리</b>에만 조용히 쌓여요 · 아무도 안 봐요':'저장하면 <b>내 생각</b>에 쌓여요 · 화살표로 이어서 길게 쓰기'}</div>
         </div>
       </div>`;
     wireHome();return;
@@ -2918,9 +2977,11 @@ const THINK_CATS_DEFAULT=[{id:'plain',nm:'그냥 생각',color:'#C8FF00'},{id:'h
 function tkCats(){try{const v=JSON.parse(localStorage.getItem('idf_thinkcats')||'null');if(Array.isArray(v)&&v.length){let ch=false;v.forEach(c=>{if(c.id==='plain'&&c.color==='#8a8a86'){c.color='#C8FF00';ch=true}if(c.id==='idea'&&c.color==='#C8FF00'){c.color='#FFD400';ch=true}});if(ch){try{localStorage.setItem('idf_thinkcats',JSON.stringify(v))}catch(e){}}return v}return THINK_CATS_DEFAULT}catch(e){return THINK_CATS_DEFAULT}}
 function tkCat(id){return id?tkCats().find(c=>c.id===id):null}
 function tkCatColor(id){const c=tkCat(id);return c?c.color:''}
-function thinkCalHtml(items){
-  // 날짜별 개수 + 카테고리 색
+function thinkCalHtml(items,opts){
+  opts=opts||{};
+  // 날짜별 개수 + 카테고리 색 (+생각 정리 날 표시)
   const cnt={},dayC={}; items.forEach(i=>{const k=ymdKey(new Date(i.ts));cnt[k]=(cnt[k]||0)+1;const col=tkCatColor(i.group);if(col&&!dayC[k])dayC[k]=col});
+  const dot=opts.dotDays||null;
   const {y,m}=thinkCalYM;
   const first=new Date(y,m,1), start=first.getDay(), days=new Date(y,m+1,0).getDate();
   const todayK=ymdKey(new Date());
@@ -2933,9 +2994,9 @@ function thinkCalHtml(items){
     const lv=n>=3?'lv3':(n===2?'lv2':(n===1?'lv1':''));
     const cls=['cal-cell']; if(lv)cls.push(lv); if(k===todayK)cls.push('today'); if(k===thinkSelDate)cls.push('sel');
     cells+=`<div class="${cls.join(' ')}" data-cald="${k}">
-      <span class="cal-d">${d}</span>${n?`<span class="cal-badge">${n>9?'9+':n}</span>`:''}</div>`;
+      <span class="cal-d">${d}</span>${n?`<span class="cal-badge">${n>9?'9+':n}</span>`:''}${(dot&&dot.has(k))?'<span class="cal-diarydot"></span>':''}</div>`;
   }
-  return `<div class="tk-cal${collapsed?' collapsed':''}">
+  return `<div class="tk-cal${collapsed?' collapsed':''}${opts.amber?' amber':''}">
     <div class="tk-cal-head" id="tkCalToggle">
       <span class="tkc-ic">📅</span><span class="tkc-title">기록 달력</span>
       <span class="tkc-sub">${total?total+'개':'이번 달 기록 없음'}</span><span class="tkc-chev">▾</span>
@@ -2955,7 +3016,10 @@ function thinkCalHtml(items){
 function thinkStreak(items){const set=new Set(items.map(i=>ymdKey(new Date(i.ts))));let d=new Date();if(!set.has(ymdKey(d)))d.setDate(d.getDate()-1);let s=0;while(set.has(ymdKey(d))){s++;d.setDate(d.getDate()-1);}return s;}
 function renderThink(){
   document.getElementById('wsTitle').innerHTML='';
-  const items=store.items.filter(i=>i.ws==='think').sort((a,b)=>b.ts-a.ts);
+  const all=store.items.filter(i=>i.ws==='think').sort((a,b)=>b.ts-a.ts);
+  const diaryRoom=thinkRoom==='diary';
+  const items=all.filter(i=>diaryRoom?i.diary:!i.diary);   // 방 분리: 일반/생각 정리
+  const diaryDays=new Set(all.filter(i=>i.diary).map(i=>ymdKey(new Date(i.ts))));
   const todayK=ymdKey(new Date());
   if(!thinkSelDate) thinkSelDate=todayK;                 // 기본=오늘
   const monthCount=items.filter(i=>{const d=new Date(i.ts);return d.getFullYear()===thinkCalYM.y&&d.getMonth()===thinkCalYM.m;}).length;
@@ -2963,27 +3027,34 @@ function renderThink(){
   const dayItems=items.filter(i=>ymdKey(new Date(i.ts))===thinkSelDate);
   const sd=thinkSelDate.split('-'); const selLabel=(thinkSelDate===todayK?'오늘':(sd[1]+'월 '+sd[2]+'일'));
   let h=`
-    <div class="tk-lg">아이디어 노트</div>
-    <div class="tk-chipwrap"><span class="tk-glowchip">${streak>0?'🔥 '+streak+'일 연속 · ':''}이번 달 ${monthCount}개</span></div>
-    ${thinkCalHtml(items)}
+    <div class="tk-lg">${diaryRoom?'생각 정리':'아이디어 노트'}</div>
+    <div class="tk-rooms">
+      <button class="tk-room${diaryRoom?'':' on'}" id="tkRoomIdea">💡 아이디어 노트</button>
+      <button class="tk-room diary${diaryRoom?' on':''}" id="tkRoomDiary">🌙 생각 정리</button>
+    </div>
+    <div class="tk-chipwrap"><span class="tk-glowchip"${diaryRoom?' style="color:#E0B27A"':''}>${streak>0?'🔥 '+streak+'일 연속 · ':''}이번 달 ${monthCount}개</span></div>
+    ${thinkCalHtml(items,{amber:diaryRoom,dotDays:diaryRoom?null:diaryDays})}
     <div class="tk-daysec">
       <div class="tk-daysec-h"><span class="tk-ds-t">${selLabel}</span><span class="tk-ds-n">${dayItems.length}</span></div>`;
   if(!dayItems.length){
-    h+=`<div class="tk-empty">${thinkSelDate===todayK?'오늘은 아직 기록이 없어요.<br>오른쪽 아래 연필로 첫 생각을 남겨보세요 ✍️':'이 날엔 기록이 없어요.'}</div>`;
+    h+=`<div class="tk-empty">${diaryRoom?(thinkSelDate===todayK?'오늘은 아직 정리한 생각이 없어요.<br>홈에서 회색 전구를 켜고 마음을 흘려보내세요 🌙':'이 날엔 정리한 생각이 없어요.'):(thinkSelDate===todayK?'오늘은 아직 기록이 없어요.<br>오른쪽 아래 연필로 첫 생각을 남겨보세요 ✍️':'이 날엔 기록이 없어요.')}</div>`;
   } else {
     dayItems.forEach(i=>{
       const tm=new Date(i.ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-      const pv=ebPlainText(i.text||''); const title=i.title||pv.slice(0,26)||'(제목 없음)'; const cc=tkCat(i.group);
-      h+=`<div class="tk-post" data-open="${i.id}"${cc?` style="border-left:3px solid ${cc.color}"`:''}>
-        <div class="tk-post-t">${cc?`<span class="tk-cattag" style="background:${cc.color}22;color:${cc.color}">${esc(cc.nm)}</span>`:''}${esc(title)}</div>
+      const pv=ebPlainText(i.text||''); const title=i.title||pv.slice(0,26)||'(제목 없음)'; const cc=i.diary?null:tkCat(i.group);
+      h+=`<div class="tk-post${i.diary?' diary':''}" data-open="${i.id}"${cc?` style="border-left:3px solid ${cc.color}"`:''}>
+        <div class="tk-post-t">${i.diary?`<span class="tk-cattag diary">🌙</span>`:(cc?`<span class="tk-cattag" style="background:${cc.color}22;color:${cc.color}">${esc(cc.nm)}</span>`:'')}${esc(title)}</div>
         ${pv?`<div class="tk-post-b">${esc(pv.slice(0,120))}</div>`:''}
         <div class="tk-post-f"><span>${esc(tm)}${i.memo?' · '+esc(i.memo):''}</span><button class="tk-del" data-del="${i.id}">✕</button></div>
       </div>`;
     });
   }
-  h+=`</div><div class="tk-backup-wrap"><button class="tk-backup2" id="tkBackup">⬇ 백업</button></div><button class="tk-fab" id="tkFab" aria-label="새 생각"><img src="${HOME_ICON}" alt=""></button>`;
+  h+=`</div><div class="tk-backup-wrap"><button class="tk-backup2" id="tkBackup">⬇ 백업</button></div><button class="tk-fab" id="tkFab" aria-label="새 생각"><img src="${HOME_ICON}" alt=""${diaryRoom?' style="filter:hue-rotate(-48deg) saturate(.62)"':''}></button>`;
   const feed=document.getElementById('feed'); feed.innerHTML=h;
-  document.getElementById('tkFab').onclick=()=>thinkNew();
+  document.getElementById('tkFab').onclick=()=>thinkNew(diaryRoom);
+  const setRoom=r=>{ if(thinkRoom===r)return; thinkRoom=r; try{localStorage.setItem('idf_thinkroom',r)}catch(e){} renderThink(); };
+  document.getElementById('tkRoomIdea').onclick=()=>setRoom('idea');
+  document.getElementById('tkRoomDiary').onclick=()=>setRoom('diary');
   const bk=document.getElementById('tkBackup'); if(bk)bk.onclick=backupThoughts;
   feed.querySelectorAll('[data-open]').forEach(c=>c.onclick=e=>{if(e.target.closest('[data-del]'))return;thinkEdit(c.dataset.open)});
   feed.querySelectorAll('.tk-del').forEach(b=>b.onclick=e=>{e.stopPropagation();
@@ -3000,7 +3071,7 @@ function renderThink(){
   });
 }
 /* ── 내 생각: 전자책과 같은 풀 에디터 ── */
-function thinkNew(){const it={id:uid(),ws:'think',type:'journal',title:'',text:'',memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};store.items.unshift(it);save();thinkEdit(it.id);ebBuzz(6)}
+function thinkNew(diary){const it={id:uid(),ws:'think',type:'journal',diary:!!diary,title:'',text:'',memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};store.items.unshift(it);save();thinkEdit(it.id);ebBuzz(6)}
 function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;curThink=it;const d=new Date(it.ts);
   const w=document.createElement('div');w.className='eb-editor';w.id='thinkEditor';
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
@@ -3010,7 +3081,7 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
       <input class="eb-edtitle eb-thinktitle" id="thinkTitle" placeholder="제목 (선택)" value="${esc(it.title||'')}">
-      <div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>
+      ${it.diary?`<div class="tk-catrow"><span class="tk-cattag diary">🌙 생각 정리 · 나만 보는 글</span></div>`:`<div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>`}
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
       <div class="eb-edbody" id="thinkBody" contenteditable="true" data-ph="여기에 자유롭게 길게 써 내려가세요. 글자를 긁으면 서식이, ＋를 누르면 사진·인용이 나와요. ✍️">${it.text||''}</div>
     </div></div>
