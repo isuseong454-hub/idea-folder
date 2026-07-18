@@ -524,18 +524,22 @@
   .nh-ta::-webkit-scrollbar-track{background:transparent}
   .nh-ta::-webkit-scrollbar-button{display:none}
   .nh-bar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:10px}
-  .nh-save{appearance:none;font-family:inherit;border:1px solid #333;background:linear-gradient(180deg,#242424,#191919);color:var(--ink);
-    font-weight:800;font-size:14px;padding:10px 20px;border-radius:14px;cursor:pointer;transition:.16s;
-    box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
-  .nh-save:hover:not(:disabled){border-color:rgba(var(--lime-rgb),.55);color:var(--lime)}
-  .nh-save:disabled{opacity:.4;cursor:default}
-  .nh-arrow{appearance:none;border:0;width:44px;height:44px;border-radius:50%;flex:0 0 auto;cursor:pointer;color:#0b0b0b;background:var(--lime);
-    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(var(--lime-rgb),.34);transition:.16s}
-  .nh-arrow:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 22px rgba(var(--lime-rgb),.5)}
-  .nh-arrow:disabled{opacity:.32;cursor:default;box-shadow:none;background:#2a2a2a;color:var(--ink-faint)}
-  .nh-arrow svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .nh-hint{text-align:center;color:var(--ink-faint);font-size:12px;margin-top:15px;line-height:1.5}
-  .nh-hint b{color:var(--ink-dim);font-weight:700}
+  /* 저장 = 원형 체크 버튼 */
+  .nh-save{appearance:none;font-family:inherit;border:0;width:46px;height:46px;border-radius:50%;flex:0 0 auto;cursor:pointer;
+    background:var(--lime);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 5px 18px rgba(var(--lime-rgb),.34);transition:.18s}
+  .nh-save svg{width:21px;height:21px;stroke:#0D0D0D;fill:none;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round}
+  .nh-save:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 7px 22px rgba(var(--lime-rgb),.5)}
+  .nh-save:active:not(:disabled){transform:scale(.93)}
+  .nh-save:disabled{cursor:default;box-shadow:none;background:#262626}
+  .nh-save:disabled svg{stroke:var(--ink-faint)}
+  /* 더 길게 쓰기 — 하단, 작게 */
+  .nh-more{appearance:none;background:none;border:0;cursor:pointer;font-family:inherit;margin:22px auto 0;
+    display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink-faint);
+    padding:7px 12px;border-radius:9px;transition:.18s}
+  .nh-more:hover:not(:disabled){color:var(--ink-dim)}
+  .nh-more:disabled{opacity:.35;cursor:default}
+  .nh-more svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
   /* ── 선보이기: 조립되는 연출 ── */
   .os-asm{opacity:0;transform:translateY(16px) scale(.975)}
   .os-asm.in{opacity:1;transform:none;transition:.42s cubic-bezier(.2,.8,.2,1)}
@@ -600,6 +604,7 @@
   .rt-spark i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,var(--lime),transparent 62%);animation:rtSpark .85s ease-out}
   @keyframes rtSpark{0%{transform:scale(.2);opacity:0}35%{transform:scale(1.25);opacity:1}100%{transform:scale(1.7);opacity:0}}
   .rt-msg{font-size:15px;font-weight:800;letter-spacing:-.01em}
+  .rt-sub{font-size:12px;color:var(--ink-dim);margin-top:-6px}
   .rt-msg.amber{color:#E0B27A} .rt-msg.lime{color:var(--lime)}
   @media(prefers-reduced-motion:reduce){.rt-breath,.rt-spark i,.nh-cont.show{animation:none}}
   /* ── 홈 전구 토글 (아이디어/생각 정리) ── */
@@ -617,9 +622,8 @@
   .nh.diary .nh-reflect{background:radial-gradient(58% 78% at 50% 0%,rgba(224,178,122,.4),rgba(224,178,122,.12) 46%,transparent 72%);filter:blur(20px)}
   .nh.diary .nh-ic{filter:hue-rotate(-48deg) saturate(.62) brightness(1.05) drop-shadow(0 12px 26px rgba(0,0,0,.55))}
   .nh.diary .nh-box:focus-within{border-color:rgba(224,178,122,.5);box-shadow:0 10px 34px rgba(0,0,0,.42),0 0 0 3px rgba(224,178,122,.09)}
-  .nh.diary .nh-save:hover:not(:disabled){border-color:rgba(224,178,122,.6);color:#E0B27A}
-  .nh.diary .nh-arrow:not(:disabled){background:#E0B27A;box-shadow:0 4px 16px rgba(224,178,122,.34)}
-  .nh.diary .nh-hint b{color:#E0B27A}
+  .nh.diary .nh-save:not(:disabled){background:#E0B27A;box-shadow:0 5px 18px rgba(224,178,122,.32)}
+  .nh.diary .nh-save:hover:not(:disabled){box-shadow:0 7px 22px rgba(224,178,122,.45)}
   /* ── 내 생각 탭: 방(아이디어 노트/생각 정리) ── */
   .tk-rooms{display:flex;gap:8px;margin:0 0 16px;max-width:420px;margin-left:auto;margin-right:auto}
   .tk-room{flex:1;text-align:center;background:#171717;border:1px solid var(--line);border-radius:12px;padding:11px 8px;font-size:13.5px;font-weight:800;color:#cfcfca;cursor:pointer;transition:.15s}
@@ -1813,8 +1817,8 @@ function nhGoWrite(){
 function ritualFx(diary){
   const ov=document.createElement('div'); ov.className='ritual-ov';
   ov.innerHTML = diary
-    ? `<div class="rt-breath"></div><div class="rt-msg amber">흘려보냈어요 🌙</div>`
-    : `<div class="rt-spark"><i></i></div><div class="rt-msg lime">불이 켜졌어요 💡</div>`;
+    ? `<div class="rt-breath"></div><div class="rt-msg amber">흘려보냈어요 🌙</div><div class="rt-sub">생각 정리에 저장됐어요 · 아무도 안 봐요</div>`
+    : `<div class="rt-spark"><i></i></div><div class="rt-msg lime">불이 켜졌어요 💡</div><div class="rt-sub">아이디어 노트에 저장됐어요</div>`;
   document.body.appendChild(ov);
   setTimeout(()=>ov.classList.add('out'),1150);
   setTimeout(()=>ov.remove(),1580);
@@ -1944,15 +1948,16 @@ function render(){
           <div class="nh-box">
             <textarea class="nh-ta" id="nhTa" rows="1" placeholder="${dj?'지금 마음에 걸리는 것을 그냥 흘려보내듯 적어보세요…':'지금 떠오른 생각을 툭 적어보세요…'}"></textarea>
             <div class="nh-bar">
-              <button class="nh-save" id="nhSave" disabled>저장</button>
-              <button class="nh-arrow" id="nhGo" disabled aria-label="더 쓰러 가기"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+              <button class="nh-save" id="nhSave" disabled aria-label="저장">
+                <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg></button>
             </div>
           </div>
           <div class="nh-moderow">
             <button class="nh-mode idea${dj?'':' on'}" id="nhModeIdea">${bulb}<span>아이디어</span></button>
             <button class="nh-mode diary${dj?' on':''}" id="nhModeDiary">${bulb}<span>생각 정리</span></button>
           </div>
-          <div class="nh-hint">${dj?'저장하면 <b>생각 정리</b>에만 조용히 쌓여요 · 아무도 안 봐요':'저장하면 <b>내 생각</b>에 쌓여요 · 화살표로 이어서 길게 쓰기'}</div>
+          <button class="nh-more" id="nhGo" disabled>
+            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>더 길게 쓰기</button>
           ${nhContHtml()}
         </div>
       </div>`;
