@@ -536,6 +536,72 @@
   .nh-arrow svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
   .nh-hint{text-align:center;color:var(--ink-faint);font-size:12px;margin-top:15px;line-height:1.5}
   .nh-hint b{color:var(--ink-dim);font-weight:700}
+  /* ── 선보이기: 조립되는 연출 ── */
+  .os-asm{opacity:0;transform:translateY(16px) scale(.975)}
+  .os-asm.in{opacity:1;transform:none;transition:.42s cubic-bezier(.2,.8,.2,1)}
+  @media(prefers-reduced-motion:reduce){.os-asm{opacity:1;transform:none;transition:none}}
+  /* ── 오늘 몫 / 완성 임박 / 선보이기 해제 ── */
+  .eb-quota{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:9px;padding:11px 13px;border-radius:12px;
+    background:rgba(var(--lime-rgb),.07);border:1px solid rgba(var(--lime-rgb),.26);font-size:12.5px;color:var(--ink-dim);font-variant-numeric:tabular-nums}
+  .eb-quota b{color:var(--lime);font-weight:800}
+  .eb-quota.done{background:rgba(74,222,128,.09);border-color:rgba(74,222,128,.32);color:#a7e8bd}
+  .eb-quota.done b{color:#4ade80}
+  .eb-qdots{display:flex;gap:5px}
+  .eb-qd{width:9px;height:9px;border-radius:50%;background:#2a2a2a;display:block}
+  .eb-qd.on{background:var(--lime);box-shadow:0 0 7px rgba(var(--lime-rgb),.6)}
+  .eb-qnear{margin-left:auto;color:#ff9d5c;font-weight:800}
+  .eb-qgo{margin-left:auto;background:var(--lime);color:#0D0D0D;border:0;border-radius:9px;padding:7px 13px;
+    font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+  /* ── 재료 서랍(꼭지 옆) + 배정 버튼 ── */
+  .eb-mats{background:rgba(47,111,235,.07);border:1px solid rgba(47,111,235,.28);border-radius:14px;padding:11px 12px;margin:0 0 14px}
+  .eb-mh{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:#7ab8ff;margin-bottom:9px}
+  .eb-mh b{color:#7ab8ff}
+  .eb-mh span{margin-left:auto;font-size:10.5px;font-weight:500;color:var(--ink-faint)}
+  .eb-mrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+  .eb-mrow::-webkit-scrollbar{display:none}
+  .eb-mcard{flex:0 0 auto;width:96px;background:#0c0f16;border:1px solid #1e2733;border-radius:10px;padding:7px;cursor:pointer;transition:.14s}
+  .eb-mcard:active{transform:scale(.96)}
+  .eb-mcard:hover{border-color:rgba(47,111,235,.5)}
+  .eb-mth{display:block;width:100%;height:56px;border-radius:7px;background-size:cover;background-position:center;background-color:#141821}
+  .eb-mth.txt{display:flex;align-items:center;justify-content:center;font-size:20px}
+  .eb-mt{display:block;font-size:10.5px;color:#cfcfca;margin-top:6px;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .ds-book{width:100%;background:var(--surface-2);border:1px dashed var(--line);border-radius:11px;color:var(--ink-dim);
+    padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:left}
+  .ds-book.on{border-style:solid;border-color:rgba(47,111,235,.5);background:rgba(47,111,235,.1);color:#9fc7ff}
+  /* ── 담기폼 자동 카테고리 제안 ── */
+  .comp-suggest{display:flex;align-items:center;gap:9px;margin-top:12px;min-height:0}
+  .comp-suggest:empty{display:none}
+  .cs-t{flex:1;font-size:12.5px;color:var(--ink-dim)}
+  .cs-t b{color:var(--lime);font-weight:800}
+  .cs-y{background:rgba(var(--lime-rgb),.14);border:1px solid rgba(var(--lime-rgb),.45);color:var(--lime);
+    border-radius:999px;font-size:12px;font-weight:800;padding:7px 13px;cursor:pointer;font-family:inherit;flex:0 0 auto}
+  .cs-y:active{transform:scale(.96)}
+  /* ── 홈: 이어서 쓰기(집필 모드 — 마감일 있는 책이 있을 때만, 저장 직후 등장) ── */
+  .nh-cont{display:flex;align-items:center;gap:11px;background:linear-gradient(120deg,#161c09,#131313);
+    border:1px solid rgba(var(--lime-rgb),.28);border-radius:15px;padding:12px 14px;margin-top:14px;cursor:pointer;
+    opacity:0;transform:translateY(10px);pointer-events:none;transition:.45s cubic-bezier(.2,.8,.2,1)}
+  .nh-cont.show{opacity:1;transform:none;pointer-events:auto}
+  .nh-cont.show{animation:nhcPulse 1.7s ease-out}
+  @keyframes nhcPulse{0%{box-shadow:0 0 0 0 rgba(var(--lime-rgb),.35)}100%{box-shadow:0 0 0 16px rgba(200,255,0,0)}}
+  .nhc-bk{width:26px;height:34px;border-radius:3px 5px 5px 3px;background:var(--c,#2f6feb);flex:0 0 auto;position:relative;box-shadow:2px 3px 8px rgba(0,0,0,.45)}
+  .nhc-bk::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(0,0,0,.3);border-radius:3px 0 0 3px}
+  .nhc-b{flex:1;min-width:0}
+  .nhc-t{font-size:13.5px;font-weight:800}
+  .nhc-s{font-size:11.5px;color:var(--ink-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nhc-go{color:var(--lime);font-size:19px;opacity:.7}
+  /* ── 저장 리추얼 (아이디어=불 켜짐 / 생각정리=숨 한 번) ── */
+  .ritual-ov{position:fixed;inset:0;z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    background:rgba(13,13,13,.7);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);pointer-events:none;transition:opacity .4s}
+  .ritual-ov.out{opacity:0}
+  .rt-breath{width:88px;height:88px;border-radius:50%;border:2px solid rgba(224,178,122,.65);animation:rtBreath 1.5s ease-in-out}
+  @keyframes rtBreath{0%{transform:scale(.5);opacity:.2}45%{transform:scale(1.15);opacity:1}100%{transform:scale(.8);opacity:.25}}
+  .rt-spark{width:82px;height:82px;position:relative}
+  .rt-spark i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,var(--lime),transparent 62%);animation:rtSpark .85s ease-out}
+  @keyframes rtSpark{0%{transform:scale(.2);opacity:0}35%{transform:scale(1.25);opacity:1}100%{transform:scale(1.7);opacity:0}}
+  .rt-msg{font-size:15px;font-weight:800;letter-spacing:-.01em}
+  .rt-msg.amber{color:#E0B27A} .rt-msg.lime{color:var(--lime)}
+  @media(prefers-reduced-motion:reduce){.rt-breath,.rt-spark i,.nh-cont.show{animation:none}}
   /* ── 홈 전구 토글 (아이디어/생각 정리) ── */
   .nh-moderow{display:flex;justify-content:center;gap:28px;margin-top:15px}
   .nh-mode{appearance:none;background:none;border:0;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;opacity:.36;transition:opacity .4s;padding:2px 6px}
@@ -1705,6 +1771,7 @@ function collectHubHtml(){
           </div>
         </div></div>
 
+        <div class="comp-suggest" id="cSuggest"></div>
         <button class="comp-save" id="cSave" disabled>담기</button>
       </div>`;
 }
@@ -1714,6 +1781,44 @@ function homeDayItemsHtml(){
   const lbl=homeSelDate.split('-')[1]+'월 '+homeSelDate.split('-')[2]+'일';
   return `<div class="subgrp" style="margin-top:20px"><div class="sg-head"><span class="sg-name">${lbl}에 담은 것</span><span class="sg-n">${dayItems.length}</span><span class="sg-line"></span></div>${dayItems.length?`<div class="wgrid">${dayItems.map(cardHtml).join('')}</div>`:`<div class="home-first">이 날엔 담은 게 없어요.</div>`}</div>`;
 }
+/* ── 집필 모드(자동): 마감일 정한 미완성 책이 있으면 켜짐 ── */
+function activeWritingBook(){
+  const bs=(store.books||[]).filter(b=>b.targetDate && b.chapters && ebProgress(b).pct<100);
+  if(!bs.length)return null;
+  bs.sort((a,b)=>new Date(a.targetDate)-new Date(b.targetDate));
+  return bs[0];
+}
+function nextUnwrittenSec(b){
+  for(const c of (b.chapters||[])) for(const s of (c.secs||[])) if(s.status!=='done') return {c,s};
+  return null;
+}
+function nhContHtml(){
+  const b=activeWritingBook(); if(!b)return '';
+  const nx=nextUnwrittenSec(b); if(!nx)return '';
+  const d=ebDday(b);
+  const dd=(d&&d.left>0)?` · D-${d.left}`:'';
+  return `<div class="nh-cont" id="nhCont" onclick="nhGoWrite()">
+    <span class="nhc-bk" style="--c:${b.color||'#2f6feb'}"></span>
+    <div class="nhc-b"><div class="nhc-t">📖 이어서 쓰기</div>
+      <div class="nhc-s">${esc(nx.c.title||'')} · ${esc(nx.s.title||'제목 없는 꼭지')}${dd}</div></div>
+    <span class="nhc-go">›</span></div>`;
+}
+function nhGoWrite(){
+  const b=activeWritingBook(); if(!b)return;
+  const nx=nextUnwrittenSec(b);
+  activeWs='book'; ebOpen(b.id);
+  if(nx) setTimeout(()=>{try{ebEdit(nx.c.id,nx.s.id)}catch(e){}},60);
+}
+/* ── 저장 리추얼: 아이디어=불 켜짐 / 생각정리=숨 한 번 ── */
+function ritualFx(diary){
+  const ov=document.createElement('div'); ov.className='ritual-ov';
+  ov.innerHTML = diary
+    ? `<div class="rt-breath"></div><div class="rt-msg amber">흘려보냈어요 🌙</div>`
+    : `<div class="rt-spark"><i></i></div><div class="rt-msg lime">불이 켜졌어요 💡</div>`;
+  document.body.appendChild(ov);
+  setTimeout(()=>ov.classList.add('out'),1150);
+  setTimeout(()=>ov.remove(),1580);
+}
 function wireHome(){
   const ta=document.getElementById('nhTa'),sv=document.getElementById('nhSave'),go=document.getElementById('nhGo');
   if(!ta)return;
@@ -1722,7 +1827,9 @@ function wireHome(){
   ta.addEventListener('input',upd);
   ta.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();if(!sv.disabled)sv.click();}});
   sv.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeQuickSave(t);ta.value='';upd();ta.focus();
-    toast(homeMode==='diary'?'생각 정리에 담았어요 🌙':'내 생각에 담았어요 💭');});
+    ritualFx(homeMode==='diary');                                   // 저장 리추얼
+    const c=document.getElementById('nhCont');                       // 담긴 뒤에야 「이어서」 등장
+    if(c) setTimeout(()=>c.classList.add('show'),620);});
   go.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeGoWrite(t);});
   // 전구 토글: 쓰던 글 유지한 채 모드 전환
   const setMode=m=>{ if(homeMode===m)return; homeMode=m; try{localStorage.setItem('idf_homemode',m)}catch(e){}
@@ -1846,6 +1953,7 @@ function render(){
             <button class="nh-mode diary${dj?' on':''}" id="nhModeDiary">${bulb}<span>생각 정리</span></button>
           </div>
           <div class="nh-hint">${dj?'저장하면 <b>생각 정리</b>에만 조용히 쌓여요 · 아무도 안 봐요':'저장하면 <b>내 생각</b>에 쌓여요 · 화살표로 이어서 길게 쓰기'}</div>
+          ${nhContHtml()}
         </div>
       </div>`;
     wireHome();return;
@@ -1937,6 +2045,18 @@ function ebDays(b){return Math.max(1,Math.floor((Date.now()-b.created)/86400000)
 function ebPlain(html){const d=document.createElement('div');d.innerHTML=html||'';return (d.textContent||'').replace(/\s/g,'').length}
 function ebStreak(){const set=new Set(store.bookDays||[]);let n=0,d=new Date();for(;;){if(set.has(ymdKey(d))){n++;d.setDate(d.getDate()-1)}else break}return n}
 function ebMarkToday(){if(!store.bookDays)store.bookDays=[];const k=ymdKey(new Date());if(!store.bookDays.includes(k)){store.bookDays.push(k);store.bookDays=store.bookDays.slice(-400)}}
+/* ── 완료 장치: 오늘 몫 / 완성 임박 / 선보이기 해제 ── */
+function ebTodayDone(b){const t=ymdKey(new Date());let n=0;
+  (b.chapters||[]).forEach(c=>(c.secs||[]).forEach(s=>{if(s.status==='done'&&s.doneAt&&ymdKey(new Date(s.doneAt))===t)n++}));return n}
+function ebQuotaHtml(b){
+  const p=ebProgress(b);
+  if(p.pct>=100)return `<div class="eb-quota done">🎉 <b>완성했어요!</b> 이제 선보일 차례<button class="eb-qgo" onclick="event.stopPropagation();activeWs='osmu';render()">🎭 선보이기 →</button></div>`;
+  const dd=ebDday(b); if(!dd)return '';
+  const need=Math.max(1,dd.perDay), got=ebTodayDone(b);
+  const dots=Array.from({length:Math.min(need,6)},(_,i)=>`<span class="eb-qd${i<got?' on':''}"></span>`).join('');
+  if(got>=need)return `<div class="eb-quota done">✓ <b>오늘 몫 완료</b> · 내일 또 만나요 <span class="eb-qdots">${dots}</span></div>`;
+  return `<div class="eb-quota"><span>오늘 몫 <b>${got}/${need}</b> 꼭지</span><span class="eb-qdots">${dots}</span>${p.pct>=80?`<span class="eb-qnear">🔥 ${p.pct}% · 곧 완성</span>`:''}</div>`;
+}
 function ebDday(b){if(!b.targetDate)return null;const left=Math.ceil((new Date(b.targetDate)-Date.now())/86400000);const p=ebProgress(b);const rem=p.tot-p.done;const perDay=left>0?Math.ceil(rem/left):rem;return{left,rem,perDay}}
 function ebAuthor(){const h=document.querySelector('header .brand h1')?.textContent||'';return h.replace(/의 아이디어 폴더$/,'')||'나'}
 function ebTip(){return EB_TIPS[Math.floor(Date.now()/1000)%EB_TIPS.length]}
@@ -2146,12 +2266,13 @@ function ebViewWorkspace(b){const p=ebProgress(b),nx=ebNext(b),dd=ebDday(b),st=e
   return `<button class="eb-backfix" onclick="ebBackList()" aria-label="책장으로">‹ 책장</button>
     <div class="eb-hero">${ebMiniCover(b)}
       <div class="eb-hinfo"><div class="eb-htitle">${esc(b.title)}</div>${b.sub?`<div class="eb-hsub">${esc(b.sub)}</div>`:''}
-        <div class="eb-hmeta">${EB_TEMPLATES[b.type].name} · ${p.done}/${p.tot} 꼭지</div>
+        <div class="eb-hmeta">${(EB_TEMPLATES[b.type]||{}).name||'내 책'} · ${p.done}/${p.tot} 꼭지</div>
         <div class="eb-hchips"><button class="eb-chip" onclick="ebCustomize('${b.id}')">🎨 표지</button><button class="eb-chip" onclick="ebImagine()">🔮 상상</button></div></div>
       <div class="eb-ring" style="--p:${p.pct}"><svg width="56" height="56"><circle class="eb-rc" cx="28" cy="28" r="24"/><circle class="eb-rf" cx="28" cy="28" r="24"/></svg><div class="eb-rt">${p.pct}%</div></div></div>
     <div class="eb-strip" onclick="atDashboard()">
       ${st>0?`<span class="fire">🔥 ${st}일</span>·`:''}<span><b>${ebDays(b)}일째</b> 함께</span>·<span><b>${bs.ch.toLocaleString()}자</b></span>·<span>⏱ <b>${atFmt(atGetBook()[b.id]||0)}</b></span>·${dd?`<span class="dd" onclick="event.stopPropagation();ebSetTarget()">D-${dd.left>=0?dd.left:'지남'} · 하루 ${dd.perDay}꼭지</span>`:`<span class="dd" onclick="event.stopPropagation();ebSetTarget()">＋ 완성일</span>`}
     </div>
+    ${ebQuotaHtml(b)}
     ${nx?`<div class="eb-today"><div class="eb-ttag">✍️ 오늘 쓸 한 꼭지</div><div class="eb-ttitle">${esc(nx.s.title)}</div><div class="eb-tchap">${esc(nx.c.title)}</div><button class="eb-tgo" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">이어 쓰기 →</button></div>`:`<div class="eb-today" style="border-color:rgba(var(--lime-rgb),.5)"><div class="eb-ttag">🎉 완성!</div><div class="eb-ttitle">모든 꼭지를 다 쓰셨어요</div><div class="eb-tchap">미리보기로 감상하고 PDF로 발행해보세요.</div></div>`}
     <div class="eb-toch"><span class="eb-thT">목차</span><button class="eb-thE ${bkTocEdit?'on':''}" onclick="bkTocEdit=!bkTocEdit;render()">${bkTocEdit?'완료':'편집'}</button></div>
     ${b.chapters.map(c=>`<div class="eb-chap"><div class="eb-chapt">${bkTocEdit?'<span class="eb-grip">⠿</span>':''}<span class="eb-ctitle"${bkTocEdit?` contenteditable="true" onblur="ebChapName('${c.id}',this)" onkeydown="ebNameKey(event)"`:''}>${esc(c.title)}</span><span class="eb-ctline"></span>${bkTocEdit?`<button class="eb-cte" onclick="ebDelChap('${c.id}')">✕</button>`:''}</div>
@@ -2266,6 +2387,7 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <div class="eb-edchap">${esc(c.title)}</div>
       <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
       ${s.guide?`<div class="eb-guide" id="ebGuide"><button class="eb-gx" onclick="document.getElementById('ebGuide').remove()">✕</button><div class="eb-gh">💬 이 꼭지엔 이런 걸 써보세요</div><div class="eb-gq">${esc(s.guide)}</div></div>`:''}
+      ${ebMatsHtml(b,c,s)}
       <div class="eb-edbody" id="ebEdBody" contenteditable="true" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
       <div class="eb-edtip">💡 ${ebTip()}</div>
       <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>
@@ -2342,7 +2464,9 @@ function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!ebActiveId)re
 function ebSelHandler(){if(bkFocus)ebHiFocus();ebSelBar()}
 function ebCloseEdit(){ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
 function ebGoSec(cid,sid){ebInsClose();ebMoreClose();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
-function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';save();const btn=document.getElementById('ebDoneBtn');if(btn){btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';}
+function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';
+  if(s.status==='done')s.doneAt=Date.now(); else delete s.doneAt;   // 오늘 몫 계산용
+  save();const btn=document.getElementById('ebDoneBtn');if(btn){btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';}
   const p=ebProgress(bkCur);
   if(p.pct<100)bkCur.celebrated=false;
   if(s.status==='done'){ebBuzz(16);if(p.pct===100&&!bkCur.celebrated){bkCur.celebrated=true;save();ebCelebrate()}else toast('한 꼭지 완성! 잘하셨어요 🎉')}else ebBuzz(8)}
@@ -2381,7 +2505,8 @@ function ebMoreMenu(e){
   const m=document.createElement('div');m.className='eb-moremenu';m.id='ebMoreMenu';
   m.innerHTML='<button onclick="ebMoreClose();ebViewSettings()">🅰 배경·글자·글꼴</button>'
     +(isBook&&s?`<button id="ebDoneBtn" onclick="ebToggleDone();ebMoreClose()">${s.status==='done'?'✓ 완성됨':'✓ 완성 표시'}</button>`:'')
-    +(!isBook?'<button onclick="ebMoreClose();thinkSendToBook()">📖 전자책으로 보내기</button>':'')
+    +(!isBook?'<button onclick="ebMoreClose();thinkSendToBook()">📖 전자책 꼭지로 승격</button>':'')
+    +(!isBook?'<button onclick="ebMoreClose();thinkSendToIdea()">💡 아이디어(콘텐츠)로 승격</button>':'')
     +'<button onclick="ebMoreClose();ebHistOpen()">🕐 되돌리기</button>';
   document.body.appendChild(m);
   const r=(e&&e.currentTarget&&e.currentTarget.getBoundingClientRect)?e.currentTarget.getBoundingClientRect():{bottom:50,right:innerWidth-10};
@@ -2591,6 +2716,14 @@ function renderOsmu(){const w=WS.find(x=>x.key==='osmu');
     }
   }
   feed.innerHTML=h+'</div>';
+  if(osmuSrc)osmuAssemble();          // ✨ 부품이 조립되는 연출
+}
+/* 결과물이 눈앞에서 조립되는 느낌 — 마법의 정체는 "과정을 보여주는 것" */
+function osmuAssemble(){
+  const nodes=document.querySelectorAll('#feed .os-seg, #feed .os-tw, #feed .os-card, #feed .os-blog, #feed .os-cap, #feed .os-slide');
+  const n=nodes.length; if(!n)return;
+  const step=Math.min(85,650/n);            // 조각이 많아도 전체 0.7초 안에 다 조립
+  nodes.forEach((el,i)=>{el.classList.add('os-asm');setTimeout(()=>el.classList.add('in'),60+i*step)});
 }
 function osmuPick(i){const s=osmuSources[i];osmuSrc={title:s.title,paras:osmuHtmlToParas(s.html)};osmuTone='story';osmuFmt='card';osmuHook=0;render()}
 function osmuBack(){osmuSrc=null;render()}
@@ -2801,6 +2934,55 @@ function ebSendThought(th){bkPending=th;if(!store.books||!store.books.length){to
 function ebPushToSec(bid,cid,sid){const b=store.books.find(x=>x.id===bid);const s=b.chapters.find(c=>c.id===cid).secs.find(x=>x.id===sid);
   s.html=(s.html||'')+`<div class="eb-pulled"><span class="eb-pusrc">🧲 내 생각에서${bkPending.title?' · '+esc(bkPending.title):''}</span>${esc(bkPending.body||'').replace(/\n/g,'<br>')}</div>`;
   if(s.status==='empty')s.status='draft';save();ebCloseSheet();toast('전자책 꼭지에 붙였어요 ✓ (전자책 탭에서 확인)')}
+
+/* ═══════ 재료 배정 · 재료 서랍 (콘텐츠 → 책 꼭지) ═══════ */
+function matsForSec(bid,cid,sid){return store.items.filter(i=>i.bookRef&&i.bookRef.bookId===bid&&i.bookRef.cid===cid&&i.bookRef.sid===sid)}
+function matRefLabel(it){
+  if(!it.bookRef)return '＋ 꼭지에 배정하기';
+  const b=(store.books||[]).find(x=>x.id===it.bookRef.bookId); if(!b)return '＋ 꼭지에 배정하기';
+  const c=(b.chapters||[]).find(x=>x.id===it.bookRef.cid), s=c&&(c.secs||[]).find(x=>x.id===it.bookRef.sid);
+  return '📖 '+esc(b.title)+' · '+esc((s&&s.title)||'꼭지');
+}
+function ebMatsHtml(b,c,s){
+  const ms=matsForSec(b.id,c.id,s.id); if(!ms.length)return '';
+  return `<div class="eb-mats"><div class="eb-mh">🧰 이 꼭지 재료 <b>${ms.length}</b><span>탭하면 본문에 들어가요</span></div>
+    <div class="eb-mrow">${ms.map(i=>`<div class="eb-mcard" onclick="ebUseMat('${i.id}')">
+      ${i.img?`<span class="eb-mth" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')"></span>`:`<span class="eb-mth txt">📝</span>`}
+      <span class="eb-mt">${esc((i.text||i.memo||'재료').slice(0,26))}</span></div>`).join('')}</div></div>`;
+}
+function ebUseMat(id){
+  const it=store.items.find(x=>x.id===id); if(!it)return;
+  const body=document.getElementById('ebEdBody'); if(!body)return;
+  body.focus();
+  let html='';
+  if(it.img)html+=`<img class="eb-img" src="${(it.img||'').replace(/"/g,'&quot;')}" alt=""/>`;
+  const txt=(it.text||'').trim(),memo=(it.memo||'').trim();
+  if(txt||memo)html+=`<div class="eb-pulled"><span class="eb-pusrc">🧰 재료에서</span>${esc(txt||memo).replace(/\n/g,'<br>')}</div>`;
+  html+='<p><br></p>';
+  document.execCommand('insertHTML',false,html);
+  it.uses=(it.uses||0)+1;
+  if(bkSec&&bkSec.s){bkSec.s.html=body.innerHTML;if(bkSec.s.status==='empty')bkSec.s.status='draft';}
+  save();if(typeof ebUpdWc==='function')ebUpdWc();ebBuzz(8);toast('재료를 본문에 넣었어요 ✓');
+}
+function ebAssignMat(itemId){
+  const it=store.items.find(x=>x.id===itemId); if(!it)return;
+  if(!store.books||!store.books.length){toast('먼저 전자책을 만들어주세요');return}
+  const sh=document.createElement('div');sh.className='eb-sheet';sh.id='ebSheet';let rows='';
+  store.books.forEach(b=>{rows+=`<div class="eb-pickb">${b.emoji||'📖'} ${esc(b.title)}</div>`;
+    (b.chapters||[]).forEach(c=>(c.secs||[]).forEach(s=>{rows+=`<div class="eb-picks" onclick="ebSetMatRef('${it.id}','${b.id}','${c.id}','${s.id}')"><div style="flex:1"><div class="eb-pickc">${esc(c.title)}</div><div class="eb-pickt">${esc(s.title)}</div></div><span style="color:var(--lime)">＋</span></div>`}))});
+  sh.innerHTML=`<div class="eb-sheetc"><button class="eb-sheetx" onclick="ebCloseSheet()">✕</button>
+    <div class="eb-sheeth">📖 어느 꼭지에 쓸 재료인가요?</div>
+    <div class="eb-sheets">그 꼭지를 쓸 때 이 재료가 <b>옆에 자동으로</b> 떠요.</div>
+    ${it.bookRef?`<div class="eb-picks" onclick="ebSetMatRef('${it.id}','','','')"><div style="flex:1"><div class="eb-pickt">✕ 배정 해제</div></div></div>`:''}${rows}</div>`;
+  document.body.appendChild(sh);sh.onclick=e=>{if(e.target===sh)ebCloseSheet()};
+}
+function ebSetMatRef(itemId,bid,cid,sid){
+  const it=store.items.find(x=>x.id===itemId); if(!it)return;
+  it.bookRef=bid?{bookId:bid,cid:cid,sid:sid}:null;
+  save();ebCloseSheet();
+  if(document.getElementById('dContent'))openDetail(itemId);
+  toast(bid?'📖 꼭지에 배정했어요 ✓':'배정을 풀었어요');
+}
 /* 미리보기·발행 */
 function ebPreview(){const b=bkCur;const w=document.createElement('div');w.className='eb-preview '+(bkTheme==='dark'?'':bkTheme);w.id='ebPreview';
   w.innerHTML=`<div class="eb-pvtop"><button class="eb-back" onclick="ebClosePv()">‹ 닫기</button><button class="eb-pvth" onclick="ebCycleTheme()" id="ebThemeBtn">${ebThemeLabel()}</button><button class="eb-pvth" onclick="bkSerif=!bkSerif;ebRefreshPv()">${bkSerif?'고딕체':'명조체'}</button><button class="eb-pvth" onclick="ebPublishInfo()">ℹ️ 설명</button><button class="eb-pvpdf" onclick="window.print()">📄 PDF</button><button class="eb-pvepub" onclick="ebExportEpub(bkCur)">📖 EPUB</button></div><div class="eb-pvpage" id="ebPvPage">${ebPvHtml(b)}</div>`;
@@ -3099,8 +3281,22 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
   ebUpdWc();ebHistPush(it.id,it.text||'');atStart();setTimeout(()=>body.focus(),180);
 }
 function thinkMark(){clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved()},450)}
-function thinkSaveNow(){if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;}save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved();toast('저장했어요 ✓');ebBuzz(10)}
+function thinkSaveNow(){if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;}save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved();ritualFx(!!(curThink&&curThink.diary));ebBuzz(10)}
 function thinkSendToBook(){if(!curThink)return;const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;save();ebSendThought({title:curThink.title||'',body:ebPlainText(curThink.text||'')})}
+/* 생각 → 아이디어(콘텐츠 재료)로 승격 */
+function thinkSendToIdea(){
+  if(!curThink)return;
+  const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;
+  const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;
+  const body=ebPlainText(curThink.text||'').trim();
+  const head=(curThink.title||'').trim()||body.slice(0,60);
+  if(!head){toast('내용을 먼저 써주세요');return}
+  const sug=(typeof suggestGroup==='function')?suggestGroup(head+' '+body):'';
+  store.items.unshift({id:uid(),ws:'idea',type:'idea',group:sug||'유형 미지정',text:head,
+    memo:(body&&body!==head)?body.slice(0,300):'',ts:Date.now(),fav:false,uses:0,tags:[]});
+  save();ebBuzz(12);
+  toast('💡 아이디어로 승격'+(sug?(' · '+sug):'')+' ✓');
+}
 function thinkClose(){ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
   if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;
     if(!(curThink.title||'').trim() && !ebPlainText(curThink.text||'').trim()){store.items=store.items.filter(x=>x.id!==curThink.id);} // 빈 글은 저장 안 함
@@ -3225,6 +3421,8 @@ function openDetail(id){
     <div class="d-head"><span class="d-badge" style="background:${T.color}22;color:${T.color}">${T.badge}</span>
       <span class="d-when">${new Date(i.ts).toLocaleDateString('ko-KR')}</span></div>
     ${media}
+    ${i.ws==='idea'?`<div class="d-set"><div class="ds-label">📖 쓸 꼭지 <span style="color:var(--ink-faint);font-weight:400">(그 꼭지 쓸 때 옆에 떠요)</span></div>
+      <button class="ds-book${i.bookRef?' on':''}" onclick="ebAssignMat('${i.id}')">${matRefLabel(i)}</button></div>`:''}
     <div class="d-set"><div class="ds-label">📝 메모</div>
       <textarea id="dMemo" class="d-memoedit" placeholder="메모 추가… (아이디어 카드엔 ＋메모로 펼쳐져요)">${esc(i.memo||'')}</textarea></div>
     ${meta?`<div class="d-meta">${meta}</div>`:''}
@@ -3264,11 +3462,11 @@ function initComposer(){
   document.getElementById('cNewGroup').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();compAddGroup()}};
   document.getElementById('cAddTag').onclick=compAddTag;
   document.getElementById('cNewTag').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();compAddTag()}};
-  document.getElementById('uniText').oninput=()=>{compValidate();updatePreview()};
+  document.getElementById('uniText').oninput=()=>{compValidate();updatePreview();compSuggest()};
   document.getElementById('uniUrl').oninput=compValidate;
   const um=document.getElementById('uniMemo');if(um)um.oninput=()=>{cMemoVal=um.value};
   document.getElementById('cSave').onclick=compSave;
-  compGroups();compTags();compValidate();
+  compGroups();compTags();compValidate();compSuggest();
 }
 function compDest(){
   cWs='idea';
@@ -3315,10 +3513,44 @@ document.addEventListener('paste',e=>{
   const it=[...e.clipboardData.items].find(x=>x.type&&x.type.startsWith('image/'));
   if(it){e.preventDefault();compLoadImg(it.getAsFile())}
 });
+/* ── 자동 카테고리 제안 (키워드 기반, AI 없이) ── */
+const GROUP_KEYWORDS={
+  '후킹':['후킹','훅','3초','첫문장','첫 문장','제목','시선','궁금','스크롤','멈추','도입'],
+  '전환':['전환','구매','결제','상담','가격','세일즈','판매','클로징','설득','신청','예약'],
+  '문제해결':['문제','고민','해결','불만','실수','어려','막히','안된','안 된','해결책'],
+  '꿀팁':['팁','노하우','방법','쉽게','꿀팁','비법','요령'],
+  '정보':['정보','통계','자료','데이터','분석','조사','근거','트렌드'],
+  '강의':['강의','수업','커리큘럼','수강생','교육','과정','기수','강사'],
+  '사업':['사업','매출','수익','창업','브랜드','마케팅','단가','운영'],
+  '카피':['카피','문구','멘트','워딩','슬로건','한줄','한 줄'],
+  '기획':['기획','구성','목차','설계','흐름','구조','뼈대'],
+  '이미지 생성':['이미지','사진','썸네일','프롬프트','미드저니','생성형','ai그림']
+};
+function suggestGroup(text){
+  const t=(text||'').toLowerCase();
+  if(t.replace(/\s/g,'').length<4)return '';
+  const avail=groupsFor('idea');
+  let best='',score=0;
+  for(const g in GROUP_KEYWORDS){
+    if(!avail.includes(g))continue;
+    let sc=0; GROUP_KEYWORDS[g].forEach(k=>{if(t.includes(k.toLowerCase()))sc++});
+    if(sc>score){score=sc;best=g;}
+  }
+  return score>0?best:'';
+}
+function compSuggest(){
+  const el=document.getElementById('cSuggest'); if(!el)return;
+  if(cGroup&&cGroup!=='유형 미지정'){el.innerHTML='';return}          // 이미 고르면 숨김
+  const t=(document.getElementById('uniText')?.value||'')+' '+(cMemoVal||'');
+  const g=suggestGroup(t);
+  if(!g){el.innerHTML='';return}
+  el.innerHTML=`<span class="cs-t">💡 「<b>${esc(g)}</b>」 같아요</span><button class="cs-y" id="csYes">이걸로 분류</button>`;
+  document.getElementById('csYes').onclick=()=>{cGroup=g;compGroups();compSuggest();ebBuzz(8);toast('「'+g+'」로 분류 ✓')};
+}
 function compGroups(){
   const groups=groupsFor(cWs);
   document.getElementById('cGroupRow').innerHTML=groups.map(g=>`<button class="co ${cGroup===g?'sel':''}" data-g="${esc(g)}">${esc(g)}</button>`).join('');
-  document.querySelectorAll('#cGroupRow .co').forEach(b=>b.onclick=()=>{cGroup=b.dataset.g;compGroups()});
+  document.querySelectorAll('#cGroupRow .co').forEach(b=>b.onclick=()=>{cGroup=b.dataset.g;compGroups();compSuggest()});
 }
 function compAddGroup(){const inp=document.getElementById('cNewGroup');const v=inp.value.trim();if(!v)return;
   if(!store.groups[cWs])store.groups[cWs]=[];
