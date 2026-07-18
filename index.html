@@ -1609,7 +1609,7 @@ function visibleTags(i){return (i.tags||[]).filter(t=>t&&t.indexOf('__')!==0)}
 function cardHtml(i){
   const cap=esc(i.text||(i.url?(i.title||host(i.url)):''));
   const hasMemo=i.memo&&i.memo.trim();
-  const views=i.views?`<span class="cc-views">👁 ${esc(i.views)}</span>`:'';
+  const views='';
   const memoBtn=hasMemo?`<button class="cc-memo" data-memo="${i.id}">＋ 메모</button>`:'';
   const memoPop=hasMemo?`<div class="cc-mpop"><span class="cc-mx" data-mclose="${i.id}">✕</span>${esc(i.memo)}</div>`:'';
   const photo=i.img?`<div class="cc-photo" style="background-image:url('${(i.img||'').replace(/'/g,'%27')}')"></div><div class="cc-grad"></div>`:'';
@@ -1671,21 +1671,11 @@ function collectHubHtml(){
             </div>
             <input type="file" id="uniFile" accept="image/*" hidden>
           </div>
-          <span class="cp-views" id="cpViews"></span>
           <div class="cp-cap" id="cpCap"></div>
         </div>
 
         <div class="field-box">
-          <textarea class="fb-text" id="uniText" placeholder="제목 · 문구 (카드 하단에 보여요)"></textarea>
-        </div>
-
-        <div class="comp-field" id="cViewsBox" style="display:none">
-          <label>👁 조회수</label>
-          <div class="comp-chips" id="cViews"></div>
-        </div>
-        <div class="comp-field" id="cMemoBox" style="display:none">
-          <label>📝 메모 <span class="opt">(＋메모로 펼쳐져요)</span></label>
-          <textarea class="fb-text" id="uniMemo" placeholder="이 아이디어 실행 방법·참고…" style="min-height:50px"></textarea>
+          <textarea class="fb-text" id="uniText" placeholder="메모"></textarea>
         </div>
 
         <div class="field-box link-box">
@@ -3235,8 +3225,6 @@ function openDetail(id){
     <div class="d-head"><span class="d-badge" style="background:${T.color}22;color:${T.color}">${T.badge}</span>
       <span class="d-when">${new Date(i.ts).toLocaleDateString('ko-KR')}</span></div>
     ${media}
-    ${i.ws==='idea'?`<div class="d-set"><div class="ds-label">👁 조회수</div>
-      <div class="ds-btns" id="dViews">${['10만','30만','50만','100만','300만','500만+',''].map(v=>`<button data-v="${v}" class="${(i.views||'')===v?'on':''}">${v||'없음'}</button>`).join('')}</div></div>`:''}
     <div class="d-set"><div class="ds-label">📝 메모</div>
       <textarea id="dMemo" class="d-memoedit" placeholder="메모 추가… (아이디어 카드엔 ＋메모로 펼쳐져요)">${esc(i.memo||'')}</textarea></div>
     ${meta?`<div class="d-meta">${meta}</div>`:''}
@@ -3255,9 +3243,6 @@ function openDetail(id){
   document.getElementById('dFav').onclick=()=>{i.fav=!i.fav;save();render();openDetail(id)};
   document.getElementById('dDel').onclick=()=>{if(confirm('삭제할까요?')){
     store.items=store.items.filter(x=>x.id!==id);save();render();closeDetail()}};
-  const dv=document.getElementById('dViews');
-  if(dv)dv.querySelectorAll('button').forEach(b=>b.onclick=()=>{i.views=b.dataset.v||null;save();render();openDetail(id);
-    toast(b.dataset.v?('조회수 '+b.dataset.v+' ✓'):'조회수 지움')});
   const dm=document.getElementById('dMemo');
   if(dm)dm.onchange=()=>{const v=dm.value.trim();i.memo=v||null;save();render();toast(v?'메모 저장 ✓':'메모 지움')};
   document.getElementById('dScrim').classList.add('show');
@@ -3295,23 +3280,12 @@ function compDest(){
     dest.querySelectorAll('.co').forEach(b=>b.onclick=()=>{cWs=b.dataset.d;cGroup='';compDest();compGroups()});
   }
   const gw=document.getElementById('cGroupWs');if(gw)gw.textContent='';
-  const vb=document.getElementById('cViewsBox'),mb=document.getElementById('cMemoBox');
-  if(vb)vb.style.display='';   // 조회수(옵션)
-  if(mb)mb.style.display='';   // 메모(옵션)
-  renderCompViews();updatePreview();
-}
-function renderCompViews(){
-  const box=document.getElementById('cViews');if(!box)return;
-  box.innerHTML=['10만','30만','50만','100만','300만','500만+',''].map(v=>
-    `<button class="co ${cViewsVal===v?'sel':''}" data-v="${v}">${v||'없음'}</button>`).join('');
-  box.querySelectorAll('.co').forEach(b=>b.onclick=()=>{cViewsVal=b.dataset.v;renderCompViews();updatePreview()});
+  updatePreview();
 }
 function updatePreview(){
-  const cap=document.getElementById('cpCap'),views=document.getElementById('cpViews');if(!cap)return;
+  const cap=document.getElementById('cpCap');if(!cap)return;
   const t=(document.getElementById('uniText')?.value||'').trim();
   cap.textContent=t;cap.classList.toggle('on',!!t);
-  const showV=!!cViewsVal;
-  views.textContent=showV?('👁 '+cViewsVal):'';views.classList.toggle('on',!!showV);
 }
 function bindPhoto(){
   const p=document.getElementById('uniPhoto'),f=document.getElementById('uniFile');
