@@ -540,6 +540,28 @@
   .nh-more:hover:not(:disabled){color:var(--ink-dim)}
   .nh-more:disabled{opacity:.35;cursor:default}
   .nh-more svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  /* ── ⭐ 중요 표시(별) — 목록 + 달력 ── */
+  .tk-post{position:relative}
+  .tk-star{position:absolute;top:10px;right:10px;z-index:2;background:none;border:0;cursor:pointer;
+    font-size:16px;line-height:1;color:#4a4a46;padding:4px;border-radius:8px;font-family:inherit;transition:.16s}
+  .tk-star:hover{color:#ffd24a;background:rgba(255,210,74,.1)}
+  .tk-star.on{color:#ffd24a;text-shadow:0 0 10px rgba(255,210,74,.55)}
+  .tk-post.faved{border-color:rgba(255,210,74,.4);box-shadow:0 0 0 1px rgba(255,210,74,.12),0 6px 18px rgba(0,0,0,.35)}
+  .tk-post-t{padding-right:30px}
+  .cal-star{position:absolute;top:3px;left:4px;font-size:9px;line-height:1;color:#ffd24a;
+    text-shadow:0 0 6px rgba(255,210,74,.7);pointer-events:none}
+  .cal-cell.sel .cal-star{color:#0D0D0D;text-shadow:none}
+  /* ── 🖍 형광 강조 (A: 글자 + 옅은 배경) ── */
+  mark.eb-hl{transition:.2s;border-radius:4px;padding:1px 4px;margin:0 -1px}
+  mark.eb-hl.lime{color:var(--lime);background:rgba(var(--lime-rgb),.15)}
+  mark.eb-hl.amber{color:#E0B27A;background:rgba(224,178,122,.15)}
+  .eb-selbar .sb-hl{font-size:15px;line-height:1}
+  /* ── 저장 버튼 = 편집기 오른쪽 상단 ── */
+  .eb-edtop .eb-savetop{background:rgba(var(--lime-rgb),.14);border:1px solid rgba(var(--lime-rgb),.45);
+    color:var(--lime);border-radius:999px;font-size:12.5px;font-weight:800;padding:7px 14px;cursor:pointer;
+    font-family:inherit;flex:0 0 auto;transition:.16s}
+  .eb-edtop .eb-savetop:active{transform:scale(.95)}
+  .eb-edtop .eb-savetop.saved{background:rgba(74,222,128,.16);border-color:rgba(74,222,128,.5);color:#4ade80}
   /* ── 선보이기: 조립되는 연출 ── */
   .os-asm{opacity:0;transform:translateY(16px) scale(.975)}
   .os-asm.in{opacity:1;transform:none;transition:.42s cubic-bezier(.2,.8,.2,1)}
@@ -635,7 +657,15 @@
   .tk-cal.amber .cal-cell.lv2{background:rgba(224,178,122,.22)}
   .tk-cal.amber .cal-cell.lv3{background:rgba(224,178,122,.32)}
   .tk-cal.amber .cal-badge{background:#E0B27A;color:#141008}
-  .tk-cal.amber .cal-cell.sel{outline:2px solid #E0B27A}
+  /* 생각 정리 방 = 달력 전체를 앰버로 */
+  .tk-cal.amber .cal-cell.today{border-color:rgba(224,178,122,.6)}
+  .tk-cal.amber .cal-cell.sel{background:#E0B27A;color:#141008;outline:none}
+  .tk-cal.amber .cal-cell.sel .cal-badge{background:#141008;color:#E0B27A}
+  .tk-cal.amber .cal-clear{background:rgba(224,178,122,.09);border-color:rgba(224,178,122,.35);color:#E0B27A}
+  .tk-cal.amber .tkc-ic,.tk-cal.amber .tkc-title{color:#E0B27A}
+  /* 생각 정리 방 상단 칩도 앰버 */
+  .tk-glowchip.amber{background:rgba(224,178,122,.1);border-color:rgba(224,178,122,.4);
+    color:#E0B27A;box-shadow:0 0 16px rgba(224,178,122,.24)}
   /* 생각 정리 글 카드 */
   .tk-post.diary{border-left:3px solid #E0B27A;background:#141210}
   .tk-cattag.diary{background:rgba(224,178,122,.14);color:#E0B27A}
@@ -2387,20 +2417,20 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="ebCloseEdit()">‹ 목차</button>
       <span class="eb-edtitle-mini" id="ebEdTitleMini">${esc(s.title||'제목 없는 꼭지')}</span>
       <button class="eb-focusbtn hero" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
+      <button class="eb-savetop" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button>
       <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${esc(c.title)}</div>
       <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
       ${s.guide?`<div class="eb-guide" id="ebGuide"><button class="eb-gx" onclick="document.getElementById('ebGuide').remove()">✕</button><div class="eb-gh">💬 이 꼭지엔 이런 걸 써보세요</div><div class="eb-gq">${esc(s.guide)}</div></div>`:''}
       ${ebMatsHtml(b,c,s)}
-      <div class="eb-edbody" id="ebEdBody" contenteditable="true" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
+      <div class="eb-edbody" id="ebEdBody" contenteditable="true" spellcheck="false" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
       <div class="eb-edtip">💡 ${ebTip()}</div>
       <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>
     <button class="eb-plus" onclick="ebInsSheet()" aria-label="넣기">＋</button>
     <div class="eb-edstatus">
       <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
-      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span>
-      <button class="eb-savebtn" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button></div>`;
+      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('ebEdBody'),title=document.getElementById('ebEdTitle');
   ebActiveBody=body; ebActiveId=s.id; ebOnEdit=function(){bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()};
@@ -2434,7 +2464,7 @@ function ebMdSpace(e){const sel=window.getSelection();if(!sel.rangeCount)return;
   if(!kind)return;e.preventDefault();n.textContent=n.textContent.slice(o);ebSetCaret(n,0);ebFmt(kind);ebBuzz(6)}
 /* 선택하면 뜨는 플로팅 서식 툴바 */
 function ebEnsureSelBar(){if(document.getElementById('ebSelBar'))return;const bar=document.createElement('div');bar.id='ebSelBar';bar.className='eb-selbar';
-  bar.innerHTML=[['bold','<b>굵게</b>'],['h2','제목'],['quote','❝'],['callout','💡'],['list','✓']].map(([k,l])=>`<button onmousedown="ebFp(event)" onclick="ebFmt('${k}');ebBuzz(6)">${l}</button>`).join('');
+  bar.innerHTML=[['bold','<b>굵게</b>'],['hl','<span class="sb-hl">🖍</span>'],['h2','제목'],['quote','❝'],['callout','💡'],['list','✓']].map(([k,l])=>`<button onmousedown="ebFp(event)" onclick="ebFmt('${k}')">${l}</button>`).join('');
   document.body.appendChild(bar)}
 function ebSelBar(){let bar=document.getElementById('ebSelBar');const body=ebActiveBody;const sel=window.getSelection();
   if(!body||!bar||!sel.rangeCount||sel.isCollapsed||!body.contains(sel.anchorNode)){if(bar)bar.classList.remove('on');return}
@@ -2888,7 +2918,44 @@ function ebFmt(kind){const body=ebActiveBody;if(!body)return;body.focus();
   else if(kind==='quote')ebInsert('<blockquote>인용할 문장을 여기에…</blockquote>');
   else if(kind==='callout')ebInsert('<div class="eb-callout">💡 강조하고 싶은 핵심 메시지</div>');
   else if(kind==='divider')ebInsert('<hr class="eb-divider">');
+  else if(kind==='hl'){ebHl();return}
   ebOnEdit()}
+/* ── 🖍 형광 강조: 라임 → 앰버 → 해제 (여러 문단 걸쳐도 글 안 깨짐) ── */
+function ebHlAt(n,body){while(n&&n!==body){if(n.nodeType===1&&n.classList&&n.classList.contains('eb-hl'))return n;n=n.parentNode}return null}
+function ebHlUnwrap(m){const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m);p.normalize()}
+function ebHl(){
+  const body=ebActiveBody; if(!body)return;
+  const sel=window.getSelection(); if(!sel.rangeCount)return;
+  const hit=ebHlAt(sel.anchorNode,body);
+  if(hit){                                    // 이미 칠해진 곳 → 순환
+    if(hit.classList.contains('lime')){hit.classList.remove('lime');hit.classList.add('amber');toast('앰버로 바꿨어요');}
+    else{ebHlUnwrap(hit);toast('형광 해제');}
+    ebBuzz(6);ebOnEdit();return;
+  }
+  if(sel.isCollapsed){toast('글자를 드래그한 뒤 눌러주세요');return;}
+  const range=sel.getRangeAt(0);
+  const sC=range.startContainer,sO=range.startOffset,eC=range.endContainer,eO=range.endOffset;
+  if(sC===eC&&sC.nodeType===3){               // 한 덩어리
+    const mk=document.createElement('mark');mk.className='eb-hl lime';
+    try{range.surroundContents(mk);sel.removeAllRanges();toast('형광 ✓');}catch(e){}
+    ebBuzz(6);ebOnEdit();return;
+  }
+  const root=range.commonAncestorContainer.nodeType===1?range.commonAncestorContainer:range.commonAncestorContainer.parentNode;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);const list=[];let n;
+  while(n=w.nextNode()){if(range.intersectsNode(n)&&n.nodeValue.replace(/\s/g,''))list.push(n)}
+  let cnt=0;
+  list.forEach(tn=>{let s=0,e=tn.nodeValue.length;
+    if(tn===sC)s=sO; if(tn===eC)e=eO; if(s>=e)return;
+    const r=document.createRange();r.setStart(tn,s);r.setEnd(tn,e);
+    const mk=document.createElement('mark');mk.className='eb-hl lime';
+    try{r.surroundContents(mk);cnt++}catch(err){}});
+  sel.removeAllRanges();ebBuzz(6);ebOnEdit();
+  toast(cnt?'형광 ✓':'다시 시도해보세요');
+}
+/* 키보드 좋아할 때만 — Ctrl+M (편집기 안에서만 동작) */
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&(e.key==='m'||e.key==='M')&&ebActiveBody){e.preventDefault();ebHl();}
+},true);
 function ebInsert(html){document.execCommand('insertHTML',false,html+'<p><br></p>');ebBuzz(6)}
 /* 이미지: 압축 → 버킷 업로드(URL) → 실패 시 base64 폴백 */
 function ebCompress(file,max){max=max||1100;return new Promise(res=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(b=>res(b||null),'image/jpeg',0.74)};img.onerror=()=>res(null);img.src=URL.createObjectURL(file)})}
@@ -3158,7 +3225,7 @@ function thinkCalHtml(items,opts){
   opts=opts||{};
   // 날짜별 개수 + 카테고리 색 (+생각 정리 날 표시)
   const cnt={},dayC={}; items.forEach(i=>{const k=ymdKey(new Date(i.ts));cnt[k]=(cnt[k]||0)+1;const col=tkCatColor(i.group);if(col&&!dayC[k])dayC[k]=col});
-  const dot=opts.dotDays||null;
+  const dot=opts.dotDays||null, star=opts.starDays||null;
   const {y,m}=thinkCalYM;
   const first=new Date(y,m,1), start=first.getDay(), days=new Date(y,m+1,0).getDate();
   const todayK=ymdKey(new Date());
@@ -3171,7 +3238,7 @@ function thinkCalHtml(items,opts){
     const lv=n>=3?'lv3':(n===2?'lv2':(n===1?'lv1':''));
     const cls=['cal-cell']; if(lv)cls.push(lv); if(k===todayK)cls.push('today'); if(k===thinkSelDate)cls.push('sel');
     cells+=`<div class="${cls.join(' ')}" data-cald="${k}">
-      <span class="cal-d">${d}</span>${n?`<span class="cal-badge">${n>9?'9+':n}</span>`:''}${(dot&&dot.has(k))?'<span class="cal-diarydot"></span>':''}</div>`;
+      ${(star&&star.has(k))?'<span class="cal-star">★</span>':''}<span class="cal-d">${d}</span>${n?`<span class="cal-badge">${n>9?'9+':n}</span>`:''}${(dot&&dot.has(k))?'<span class="cal-diarydot"></span>':''}</div>`;
   }
   return `<div class="tk-cal${collapsed?' collapsed':''}${opts.amber?' amber':''}">
     <div class="tk-cal-head" id="tkCalToggle">
@@ -3201,7 +3268,8 @@ function renderThink(){
   if(!thinkSelDate) thinkSelDate=todayK;                 // 기본=오늘
   const monthCount=items.filter(i=>{const d=new Date(i.ts);return d.getFullYear()===thinkCalYM.y&&d.getMonth()===thinkCalYM.m;}).length;
   const streak=thinkStreak(items);
-  const dayItems=items.filter(i=>ymdKey(new Date(i.ts))===thinkSelDate);
+  const dayItems=items.filter(i=>ymdKey(new Date(i.ts))===thinkSelDate)
+    .sort((a,b)=>((b.fav?1:0)-(a.fav?1:0))||(b.ts-a.ts));   // ★ 별표는 항상 위
   const sd=thinkSelDate.split('-'); const selLabel=(thinkSelDate===todayK?'오늘':(sd[1]+'월 '+sd[2]+'일'));
   let h=`
     <div class="tk-lg">${diaryRoom?'생각 정리':'아이디어 노트'}</div>
@@ -3209,8 +3277,9 @@ function renderThink(){
       <button class="tk-room${diaryRoom?'':' on'}" id="tkRoomIdea">💡 아이디어 노트</button>
       <button class="tk-room diary${diaryRoom?' on':''}" id="tkRoomDiary">🌙 생각 정리</button>
     </div>
-    <div class="tk-chipwrap"><span class="tk-glowchip"${diaryRoom?' style="color:#E0B27A"':''}>${streak>0?'🔥 '+streak+'일 연속 · ':''}이번 달 ${monthCount}개</span></div>
-    ${thinkCalHtml(items,{amber:diaryRoom,dotDays:diaryRoom?null:diaryDays})}
+    <div class="tk-chipwrap"><span class="tk-glowchip${diaryRoom?' amber':''}">${streak>0?'🔥 '+streak+'일 연속 · ':''}이번 달 ${monthCount}개</span></div>
+    ${thinkCalHtml(items,{amber:diaryRoom,dotDays:diaryRoom?null:diaryDays,
+      starDays:new Set(items.filter(i=>i.fav).map(i=>ymdKey(new Date(i.ts))))})}
     <div class="tk-daysec">
       <div class="tk-daysec-h"><span class="tk-ds-t">${selLabel}</span><span class="tk-ds-n">${dayItems.length}</span></div>`;
   if(!dayItems.length){
@@ -3219,7 +3288,8 @@ function renderThink(){
     dayItems.forEach(i=>{
       const tm=new Date(i.ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
       const pv=ebPlainText(i.text||''); const title=i.title||pv.slice(0,26)||'(제목 없음)'; const cc=i.diary?null:tkCat(i.group);
-      h+=`<div class="tk-post${i.diary?' diary':''}" data-open="${i.id}"${cc?` style="border-left:3px solid ${cc.color}"`:''}>
+      h+=`<div class="tk-post${i.diary?' diary':''}${i.fav?' faved':''}" data-open="${i.id}"${cc?` style="border-left:3px solid ${cc.color}"`:''}>
+        <button class="tk-star${i.fav?' on':''}" data-tkfav="${i.id}" aria-label="중요 표시">${i.fav?'★':'☆'}</button>
         <div class="tk-post-t">${i.diary?`<span class="tk-cattag diary">🌙</span>`:(cc?`<span class="tk-cattag" style="background:${cc.color}22;color:${cc.color}">${esc(cc.nm)}</span>`:'')}${esc(title)}</div>
         ${pv?`<div class="tk-post-b">${esc(pv.slice(0,120))}</div>`:''}
         <div class="tk-post-f"><span>${esc(tm)}${i.memo?' · '+esc(i.memo):''}</span><button class="tk-del" data-del="${i.id}">✕</button></div>
@@ -3233,7 +3303,11 @@ function renderThink(){
   document.getElementById('tkRoomIdea').onclick=()=>setRoom('idea');
   document.getElementById('tkRoomDiary').onclick=()=>setRoom('diary');
   const bk=document.getElementById('tkBackup'); if(bk)bk.onclick=backupThoughts;
-  feed.querySelectorAll('[data-open]').forEach(c=>c.onclick=e=>{if(e.target.closest('[data-del]'))return;thinkEdit(c.dataset.open)});
+  feed.querySelectorAll('[data-open]').forEach(c=>c.onclick=e=>{if(e.target.closest('[data-del]')||e.target.closest('[data-tkfav]'))return;thinkEdit(c.dataset.open)});
+  feed.querySelectorAll('[data-tkfav]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const it=store.items.find(x=>x.id===b.dataset.tkfav); if(!it)return;
+    it.fav=!it.fav; save(); ebBuzz(it.fav?12:6); renderThink();
+    toast(it.fav?'⭐ 중요 표시 — 맨 위로':'중요 표시 해제');});
   feed.querySelectorAll('.tk-del').forEach(b=>b.onclick=e=>{e.stopPropagation();
     if(confirm('이 생각을 삭제할까요?')){store.items=store.items.filter(x=>x.id!==b.dataset.del);save();render()}});
   const tog=document.getElementById('tkCalToggle');
@@ -3254,19 +3328,19 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
       <span class="eb-edtitle-mini" id="thinkTitleMini">${esc(it.title||((d.getMonth()+1)+'월 '+d.getDate()+'일'))}</span>
       <button class="eb-focusbtn hero" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
+      <button class="eb-savetop" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button>
       <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
       <input class="eb-edtitle eb-thinktitle" id="thinkTitle" placeholder="제목 (선택)" value="${esc(it.title||'')}">
       ${it.diary?`<div class="tk-catrow"><span class="tk-cattag diary">🌙 생각 정리 · 나만 보는 글</span></div>`:`<div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>`}
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
-      <div class="eb-edbody" id="thinkBody" contenteditable="true" data-ph="여기에 자유롭게 길게 써 내려가세요. 글자를 긁으면 서식이, ＋를 누르면 사진·인용이 나와요. ✍️">${it.text||''}</div>
+      <div class="eb-edbody" id="thinkBody" contenteditable="true" spellcheck="false" data-ph="여기에 자유롭게 길게 써 내려가세요. 글자를 긁으면 서식이, ＋를 누르면 사진·인용이 나와요. ✍️">${it.text||''}</div>
     </div></div>
     <button class="eb-plus" onclick="ebInsSheet()" aria-label="넣기">＋</button>
     <div class="eb-edstatus">
       <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
-      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span>
-      <button class="eb-savebtn" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button></div>`;
+      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('thinkBody'),title=document.getElementById('thinkTitle');
   ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();thinkMark()};bkFocus=false;
