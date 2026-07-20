@@ -1464,6 +1464,119 @@
   /* ⑥ 색·디테일 정제 — 완성 링/게이지 부드럽게 */
   .eb-rf,.eb-bfill,.eb-exec-fill{transition:all .6s cubic-bezier(.2,.8,.2,1)}
   .eb-pvpage{padding-top:46px}
+
+  /* ═══════════ 📷 사진 — 기본 가운데 · 정렬/크기/캡션 ═══════════ */
+  .eb-edbody .eb-img,.eb-pvsb .eb-img{object-position:center;margin:16px auto}
+  .eb-fig{margin:20px 0;display:flex;flex-direction:column;gap:7px;position:relative;cursor:pointer}
+  .eb-fig img.eb-img{margin:0;max-width:100%;max-height:none;width:100%;height:auto;border-radius:11px;display:block}
+  .eb-fig figcaption.eb-cap{font-size:12.5px;color:var(--ink-faint);line-height:1.55;outline:none;max-width:88%;min-height:1.2em}
+  .eb-fig figcaption.eb-cap:empty::before{content:attr(data-ph);color:#3a3a36}
+  .eb-fig figcaption.eb-cap:focus{color:var(--ink-dim)}
+  .eb-fig.al{align-items:flex-start;text-align:left}
+  .eb-fig.ac{align-items:center;text-align:center}
+  .eb-fig.ar{align-items:flex-end;text-align:right}
+  .eb-fig.sm img.eb-img{width:46%}
+  .eb-fig.md img.eb-img{width:74%}
+  .eb-fig.lg img.eb-img{width:100%}
+  .eb-fig::after{content:'';position:absolute;inset:-6px;border-radius:14px;border:1.5px solid transparent;pointer-events:none;transition:.18s}
+  .eb-fig:hover::after{border-color:rgba(var(--lime-rgb),.22)}
+  .eb-fig.picked::after{border-color:rgba(var(--lime-rgb),.6);box-shadow:0 0 0 4px rgba(var(--lime-rgb),.07)}
+  .eb-fighint{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.62);color:#e6e6e2;font-size:10.5px;font-weight:700;
+    border-radius:99px;padding:4px 9px;opacity:0;transition:.18s;pointer-events:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .eb-fig:hover .eb-fighint{opacity:1}
+  /* 사진 편집 시트 */
+  .ebimg-ov{position:fixed;inset:0;z-index:130;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    display:flex;align-items:flex-end;justify-content:center;animation:ebimgfade .18s ease}
+  @keyframes ebimgfade{from{opacity:0}to{opacity:1}}
+  .ebimg-sh{width:100%;max-width:470px;background:var(--surface);border:1px solid var(--line);border-bottom:0;
+    border-radius:22px 22px 0 0;padding:16px 16px 26px;animation:ebimgup .26s cubic-bezier(.2,.85,.25,1)}
+  @keyframes ebimgup{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+  .ebimg-grab{width:38px;height:4px;border-radius:99px;background:#33332f;margin:0 auto 15px}
+  .ebimg-l{font-size:11px;font-weight:800;color:var(--ink-faint);letter-spacing:.08em;margin:0 0 7px 2px}
+  .ebimg-row{display:flex;gap:6px;margin-bottom:15px}
+  .ebimg-row button{flex:1;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:11px;
+    font-family:inherit;font-size:12.5px;font-weight:700;padding:11px 4px;cursor:pointer;transition:.15s;
+    display:flex;flex-direction:column;align-items:center;gap:4px}
+  .ebimg-row button:hover{border-color:#3d3d38;color:var(--ink)}
+  .ebimg-row button.on{background:rgba(var(--lime-rgb),.13);border-color:rgba(var(--lime-rgb),.5);color:var(--lime)}
+  .ebimg-row button i{font-style:normal;font-size:15px;line-height:1}
+  .ebimg-cap{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--ink);
+    font-family:inherit;font-size:13.5px;padding:12px 13px;outline:none;margin-bottom:15px}
+  .ebimg-cap:focus{border-color:rgba(var(--lime-rgb),.4)}
+  .ebimg-cap::placeholder{color:#3f3f3b}
+  .ebimg-foot{display:flex;gap:8px}
+  .ebimg-foot button{flex:1;border:0;border-radius:13px;font-family:inherit;font-size:14px;font-weight:800;padding:14px;cursor:pointer}
+  .ebimg-del{background:rgba(255,110,110,.11);color:#ff8a8a;border:1px solid rgba(255,110,110,.24)!important;flex:0 0 96px!important}
+  .ebimg-ok{background:var(--lime);color:#0b0b0b}
+
+  /* ═══════════ ✍️ 생각 쓰기 = 홈이 그대로 이어짐 (B안) ═══════════ */
+  .tk-scroll{display:flex;flex-direction:column;justify-content:center;transition:justify-content .4s}
+  .tk-scroll.writing{justify-content:flex-start}
+  .eb-edinner.tk-inner{max-width:640px;margin:0 auto;padding:18px 22px 140px;width:100%}
+  @media(min-width:768px){.eb-edinner.tk-inner{padding:26px 40px 150px}}
+  /* 홈과 같은 카드 → 쓰기 시작하면 녹아 사라짐 */
+  .tk-card{background:linear-gradient(180deg,#181818,#121212);border:1px solid #2c2c2c;border-radius:22px;
+    padding:20px 18px 18px;box-shadow:0 10px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.03);
+    transition:background .5s ease,border-color .5s ease,box-shadow .5s ease,padding .45s cubic-bezier(.3,.9,.3,1)}
+  .tk-scroll.writing .tk-card{background:none;border-color:transparent;box-shadow:none;padding:0}
+  .tk-mark{display:flex;flex-direction:column;align-items:center;gap:13px;margin-bottom:20px;
+    transition:.45s cubic-bezier(.3,.9,.3,1)}
+  .tk-scroll.writing .tk-mark{flex-direction:row;align-items:center;gap:9px;margin-bottom:14px}
+  .tk-cube{width:52px;height:52px;border-radius:15px;background:var(--lime);display:grid;place-items:center;flex:0 0 auto;
+    box-shadow:0 0 34px rgba(var(--lime-rgb),.24);transition:.45s cubic-bezier(.3,.9,.3,1)}
+  .tk-scroll.writing .tk-cube{width:22px;height:22px;border-radius:7px;box-shadow:none}
+  .tk-cube svg{width:26px;height:26px;transition:.45s cubic-bezier(.3,.9,.3,1)}
+  .tk-scroll.writing .tk-cube svg{width:12px;height:12px}
+  .tk-date{font-size:12.5px;color:var(--ink-faint);font-weight:700;transition:.3s}
+  .tk-scroll.writing .tk-date{font-size:12px;color:var(--lime);letter-spacing:.04em}
+  .eb-editor.tk-ed .eb-edbody{min-height:120px}
+  .tk-scroll:not(.writing) .eb-edbody{text-align:center}
+  .tk-scroll:not(.writing) .eb-edbody:empty::before{font-size:15px}
+  /* 생각 정리(일기) = 앰버 */
+  .tk-ed.diary .tk-cube{background:#E0B27A;box-shadow:0 0 34px rgba(224,178,122,.24)}
+  .tk-ed.diary .tk-scroll.writing .tk-date{color:#E0B27A}
+  .tk-ed.diary .eb-edbody{caret-color:#E0B27A}
+  .tk-ed.diary .tk-card:focus-within{border-color:rgba(224,178,122,.45)}
+  /* 접히는 메타 (⊕) */
+  .tk-metabtn{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:9px;
+    font-size:13px;font-weight:800;width:32px;height:31px;cursor:pointer;font-family:inherit;flex:0 0 auto;transition:.16s}
+  .tk-metabtn:hover{border-color:#3d3d38;color:var(--ink)}
+  .tk-metabtn.on{background:var(--lime);border-color:var(--lime);color:#0b0b0b}
+  .tk-meta{overflow:hidden;max-height:0;opacity:0;flex:0 0 auto;
+    transition:max-height .32s cubic-bezier(.4,0,.2,1),opacity .22s,padding .32s;border-bottom:1px solid transparent}
+  .tk-meta.open{max-height:190px;opacity:1;padding:12px 0 14px;border-bottom-color:var(--line)}
+  .tk-meta .tk-metainner{max-width:640px;margin:0 auto;padding:0 22px}
+  @media(min-width:768px){.tk-meta .tk-metainner{padding:0 40px}}
+  /* ＋ 서식 (평소엔 숨어 있음) */
+  .tk-toolwrap{position:fixed;right:16px;bottom:18px;z-index:90;display:flex;align-items:center;gap:7px}
+  .tk-toolrow{display:flex;gap:3px;background:rgba(28,28,28,.97);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border:1px solid var(--line);border-radius:999px;padding:4px;transform-origin:right center;
+    transform:translateX(16px) scale(.88);opacity:0;pointer-events:none;transition:.27s cubic-bezier(.34,1.4,.64,1)}
+  .tk-toolrow.on{transform:none;opacity:1;pointer-events:auto}
+  .tk-toolrow button{background:none;border:0;color:#d6d6d0;font-family:inherit;font-size:13px;font-weight:800;
+    width:33px;height:33px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+  .tk-toolrow button:hover{background:#2c2c2c}
+  .tk-toolrow button.hl{color:var(--lime);font-size:15px}
+  .tk-fab{width:48px;height:48px;border-radius:50%;border:0;background:var(--lime);color:#0b0b0b;font-size:20px;
+    cursor:pointer;display:grid;place-items:center;flex:0 0 auto;font-family:inherit;
+    box-shadow:0 7px 22px rgba(var(--lime-rgb),.3);transition:.26s cubic-bezier(.34,1.4,.64,1)}
+  .tk-fab.on{transform:rotate(45deg);background:var(--surface-2);color:var(--lime);box-shadow:none}
+  .tk-ed.diary .tk-fab{background:#E0B27A;box-shadow:0 7px 22px rgba(224,178,122,.3)}
+  .tk-ed.diary .tk-fab.on{background:var(--surface-2);color:#E0B27A}
+
+  /* ═══════════ 🏠 홈 대화방 — 붙여넣은 사진 ═══════════ */
+  .nh-shots{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .nh-shot{position:relative;width:60px;height:76px;border-radius:10px;background-size:cover;background-position:center;
+    background-color:#0e0e0e;border:1px solid #2c2c2c;animation:nhshot .26s cubic-bezier(.2,.9,.3,1)}
+  @keyframes nhshot{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+  .nh-shot button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#1c1c1c;
+    border:1px solid #3d3d38;color:#ff8a8a;font-size:11px;line-height:1;padding:0;cursor:pointer;font-family:inherit}
+  .nh-shot .nh-shotn{position:absolute;bottom:3px;left:4px;font-size:9px;font-weight:800;color:#fff;
+    text-shadow:0 1px 4px rgba(0,0,0,.9)}
+  .nh-busy{font-size:11.5px;color:var(--ink-faint);margin-top:9px;display:flex;align-items:center;gap:6px}
+  .nh-busy i{width:9px;height:9px;border-radius:50%;border:1.6px solid rgba(var(--lime-rgb),.3);
+    border-top-color:var(--lime);display:block;animation:nhspin .7s linear infinite}
+  @keyframes nhspin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -1857,14 +1970,30 @@ function wireHome(){
   const ta=document.getElementById('nhTa'),sv=document.getElementById('nhSave'),go=document.getElementById('nhGo');
   if(!ta)return;
   const grow=()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,Math.round(window.innerHeight*0.44))+'px';};
-  const upd=()=>{const has=ta.value.trim().length>0;sv.disabled=!has;go.disabled=!has;grow();};
+  const upd=()=>{const has=ta.value.trim().length>0||nhShots.length>0;sv.disabled=!has;go.disabled=!has;grow();};
+  nhUpd=upd;
   ta.addEventListener('input',upd);
   ta.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();if(!sv.disabled)sv.click();}});
-  sv.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeQuickSave(t);ta.value='';upd();ta.focus();
+  /* 📷 붙여넣기 · 드래그 — 여러 장 그대로 */
+  ta.addEventListener('paste',async e=>{
+    const cd=e.clipboardData;if(!cd)return;
+    let fs=cd.files&&cd.files.length?[...cd.files]:[...(cd.items||[])]
+      .filter(x=>x.type&&x.type.indexOf('image')===0).map(x=>x.getAsFile());
+    fs=fs.filter(f=>f&&f.type&&f.type.indexOf('image')===0);
+    if(!fs.length)return;      // 글 붙여넣기는 그대로
+    e.preventDefault();await nhAddShots(fs);
+  });
+  ta.addEventListener('dragover',e=>e.preventDefault());
+  ta.addEventListener('drop',async e=>{
+    const fs=e.dataTransfer&&e.dataTransfer.files?[...e.dataTransfer.files].filter(f=>f.type&&f.type.indexOf('image')===0):[];
+    if(!fs.length)return;e.preventDefault();await nhAddShots(fs);
+  });
+  sv.addEventListener('click',()=>{const t=ta.value.trim();if(!t&&!nhShots.length)return;homeQuickSave(t);ta.value='';nhShots=[];nhRenderShots();upd();ta.focus();
     ritualFx(homeMode==='diary');                                   // 저장 리추얼
     const c=document.getElementById('nhCont');                       // 담긴 뒤에야 「이어서」 등장
     if(c) setTimeout(()=>c.classList.add('show'),620);});
-  go.addEventListener('click',()=>{const t=ta.value.trim();if(!t)return;homeGoWrite(t);});
+  go.addEventListener('click',()=>{const t=ta.value.trim();if(!t&&!nhShots.length)return;homeGoWrite(t);});
+  nhRenderShots();
   // 전구 토글: 쓰던 글 유지한 채 모드 전환
   const setMode=m=>{ if(homeMode===m)return; homeMode=m; try{localStorage.setItem('idf_homemode',m)}catch(e){}
     const keep=ta.value; render(); const ta2=document.getElementById('nhTa'); if(ta2){ta2.value=keep;ta2.dispatchEvent(new Event('input'));ta2.focus();} ebBuzz(5); };
@@ -1873,9 +2002,28 @@ function wireHome(){
   if(md)md.onclick=()=>setMode('diary');
   requestAnimationFrame(grow);
 }
-function homeMakeThought(t,diary){return {id:uid(),ws:'think',type:'journal',diary:!!diary,title:'',text:esc(t).replace(/\n/g,'<br>'),memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};}
+/* ── 홈에 붙여넣은 사진들 (저장할 때 글 아래로 따라 들어감) ── */
+let nhShots=[], nhUpd=null;
+function nhRenderShots(){
+  const w=document.getElementById('nhShots');if(!w)return;
+  w.innerHTML=nhShots.map((u,i)=>`<div class="nh-shot" style="background-image:url('${String(u).replace(/'/g,"%27")}')">
+    <span class="nh-shotn">${i+1}</span><button data-sx="${i}" aria-label="빼기">✕</button></div>`).join('');
+  w.querySelectorAll('[data-sx]').forEach(b=>b.onclick=()=>{
+    nhShots.splice(+b.dataset.sx,1);nhRenderShots();if(nhUpd)nhUpd();ebBuzz(5);});
+}
+async function nhAddShots(files){
+  const w=document.getElementById('nhShots');
+  if(w)w.insertAdjacentHTML('afterend','<div class="nh-busy" id="nhBusy"><i></i>사진 '+files.length+'장 담는 중…</div>');
+  const urls=await ebUploadMany(files);
+  const b=document.getElementById('nhBusy');if(b)b.remove();
+  if(!urls.length){toast('사진 담기 실패 — 인터넷 확인');return}
+  nhShots=nhShots.concat(urls);nhRenderShots();if(nhUpd)nhUpd();ebBuzz(8);
+  toast(urls.length>1?('사진 '+urls.length+'장 담았어요 ✓'):'사진 담았어요 ✓');
+}
+function nhShotsHtml(){return nhShots.map(u=>ebFigHtml(u)).join('')}
+function homeMakeThought(t,diary){return {id:uid(),ws:'think',type:'journal',diary:!!diary,title:'',text:(t?esc(t).replace(/\n/g,'<br>'):'')+nhShotsHtml(),memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};}
 function homeQuickSave(t){const it=homeMakeThought(t,homeMode==='diary');store.items.unshift(it);save();ebBuzz(6);}
-function homeGoWrite(t){const it=homeMakeThought(t,homeMode==='diary');store.items.unshift(it);save();activeWs='think';thinkRoom=(it.diary?'diary':'idea');try{localStorage.setItem('idf_thinkroom',thinkRoom)}catch(e){}thinkEdit(it.id);}
+function homeGoWrite(t){const it=homeMakeThought(t,homeMode==='diary');nhShots=[];store.items.unshift(it);save();activeWs='think';thinkRoom=(it.diary?'diary':'idea');try{localStorage.setItem('idf_thinkroom',thinkRoom)}catch(e){}thinkEdit(it.id);}
 
 /* ═══════════ 왼쪽 목록 서랍 (list drawer) ═══════════ */
 let lcWsCur='think', lcCollapsed={};
@@ -1977,6 +2125,7 @@ function render(){
         <div class="nh-writewrap">
           <div class="nh-box">
             <textarea class="nh-ta" id="nhTa" rows="1" placeholder="${dj?'지금 마음에 걸리는 것을 그냥 흘려보내듯 적어보세요…':'지금 떠오른 생각을 툭 적어보세요…'}"></textarea>
+            <div class="nh-shots" id="nhShots"></div>
             <div class="nh-bar">
               <button class="nh-save" id="nhSave" disabled aria-label="저장">
                 <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg></button>
@@ -2444,6 +2593,7 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
   });
   body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
   body.addEventListener('click',ebImgClick);
+  body.addEventListener('dblclick',ebImgDbl);
   body.addEventListener('dragover',e=>e.preventDefault());
   body.addEventListener('drop',ebDropImg);
   body.addEventListener('paste',ebPasteImg);
@@ -2846,7 +2996,70 @@ function ebGalleryPick(){const body=ebActiveBody;if(!body)return;
 function ebGalClose(){const s=document.getElementById('ebGalSheet');if(s)s.remove()}
 function ebGalInsert(id){const i=store.items.find(x=>x.id===id);if(!i||!i.img)return;ebGalClose();ebInsertImageUrl(i.img);toast('갤러리 사진을 넣었어요 ✓')}
 /* 🖼 사진 크기 조절 — 사진 탭 → 슬라이더·프리셋 */
-function ebImgClick(e){const t=e.target;const img=t&&t.closest?t.closest('img.eb-img'):null;if(img){e.stopPropagation();ebImgResizeUI(img)}else{ebCloseImgResize()}}
+function ebImgClick(e){const t=e.target;
+  if(t&&t.closest&&t.closest('figcaption.eb-cap'))return;   // 설명 쓰는 중엔 건드리지 않음
+  const img=t&&t.closest?t.closest('img.eb-img'):null;if(img){e.stopPropagation();ebImgResizeUI(img)}else{ebCloseImgResize()}}
+
+/* ═══════ 📷 더블클릭 → 사진 정렬·크기·설명 ═══════ */
+let ebFigCur=null;
+/* 옛날에 넣은 맨 <img>도 figure로 감싸 준다 (하위호환) */
+function ebFigWrap(img){
+  const f=img.closest('figure.eb-fig'); if(f)return f;
+  const fig=document.createElement('figure');
+  fig.className='eb-fig ac md'; fig.setAttribute('contenteditable','false');
+  img.parentNode.insertBefore(fig,img); fig.appendChild(img);
+  const cap=document.createElement('figcaption');
+  cap.className='eb-cap'; cap.setAttribute('contenteditable','true'); cap.setAttribute('data-ph','사진 설명 (선택)');
+  fig.appendChild(cap);
+  const h=document.createElement('span'); h.className='eb-fighint'; h.textContent='더블클릭 → 정렬·크기';
+  fig.appendChild(h);
+  return fig;
+}
+function ebImgDbl(e){
+  const img=e.target&&e.target.closest?e.target.closest('img.eb-img'):null;
+  if(!img)return;
+  e.preventDefault();e.stopPropagation();
+  ebCloseImgResize();
+  ebImgSheet(ebFigWrap(img));
+}
+function ebFigSet(fig,group,cls){
+  (group==='align'?['al','ac','ar']:['sm','md','lg']).forEach(c=>fig.classList.remove(c));
+  fig.classList.add(cls);
+}
+function ebImgSheet(fig){
+  ebFigCur=fig; fig.classList.add('picked');
+  const cap=fig.querySelector('figcaption.eb-cap');
+  const ov=document.createElement('div'); ov.className='ebimg-ov'; ov.id='ebImgOv';
+  const A=[['al','⬅','왼쪽'],['ac','⬛','가운데'],['ar','➡','오른쪽']];
+  const S=[['sm','▫','작게'],['md','▪','보통'],['lg','⬛','꽉 차게']];
+  ov.innerHTML=`<div class="ebimg-sh" onclick="event.stopPropagation()">
+    <div class="ebimg-grab"></div>
+    <p class="ebimg-l">정렬</p>
+    <div class="ebimg-row" id="ebImgAlign">${A.map(([k,i,n])=>`<button data-a="${k}" class="${fig.classList.contains(k)?'on':''}"><i>${i}</i>${n}</button>`).join('')}</div>
+    <p class="ebimg-l">크기</p>
+    <div class="ebimg-row" id="ebImgSize">${S.map(([k,i,n])=>`<button data-s="${k}" class="${fig.classList.contains(k)?'on':''}"><i>${i}</i>${n}</button>`).join('')}</div>
+    <p class="ebimg-l">설명</p>
+    <input class="ebimg-cap" id="ebImgCap" placeholder="사진 아래에 들어갈 설명 (선택)" value="${esc(cap?cap.textContent:'')}">
+    <div class="ebimg-foot">
+      <button class="ebimg-del" id="ebImgDel">삭제</button>
+      <button class="ebimg-ok" id="ebImgOk">완료</button>
+    </div></div>`;
+  document.body.appendChild(ov);
+  const close=()=>{fig.classList.remove('picked');ov.remove();ebFigCur=null;if(typeof ebOnEdit==='function')ebOnEdit();};
+  ov.onclick=close;
+  ov.querySelectorAll('#ebImgAlign button').forEach(b=>b.onclick=()=>{
+    ebFigSet(fig,'align',b.dataset.a);
+    ov.querySelectorAll('#ebImgAlign button').forEach(x=>x.classList.toggle('on',x===b));ebBuzz(5);});
+  ov.querySelectorAll('#ebImgSize button').forEach(b=>b.onclick=()=>{
+    ebFigSet(fig,'size',b.dataset.s);
+    ov.querySelectorAll('#ebImgSize button').forEach(x=>x.classList.toggle('on',x===b));ebBuzz(5);});
+  const ci=ov.querySelector('#ebImgCap');
+  ci.oninput=()=>{if(cap)cap.textContent=ci.value};
+  ov.querySelector('#ebImgDel').onclick=()=>{
+    if(!confirm('이 사진을 지울까요?'))return;
+    fig.remove();ov.remove();ebFigCur=null;if(typeof ebOnEdit==='function')ebOnEdit();toast('사진을 지웠어요');};
+  ov.querySelector('#ebImgOk').onclick=()=>{close();toast('적용했어요 ✓')};
+}
 /* 사진 클릭 → 네 모서리 핸들을 끌어서 크기 조절(마우스·터치 공용) */
 let ebImgSelTarget=null, ebImgSelBox=null, ebImgSelReposition=null;
 function ebCloseImgResize(){
@@ -2893,22 +3106,50 @@ function ebImgResizeUI(img){
   });
 }
 /* 공통 이미지 삽입 (커서 안정) + 드래그&드롭 */
-function ebInsertImageUrl(url){const body=ebActiveBody;if(!body||!url)return;body.focus();
-  document.execCommand('insertHTML',false,'<img class="eb-img" src="'+String(url).replace(/"/g,'&quot;')+'" alt=""/><p><br></p>');
+/* 사진 한 장 = <figure> — 기본 가운데(ac) + 보통 크기(md) + 설명칸 */
+function ebFigHtml(url){
+  return '<figure class="eb-fig ac md" contenteditable="false">'
+    +'<img class="eb-img" src="'+String(url).replace(/"/g,'&quot;')+'" alt="">'
+    +'<figcaption class="eb-cap" contenteditable="true" data-ph="사진 설명 (선택)"></figcaption>'
+    +'<span class="eb-fighint">더블클릭 → 정렬·크기</span></figure>';
+}
+function ebInsertImageUrl(url){return ebInsertImageUrls([url])}
+function ebInsertImageUrls(urls){const body=ebActiveBody;if(!body||!urls||!urls.length)return;body.focus();
+  const html=urls.filter(Boolean).map(ebFigHtml).join('')+'<p><br></p>';
+  document.execCommand('insertHTML',false,html);
   if(typeof ebOnEdit==='function')ebOnEdit();ebBuzz(8)}
-async function ebDropImg(e){const dt=e.dataTransfer;if(!dt||!dt.files||!dt.files.length)return;const f=dt.files[0];if(!f.type||f.type.indexOf('image')<0)return;
-  e.preventDefault();if(!ebActiveBody)return;toast('사진 올리는 중…');const url=await ebUploadImg(f,1000);if(!url){toast('사진 업로드 실패 — 인터넷 확인');return}ebInsertImageUrl(url);toast('사진 넣었어요 ✓')}
+/* 여러 장 한 번에 — 순서대로 압축·업로드 */
+async function ebUploadMany(files){
+  const list=[...files].filter(f=>f&&f.type&&f.type.indexOf('image')===0);
+  if(!list.length)return[];
+  toast(list.length>1?('사진 '+list.length+'장 올리는 중…'):'사진 올리는 중…');
+  const urls=[];
+  for(let i=0;i<list.length;i++){
+    const u=await ebUploadImg(list[i],1000);
+    if(u)urls.push(u);
+    if(list.length>3&&i%3===2)toast('사진 '+(i+1)+'/'+list.length+' …');
+  }
+  return urls;
+}
+async function ebDropImg(e){const dt=e.dataTransfer;if(!dt||!dt.files||!dt.files.length)return;
+  if(![...dt.files].some(f=>f.type&&f.type.indexOf('image')===0))return;
+  e.preventDefault();if(!ebActiveBody)return;
+  const urls=await ebUploadMany(dt.files);
+  if(!urls.length){toast('사진 업로드 실패 — 인터넷 확인');return}
+  ebInsertImageUrls(urls);toast(urls.length>1?('사진 '+urls.length+'장 넣었어요 ✓'):'사진 넣었어요 ✓')}
 /* 붙여넣기(Ctrl+V) 사진: 브라우저 기본 base64 삽입 차단 → 압축·업로드해 URL로 (저장공간 절약) */
 async function ebPasteImg(e){
-  const items=(e.clipboardData&&e.clipboardData.items)?[...e.clipboardData.items]:[];
-  const it=items.find(x=>x.type&&x.type.indexOf('image')===0);
-  if(!it)return;               // 텍스트 붙여넣기는 그대로 둠
+  const cd=e.clipboardData;if(!cd)return;
+  // 파일 목록이 있으면 그대로(여러 장), 없으면 items에서 이미지만 추림
+  let files=cd.files&&cd.files.length?[...cd.files]:[...(cd.items||[])]
+    .filter(x=>x.type&&x.type.indexOf('image')===0).map(x=>x.getAsFile());
+  files=files.filter(f=>f&&f.type&&f.type.indexOf('image')===0);
+  if(!files.length)return;     // 텍스트 붙여넣기는 그대로 둠
   e.preventDefault();          // 원본 그대로(base64) 박히는 것 차단
-  const f=it.getAsFile();if(!f||!ebActiveBody)return;
-  toast('사진 올리는 중…');
-  const url=await ebUploadImg(f,1000);
-  if(!url){toast('사진 업로드 실패 — 인터넷 확인');return}
-  ebInsertImageUrl(url);toast('사진 넣었어요 ✓')}
+  if(!ebActiveBody)return;
+  const urls=await ebUploadMany(files);
+  if(!urls.length){toast('사진 업로드 실패 — 인터넷 확인');return}
+  ebInsertImageUrls(urls);toast(urls.length>1?('사진 '+urls.length+'장 넣었어요 ✓'):'사진 넣었어요 ✓')}
 function ebHiFocus(){const b=ebActiveBody;if(!b)return;const sel=window.getSelection();b.querySelectorAll('.active').forEach(x=>x.classList.remove('active'));if(!sel.anchorNode)return;let n=sel.anchorNode;while(n&&n.parentNode!==b)n=n.parentNode;if(n&&n.classList)n.classList.add('active')}
 function ebFmt(kind){const body=ebActiveBody;if(!body)return;body.focus();
   if(kind==='img'){ebPickImg();return}
@@ -2961,10 +3202,10 @@ function ebInsert(html){document.execCommand('insertHTML',false,html+'<p><br></p
 function ebCompress(file,max){max=max||1100;return new Promise(res=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(b=>res(b||null),'image/jpeg',0.74)};img.onerror=()=>res(null);img.src=URL.createObjectURL(file)})}
 function ebBlobDataUrl(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>res(null);r.readAsDataURL(blob)})}
 async function ebUploadImg(file,max){const blob=await ebCompress(file,max);if(!blob)return null;let url=window.__idfUpload?await window.__idfUpload(blob):null;if(!url)url=await ebBlobDataUrl(blob);return url}
-function ebPickImg(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-  inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;toast('사진 올리는 중…');
-    const url=await ebUploadImg(f,1000);if(!url){toast('사진 업로드 실패 — 인터넷 확인 후 다시');return}
-    ebInsertImageUrl(url);toast('사진 넣었어요 ✓')};
+function ebPickImg(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;
+  inp.onchange=async()=>{const fs=inp.files&&inp.files.length?[...inp.files]:[];if(!fs.length)return;
+    const urls=await ebUploadMany(fs);if(!urls.length){toast('사진 업로드 실패 — 인터넷 확인 후 다시');return}
+    ebInsertImageUrls(urls);toast(urls.length>1?('사진 '+urls.length+'장 넣었어요 ✓'):'사진 넣었어요 ✓')};
   inp.click()}
 function ebPickCover(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
   inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;toast('표지 올리는 중…');
@@ -3324,32 +3565,57 @@ function renderThink(){
 /* ── 내 생각: 전자책과 같은 풀 에디터 ── */
 function thinkNew(diary){const it={id:uid(),ws:'think',type:'journal',diary:!!diary,title:'',text:'',memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};store.items.unshift(it);save();thinkEdit(it.id);ebBuzz(6)}
 function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;curThink=it;const d=new Date(it.ts);
-  const w=document.createElement('div');w.className='eb-editor';w.id='thinkEditor';
+  const w=document.createElement('div');w.className='eb-editor tk-ed'+(it.diary?' diary':'');w.id='thinkEditor';
+  const CUBE=`<svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.6 20.5 7.3v9.4L12 21.4 3.5 16.7V7.3z"/><path d="M3.5 7.3 12 12l8.5-4.7"/><path d="M12 12v9.4"/></svg>`;
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
-      <span class="eb-edtitle-mini" id="thinkTitleMini">${esc(it.title||((d.getMonth()+1)+'월 '+d.getDate()+'일'))}</span>
-      <button class="eb-focusbtn hero" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
+      <span class="eb-edtitle-mini" id="thinkTitleMini">${(d.getMonth()+1)}월 ${d.getDate()}일</span>
+      <button class="tk-metabtn" id="tkMetaBtn" onclick="tkToggleMeta()" aria-label="유형·기분">⊕</button>
       <button class="eb-savetop" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button>
       <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
-    <div class="eb-edscroll"><div class="eb-edinner">
-      <div class="eb-edchap">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
-      <input class="eb-edtitle eb-thinktitle" id="thinkTitle" placeholder="제목 (선택)" value="${esc(it.title||'')}">
+    <div class="tk-meta" id="tkMeta"><div class="tk-metainner">
       ${it.diary?`<div class="tk-catrow"><span class="tk-cattag diary">🌙 생각 정리 · 나만 보는 글</span></div>`:`<div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>`}
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
-      <div class="eb-edbody" id="thinkBody" contenteditable="true" spellcheck="false" data-ph="여기에 자유롭게 길게 써 내려가세요. 글자를 긁으면 서식이, ＋를 누르면 사진·인용이 나와요. ✍️">${it.text||''}</div>
     </div></div>
-    <button class="eb-plus" onclick="ebInsSheet()" aria-label="넣기">＋</button>
+    <div class="eb-edscroll tk-scroll" id="tkScroll"><div class="eb-edinner tk-inner">
+      <div class="tk-card">
+        <div class="tk-mark">
+          <div class="tk-cube">${CUBE}</div>
+          <div class="tk-date">${(d.getMonth()+1)}월 ${d.getDate()}일 (${WD[d.getDay()]})</div>
+        </div>
+        <div class="eb-edbody" id="thinkBody" contenteditable="true" spellcheck="false" data-ph="${it.diary?'지금 마음에 걸리는 것을 그냥 흘려보내듯…':'지금 떠오른 생각을 툭 적어보세요…'}">${it.text||''}</div>
+      </div>
+    </div></div>
+    <div class="tk-toolwrap">
+      <div class="tk-toolrow" id="tkTools">
+        <button data-t="bold" title="굵게"><b>B</b></button>
+        <button class="hl" data-t="hl" title="형광">🖍</button>
+        <button data-t="h2" title="제목">H</button>
+        <button data-t="quote" title="인용">❝</button>
+        <button data-t="img" title="사진">📷</button>
+        <button data-t="more" title="더">⋯</button>
+      </div>
+      <button class="tk-fab" id="tkFab" onclick="tkToggleTools()" aria-label="편집 도구">＋</button>
+    </div>
     <div class="eb-edstatus">
       <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
       <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('thinkBody'),title=document.getElementById('thinkTitle');
-  ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();thinkMark()};bkFocus=false;
+  ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();tkWriting();thinkMark()};bkFocus=false;
   ebEnsureSelBar();
-  title.addEventListener('input',()=>{curThink.title=title.value;thinkMark()});
-  body.addEventListener('input',()=>{atNote();ebSmartType();curThink.text=body.innerHTML;ebUpdWc();thinkMark();if(bkFocus)ebHiFocus()});
+  if(title)title.addEventListener('input',()=>{curThink.title=title.value;thinkMark()});
+  // 서식 ＋ 버튼들
+  document.querySelectorAll('#tkTools button').forEach(b=>{
+    b.onmousedown=e=>e.preventDefault();
+    b.onclick=()=>{const k=b.dataset.t;
+      if(k==='hl')ebHl(); else if(k==='more')ebInsSheet(); else ebFmt(k);};
+  });
+  tkWriting();
+  body.addEventListener('input',()=>{atNote();ebSmartType();curThink.text=body.innerHTML;ebUpdWc();tkWriting();thinkMark();if(bkFocus)ebHiFocus()});
   body.addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');curThink.text=body.innerHTML;thinkMark();return}}if(e.key===' ')ebMdSpace(e)});
   body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
   body.addEventListener('click',ebImgClick);
+  body.addEventListener('dblclick',ebImgDbl);
   body.addEventListener('dragover',e=>e.preventDefault());
   body.addEventListener('drop',ebDropImg);
   body.addEventListener('paste',ebPasteImg);
@@ -3358,6 +3624,27 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
     document.querySelectorAll('#thinkCats .tk-catchip').forEach(x=>{const on=x.dataset.cat===curThink.group;const cc=tkCat(x.dataset.cat);x.classList.toggle('on',on);x.style.borderColor=on&&cc?cc.color:'';x.style.background=on&&cc?cc.color+'22':''});thinkMark();ebBuzz(5)});
   document.addEventListener('selectionchange',ebSelHandler);
   ebUpdWc();ebHistPush(it.id,it.text||'');atStart();setTimeout(()=>body.focus(),180);
+}
+/* ── B안 헬퍼: 카드 녹이기 · ⊕ 메타 · ＋ 서식 ── */
+function tkWriting(){
+  const sc=document.getElementById('tkScroll'),b=document.getElementById('thinkBody');
+  if(!sc||!b)return;
+  const has=(b.innerText||'').replace(/\s/g,'').length>0 || !!b.querySelector('img,figure');
+  sc.classList.toggle('writing',has);
+}
+function tkToggleMeta(){
+  const m=document.getElementById('tkMeta'),b=document.getElementById('tkMetaBtn');
+  if(!m)return;
+  const open=m.classList.toggle('open');
+  if(b){b.classList.toggle('on',open);b.textContent=open?'✕':'⊕';}
+  ebBuzz(5);
+}
+function tkToggleTools(){
+  const r=document.getElementById('tkTools'),f=document.getElementById('tkFab');
+  if(!r)return;
+  const on=r.classList.toggle('on');
+  if(f)f.classList.toggle('on',on);
+  ebBuzz(6);
 }
 function thinkMark(){clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved()},450)}
 function thinkSaveNow(){if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=t.value;}save();if(curThink)ebHistPush(curThink.id,curThink.text||'');ebFlashSaved();ritualFx(!!(curThink&&curThink.diary));ebBuzz(10)}
