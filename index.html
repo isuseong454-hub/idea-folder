@@ -1547,6 +1547,38 @@
   .tk-meta.open{max-height:190px;opacity:1;padding:12px 0 14px;border-bottom-color:var(--line)}
   .tk-meta .tk-metainner{max-width:640px;margin:0 auto;padding:0 22px}
   @media(min-width:768px){.tk-meta .tk-metainner{padding:0 40px}}
+  /* ── 상단 고정 서식 바 (스크롤해도 유지 · iOS 기본 메뉴와 안 겹침) ── */
+  .eb-editor.tk-ed .eb-edtop{border-bottom:0;padding-bottom:8px}
+  .tk-fmtbar{flex:0 0 auto;display:flex;gap:5px;padding:0 12px 9px;background:rgba(13,13,13,.96);
+    -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tk-fmtbar::-webkit-scrollbar{display:none}
+  .tk-fmtbar button{flex:0 0 auto;background:var(--surface-2);border:1px solid var(--line);color:#d2d2cc;
+    border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;padding:7px 12px;cursor:pointer;transition:.15s;
+    min-width:38px;display:flex;align-items:center;justify-content:center}
+  .tk-fmtbar button:hover{border-color:rgba(var(--lime-rgb),.42);color:var(--lime)}
+  .tk-fmtbar button:active{transform:scale(.94)}
+  .tk-fmtbar button.hl{font-size:15px;color:var(--lime)}
+  .tk-fmtbar .tk-fmtdiv{flex:0 0 auto;width:1px;background:var(--line);margin:4px 3px;align-self:stretch}
+  .tk-ed.diary .tk-fmtbar button:hover{border-color:rgba(224,178,122,.45);color:#E0B27A}
+  .tk-ed.diary .tk-fmtbar button.hl{color:#E0B27A}
+
+  /* ── 하단 바: 🎤 · 🖼 ─── 자수 ─── 저장 ── */
+  .eb-editor.tk-ed .eb-edstatus{justify-content:flex-start;flex-wrap:nowrap;gap:7px;padding-top:9px;padding-bottom:calc(9px + env(safe-area-inset-bottom))}
+  .tk-wcwrap{flex:1;display:flex;justify-content:center;align-items:center;gap:10px;min-width:0}
+  .eb-editor.tk-ed .tk-wcwrap .eb-wc{margin-left:0;padding:0}
+  .tk-photo{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:8px;
+    font-size:11.5px;font-weight:700;padding:4px 10px;cursor:pointer;font-family:inherit;flex:0 0 auto;transition:.15s}
+  .tk-photo:hover{border-color:rgba(var(--lime-rgb),.4);color:var(--lime)}
+  .tk-save{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:var(--lime);color:#0b0b0b;border:0;
+    border-radius:999px;font-family:inherit;font-size:13px;font-weight:800;padding:9px 17px 9px 14px;cursor:pointer;
+    box-shadow:0 4px 16px rgba(var(--lime-rgb),.3);transition:.18s}
+  .tk-save svg{width:15px;height:15px;stroke:#0b0b0b;fill:none;stroke-width:2.9;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+  .tk-save:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(var(--lime-rgb),.46)}
+  .tk-save:active{transform:scale(.95)}
+  .tk-save.saved{background:#eaffa0}
+  .tk-ed.diary .tk-save{background:#E0B27A;box-shadow:0 4px 16px rgba(224,178,122,.3)}
+  .tk-ed.diary .tk-save:hover{box-shadow:0 6px 20px rgba(224,178,122,.46)}
   /* ＋ 서식 (평소엔 숨어 있음) */
   .tk-toolwrap{position:fixed;right:16px;bottom:18px;z-index:90;display:flex;align-items:center;gap:7px}
   .tk-toolrow{display:flex;gap:3px;background:rgba(28,28,28,.97);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
@@ -2625,7 +2657,11 @@ function ebAutoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
 function ebUpdWc(){const b=ebActiveBody,w=document.getElementById('ebWc');if(b&&w)w.textContent=ebPlain(b.innerHTML)+'자'}
 let ebSaveTmr;
 function ebMark(){ebMarkToday();clearTimeout(ebSaveTmr);ebSaveTmr=setTimeout(()=>{save();if(bkSec)ebHistPush(bkSec.s.id,bkSec.s.html);ebFlashSaved()},450)}
-function ebFlashSaved(){const b=document.getElementById('ebSaveBtn');if(!b)return;b.textContent='✓ 저장됨';b.classList.add('saved');clearTimeout(b._t);b._t=setTimeout(()=>{b.textContent='💾 저장';b.classList.remove('saved')},1600)}
+function ebFlashSaved(){const b=document.getElementById('ebSaveBtn');if(!b)return;
+  const t=b.querySelector('.tk-savetxt');
+  if(t){ t.textContent='저장됨';b.classList.add('saved');clearTimeout(b._t);
+    b._t=setTimeout(()=>{t.textContent='저장';b.classList.remove('saved')},1600); return; }
+  b.textContent='✓ 저장됨';b.classList.add('saved');clearTimeout(b._t);b._t=setTimeout(()=>{b.textContent='💾 저장';b.classList.remove('saved')},1600)}
 function ebSaveNow(){if(bkSec){const body=document.getElementById('ebEdBody');if(body)bkSec.s.html=body.innerHTML;const t=document.getElementById('ebEdTitle');if(t)bkSec.s.title=t.value;}save();if(bkSec)ebHistPush(bkSec.s.id,bkSec.s.html);ebFlashSaved();toast('저장했어요 ✓');ebBuzz(10)}
 /* 되돌리기 히스토리 (로컬 안전망, 동기화 X) */
 let ebHistLast={};
@@ -3570,8 +3606,18 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
   w.innerHTML=`<div class="eb-edtop"><button class="eb-back" onclick="thinkClose()">‹ 목록</button>
       <span class="eb-edtitle-mini" id="thinkTitleMini">${(d.getMonth()+1)}월 ${d.getDate()}일</span>
       <button class="tk-metabtn" id="tkMetaBtn" onclick="tkToggleMeta()" aria-label="유형·기분">⊕</button>
-      <button class="eb-savetop" id="ebSaveBtn" onclick="thinkSaveNow()">💾 저장</button>
       <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
+    <div class="tk-fmtbar" id="tkFmtBar">
+      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')" title="굵게"><b>굵게</b></button>
+      <button class="hl" onmousedown="ebFp(event)" onclick="ebHl()" title="형광">🖍</button>
+      <span class="tk-fmtdiv"></span>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('h2')" title="제목">제목</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')" title="인용">❝</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')" title="강조">💡</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('list')" title="목록">✓</button>
+      <span class="tk-fmtdiv"></span>
+      <button onmousedown="ebFp(event)" onclick="ebPickImg()" title="사진">🖼</button>
+    </div>
     <div class="tk-meta" id="tkMeta"><div class="tk-metainner">
       ${it.diary?`<div class="tk-catrow"><span class="tk-cattag diary">🌙 생각 정리 · 나만 보는 글</span></div>`:`<div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>`}
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
@@ -3585,33 +3631,23 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
         <div class="eb-edbody" id="thinkBody" contenteditable="true" spellcheck="false" data-ph="${it.diary?'지금 마음에 걸리는 것을 그냥 흘려보내듯…':'지금 떠오른 생각을 툭 적어보세요…'}">${it.text||''}</div>
       </div>
     </div></div>
-    <div class="tk-toolwrap">
-      <div class="tk-toolrow" id="tkTools">
-        <button data-t="bold" title="굵게"><b>B</b></button>
-        <button class="hl" data-t="hl" title="형광">🖍</button>
-        <button data-t="h2" title="제목">H</button>
-        <button data-t="quote" title="인용">❝</button>
-        <button data-t="img" title="사진">📷</button>
-        <button data-t="more" title="더">⋯</button>
-      </div>
-      <button class="tk-fab" id="tkFab" onclick="tkToggleTools()" aria-label="편집 도구">＋</button>
-    </div>
     <div class="eb-edstatus">
       <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
-      <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>`;
+      <button class="tk-photo" onclick="ebPickImg()" aria-label="사진 넣기">🖼 사진</button>
+      <span class="tk-wcwrap"><span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></span>
+      <button class="tk-save" id="ebSaveBtn" onclick="thinkSaveNow()">
+        <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span class="tk-savetxt">저장</span></button>
+    </div>`;
   document.body.appendChild(w);
   const body=document.getElementById('thinkBody'),title=document.getElementById('thinkTitle');
   ebActiveBody=body;ebActiveId=it.id;ebOnEdit=function(){curThink.text=body.innerHTML;ebUpdWc();tkWriting();thinkMark()};bkFocus=false;
-  ebEnsureSelBar();
+  /* 드래그 선택바 안 씀 — 아이폰 기본 메뉴(오려두기·복사)와 겹침. 서식은 상단 고정 바로 */
   if(title)title.addEventListener('input',()=>{curThink.title=title.value;thinkMark()});
-  // 서식 ＋ 버튼들
-  document.querySelectorAll('#tkTools button').forEach(b=>{
-    b.onmousedown=e=>e.preventDefault();
-    b.onclick=()=>{const k=b.dataset.t;
-      if(k==='hl')ebHl(); else if(k==='more')ebInsSheet(); else ebFmt(k);};
-  });
   tkWriting();
-  body.addEventListener('input',()=>{atNote();ebSmartType();curThink.text=body.innerHTML;ebUpdWc();tkWriting();thinkMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('input',()=>{atNote();ebSmartType();curThink.text=body.innerHTML;ebUpdWc();tkWriting();tkCaretIntoView();thinkMark();if(bkFocus)ebHiFocus()});
+  body.addEventListener('keyup',e=>{if(e.key==='Enter'||e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Backspace')tkCaretIntoView()});
+  body.addEventListener('focus',()=>setTimeout(tkCaretIntoView,60));
+  window.addEventListener('resize',tkCaretIntoView);   // 폰 키보드가 올라올 때
   body.addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey){if(e.key==='b'){e.preventDefault();ebFmt('bold');return}if(e.key==='i'){e.preventDefault();document.execCommand('italic');curThink.text=body.innerHTML;thinkMark();return}}if(e.key===' ')ebMdSpace(e)});
   body.addEventListener('keyup',e=>{if(e.key==='/')ebMaybeSlash()});
   body.addEventListener('click',ebImgClick);
@@ -3624,6 +3660,24 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
     document.querySelectorAll('#thinkCats .tk-catchip').forEach(x=>{const on=x.dataset.cat===curThink.group;const cc=tkCat(x.dataset.cat);x.classList.toggle('on',on);x.style.borderColor=on&&cc?cc.color:'';x.style.background=on&&cc?cc.color+'22':''});thinkMark();ebBuzz(5)});
   document.addEventListener('selectionchange',ebSelHandler);
   ebUpdWc();ebHistPush(it.id,it.text||'');atStart();setTimeout(()=>body.focus(),180);
+}
+/* ── 커서를 항상 화면 안에 — 쓰는 줄이 하단 바에 가려지지 않게 ── */
+function tkCaretIntoView(){
+  const sc=document.getElementById('tkScroll'),body=document.getElementById('thinkBody');
+  if(!sc||!body)return;
+  const sel=window.getSelection();
+  if(!sel||!sel.rangeCount||!body.contains(sel.anchorNode))return;
+  let r=sel.getRangeAt(0).getBoundingClientRect();
+  if(!r||(!r.height&&!r.top)){                   // 빈 줄이면 그 줄의 블록으로 대체
+    let n=sel.anchorNode; if(n&&n.nodeType===3)n=n.parentNode;
+    if(n&&n.getBoundingClientRect)r=n.getBoundingClientRect();
+  }
+  if(!r||(!r.height&&!r.top))return;
+  const box=sc.getBoundingClientRect();
+  const bottomGuard=box.bottom-118;              // 하단 바(저장·자수) 높이만큼 띄움
+  const topGuard=box.top+24;
+  if(r.bottom>bottomGuard) sc.scrollTop+=(r.bottom-bottomGuard);
+  else if(r.top<topGuard) sc.scrollTop-=(topGuard-r.top);
 }
 /* ── B안 헬퍼: 카드 녹이기 · ⊕ 메타 · ＋ 서식 ── */
 function tkWriting(){
