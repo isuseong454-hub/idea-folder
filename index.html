@@ -100,6 +100,13 @@
     display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .ccard.notxt .cc-cap{color:var(--ink);position:absolute;top:0;bottom:auto;padding:34px 11px 12px;
     -webkit-line-clamp:6;font-weight:600;font-size:13px}
+  /* 🎨 타이포 타일 — 글이 곧 포스터 */
+  .ccard.tile{background:linear-gradient(158deg,#181818,#121212)}
+  .ccard.tile .cc-tcat{position:absolute;top:11px;left:11px;z-index:3;font-size:9.5px;font-weight:800;letter-spacing:.03em}
+  .ccard.tile .cc-cap{top:0;bottom:auto;padding:30px 13px 40px;-webkit-line-clamp:5;
+    font-weight:800;font-size:15px;letter-spacing:-.02em;line-height:1.42;color:#edefe7}
+  .ccard.tile .cc-e{font-weight:600;color:var(--ink-faint)}
+  .ccard.tile .cc-link{color:var(--link);font-weight:700}
   .ccard .cc-e{color:var(--ink-faint);font-weight:500}
   .ccard .cc-link{font-size:11px;color:var(--link);margin-top:4px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ccard .cc-views{position:absolute;top:8px;right:8px;z-index:3;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);
@@ -1837,6 +1844,76 @@
     .tk-peek,.tk-meta,.tk-calwrap,.tk-title{transition:opacity .18s ease!important}
   }
 
+  /* ═══════════ 🏃 아이디어 실행 모음 — 러너 담기 버튼 + 완료 ═══════════ */
+  :root{--rspring:linear(0,.42,.83,1.12,1.24,1.25,1.19,1.08,1,.97,.99,1.005,1)}
+  .cc-runner{position:absolute;right:8px;bottom:8px;z-index:4;width:34px;height:34px;border-radius:50%;
+    background:#0f120c;border:1.5px solid rgba(var(--lime-rgb),.5);cursor:pointer;display:grid;place-items:center;
+    box-shadow:0 0 10px rgba(var(--lime-rgb),.15),inset 0 0 8px rgba(var(--lime-rgb),.05);transition:transform .18s,border-color .2s}
+  .cc-runner:hover{border-color:rgba(var(--lime-rgb),.8)}
+  .cc-runner:active{transform:scale(.9)}
+  .cc-runner svg{width:19px;height:19px;overflow:visible;position:relative;z-index:3}
+  .cc-runner svg *{stroke:var(--lime);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .cc-runner .cc-orbit{position:absolute;inset:4px;border-radius:50%;pointer-events:none;animation:ccorbit 4.5s linear infinite;animation-play-state:paused}
+  .ccard:hover .cc-runner .cc-orbit{animation-play-state:running}
+  .cc-runner .cc-orbit::after{content:'';position:absolute;top:-2px;left:50%;width:4px;height:4px;border-radius:50%;
+    background:var(--lime);box-shadow:0 0 6px var(--lime);transform:translateX(-50%)}
+  @keyframes ccorbit{to{transform:rotate(360deg)}}
+  .cc-runner .cc-ripple{position:absolute;inset:0;border-radius:50%;border:2px solid var(--lime);opacity:0;pointer-events:none}
+  .cc-runner.filed{animation:ccinhale .5s var(--rspring)}
+  @keyframes ccinhale{0%{transform:scale(1)}25%{transform:scale(.72)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+  .cc-runner.filed .cc-ripple{animation:ccripple .55s ease-out}
+  @keyframes ccripple{0%{transform:scale(.9);opacity:.6}100%{transform:scale(2);opacity:0}}
+  .cc-runner.filed svg{animation:ccdash .5s cubic-bezier(.4,0,.3,1),ccdashback .3s var(--rspring) .5s both}
+  @keyframes ccdash{0%{transform:translateX(0)}45%{transform:translateX(-3px)}100%{transform:translateX(18px);opacity:0}}
+  @keyframes ccdashback{from{transform:translateX(-14px);opacity:0}to{transform:none;opacity:1}}
+  .cc-runflag{position:absolute;right:8px;bottom:8px;z-index:4;font-size:10px;font-weight:800;border-radius:8px;padding:5px 8px;cursor:pointer;border:0;font-family:inherit}
+  .cc-runflag.inq{color:var(--lime);background:rgba(var(--lime-rgb),.12);border:1px solid rgba(var(--lime-rgb),.3)}
+  .cc-runflag.done{color:#8FC7B8;background:rgba(143,199,184,.12)}
+  /* 담기 폼: 담기 + 러너 «빠르게 실행하기» 한 줄 */
+  .comp-saverow{display:flex;gap:10px;align-items:stretch;margin-top:12px}
+  .comp-saverow .comp-save{flex:1;margin-top:0}
+  .comp-run{position:relative;flex:0 0 auto;width:52px;border-radius:14px;cursor:pointer;
+    background:#0f120c;border:1.5px solid rgba(var(--lime-rgb),.5);display:grid;place-items:center;
+    box-shadow:0 0 12px rgba(var(--lime-rgb),.16),inset 0 0 8px rgba(var(--lime-rgb),.05);transition:transform .18s,border-color .2s,opacity .2s}
+  .comp-run:hover:not(:disabled){border-color:rgba(var(--lime-rgb),.85)}
+  .comp-run:active:not(:disabled){transform:scale(.9)}
+  .comp-run:disabled{opacity:.32;cursor:default}
+  .comp-run svg{width:24px;height:24px;overflow:visible;position:relative;z-index:3}
+  .comp-run svg *{stroke:var(--lime);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .comp-run .cc-orbit{position:absolute;inset:8px;border-radius:50%;pointer-events:none;animation:ccorbit 4.5s linear infinite}
+  .comp-run:disabled .cc-orbit{animation-play-state:paused;opacity:.4}
+  .comp-run .cc-orbit::after{content:'';position:absolute;top:-2px;left:50%;width:5px;height:5px;border-radius:50%;
+    background:var(--lime);box-shadow:0 0 6px var(--lime);transform:translateX(-50%)}
+  .comp-run .cc-ripple{position:absolute;inset:0;border-radius:14px;border:2px solid var(--lime);opacity:0;pointer-events:none}
+  .comp-run.filed{animation:ccinhale .5s var(--rspring)}
+  .comp-run.filed .cc-ripple{animation:ccripple .55s ease-out}
+  .comp-run.filed svg{animation:ccdash .5s cubic-bezier(.4,0,.3,1)}
+
+  /* 실행 모음 뷰 */
+  .run-prog{background:linear-gradient(160deg,rgba(var(--lime-rgb),.06),rgba(255,255,255,.01));
+    border:1px solid rgba(var(--lime-rgb),.2);border-radius:16px;padding:15px 16px;margin-bottom:15px}
+  .run-prog .rp-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:10px}
+  .run-prog .rp-top .rp-done{color:var(--lime)}
+  .run-prog .rp-bar{height:7px;border-radius:99px;background:#1e1e1e;overflow:hidden}
+  .run-prog .rp-bar i{display:block;height:100%;background:linear-gradient(90deg,#8FE04B,var(--lime));border-radius:99px;transition:width .55s cubic-bezier(.3,.9,.3,1)}
+  .run-prog .rp-sub{font-size:11.5px;color:var(--ink-faint);margin-top:9px;line-height:1.6}
+  .run-card{background:var(--surface);border:1px solid #212121;border-radius:15px;padding:14px 15px;margin-bottom:10px;position:relative;overflow:hidden;transition:.2s}
+  .run-card .rc-cat{font-size:10px;font-weight:800;border-radius:5px;padding:2.5px 7px;margin-bottom:8px;display:inline-block}
+  .run-card .rc-cap{font-size:14px;font-weight:700;line-height:1.55;color:#dcdcd6;margin-bottom:12px;padding-right:22px}
+  .run-cancel{position:absolute;top:12px;right:12px;background:none;border:0;color:var(--ink-faint);font-size:12px;cursor:pointer;line-height:1;padding:2px}
+  .run-cancel:hover{color:var(--ink-dim)}
+  .run-complete{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+    background:rgba(var(--lime-rgb),.13);border:1px solid rgba(var(--lime-rgb),.32);color:var(--lime);
+    border-radius:12px;font-family:inherit;font-size:14px;font-weight:800;padding:12px;cursor:pointer;transition:.16s}
+  .run-complete:hover{background:rgba(var(--lime-rgb),.22)}
+  .run-complete:active{transform:scale(.97)}
+  .run-card.celebrate{border-color:var(--lime);box-shadow:0 0 0 1px rgba(var(--lime-rgb),.4),0 8px 26px rgba(var(--lime-rgb),.16)}
+  .run-card.celebrate::after{content:'🎉';position:absolute;inset:0;display:grid;place-items:center;font-size:34px;
+    animation:rcspark .6s ease forwards;pointer-events:none}
+  @keyframes rcspark{0%{opacity:0;transform:scale(.4)}45%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(1.4)}}
+  .run-card.gone{animation:rcgone .5s forwards}
+  @keyframes rcgone{to{opacity:0;transform:scale(.92);max-height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0}}
+
   /* ═══════════ 🏠 홈 대화방 — 붙여넣은 사진 ═══════════ */
   .nh-shots{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   .nh-shot{position:relative;width:60px;height:76px;border-radius:10px;background-size:cover;background-position:center;
@@ -2103,6 +2180,9 @@ function renderTabs(){
 
 /* ── Card ── */
 function isDone(i){return Array.isArray(i.tags)&&i.tags.includes('__done')}
+/* 🏃 아이디어 실행 모음: __run = 실행 대기 큐 (완료되면 빠짐) */
+function isRun(i){return Array.isArray(i.tags)&&i.tags.includes('__run')&&!isDone(i)}
+const RUNNER_SVG='<svg viewBox="0 0 24 24"><circle cx="14.8" cy="4.8" r="2.2"/><path d="M13.6 7.2 C12.8 9 12 10.6 10.6 12.2"/><path d="M10.6 12.2 L13.8 13.4 L14.4 17.6"/><path d="M10.6 12.2 L8 14.6 L5.8 17.4"/><path d="M12.4 8.6 L15.6 9.4 L16.2 12.2"/><path d="M12.4 8.6 L9.6 8.6 L7.6 10.2"/></svg>';
 function visibleTags(i){return (i.tags||[]).filter(t=>t&&t.indexOf('__')!==0)}
 function cardHtml(i){
   const cap=esc(i.text||(i.url?(i.title||host(i.url)):''));
@@ -2113,11 +2193,21 @@ function cardHtml(i){
   const photo=i.img?`<div class="cc-photo" style="background-image:url('${(i.img||'').replace(/'/g,'%27')}')"></div><div class="cc-grad"></div>`:'';
   const link=(i.url&&i.text)?`<div class="cc-link">🔗 ${esc(host(i.url))}</div>`:'';
   const done=isDone(i);
-  const doneBtn=(i.ws==='idea')?`<button class="cc-done ${done?'on':''}" data-done="${i.id}">${done?'✓ 실행함':'실행하기'}</button>`:'';
-  return`<div class="ccard ${i.fav?'fav':''} ${i.img?'':'notxt'} ${done?'checked':''}" data-id="${i.id}">
+  let doneBtn='';
+  if(i.ws==='idea'){
+    if(done) doneBtn=`<button class="cc-runflag done" data-done="${i.id}">✓ 실행함</button>`;
+    else if(isRun(i)) doneBtn=`<span class="cc-runflag inq">🏃 실행 모음</span>`;
+    else doneBtn=`<button class="cc-runner" data-torun="${i.id}" aria-label="실행 모음으로 담기"><span class="cc-orbit"></span><span class="cc-ripple"></span>${RUNNER_SVG}</button>`;
+  }
+  // 🎨 타이포 타일: 사진 없는 글 카드는 유형 색으로 물들이고 글자를 크게 (스크롤·인식 개선)
+  const isText=!i.img;
+  const tcol=isText?ideaGroupColor(i.group):'';
+  const tcat=(isText && i.group && i.group!=='유형 미지정')?`<span class="cc-tcat" style="color:${tcol}">${esc(i.group)}</span>`:'';
+  const tileStyle=isText?` style="background:linear-gradient(158deg,${tcol}22,#131313);border-color:${tcol}2e"`:'';
+  return`<div class="ccard ${i.fav?'fav':''} ${i.img?'':'notxt tile'} ${done?'checked':''}" data-id="${i.id}"${tileStyle}>
     ${photo}
     <button class="cc-fav" data-fav="${i.id}">${i.fav?'★':'☆'}</button>
-    ${views}${memoBtn}
+    ${views}${memoBtn}${tcat}
     <div class="cc-cap">${cap||'<span class="cc-e">(내용 없음)</span>'}${link}</div>
     ${doneBtn}
     ${memoPop}
@@ -2204,7 +2294,11 @@ function collectHubHtml(){
         </div></div>
 
         <div class="comp-suggest" id="cSuggest"></div>
-        <button class="comp-save" id="cSave" disabled>담기</button>
+        <div class="comp-saverow">
+          <button class="comp-save" id="cSave" disabled>담기</button>
+          <button class="comp-run" id="cRun" disabled aria-label="빠르게 실행하기에 담기">
+            <span class="cc-orbit"></span><span class="cc-ripple"></span>${RUNNER_SVG}</button>
+        </div>
       </div>`;
 }
 function homeDayItemsHtml(){
@@ -2443,7 +2537,7 @@ function render(){
     // 유효하지 않은 세그(삭제된 유형 등) → 홈
     const gHas={}; items.forEach(i=>{const g=i.group||'유형 미지정';gHas[g]=1;});
     const validSeg=groups.includes(ideaSeg)||gHas[ideaSeg];      // 빈 칸도 유효
-    if(!(ideaSeg==='home'||ideaSeg==='rec'||ideaSeg==='all'||ideaSeg==='gal'||validSeg)) ideaSeg='home';
+    if(!(ideaSeg==='home'||ideaSeg==='rec'||ideaSeg==='all'||ideaSeg==='gal'||ideaSeg==='run'||validSeg)) ideaSeg='home';
     feed.innerHTML=`<div class="ir-lay">${ideaRailHtml(items,groups)}
       <div class="ir-main">${ideaHeadHtml(items)}<div id="ideaSegBody">${ideaSegBodyHtml(items,groups)}</div></div></div>`;
     bindSortBar(); bindFeed();
@@ -3235,8 +3329,10 @@ function ideaRailHtml(items,groups){
       <span class="irn">${n===null?'':n}</span>
       ${fixed?'':`<button class="irm" data-irm="${esc(seg)}" aria-label="이 칸 지우기">−</button>`}
     </div>`;
+  const runN=items.filter(i=>isRun(i)).length;
   let h=`<div class="ir-rail${ideaRailEditing?' editing':''}" id="ideaRail">`;
   h+=row('home','#BCDE55','담기',null,true);
+  h+=row('run','#C8FF00','🏃 실행 모음',runN,true);
   h+=`<div class="ir-div"></div>`;
   h+=row('all','#8FAECF','전체보기',items.length,true);
   groups.forEach(g=>{
@@ -3259,7 +3355,8 @@ function ideaHeadHtml(items){
     gal:['갤러리','#B49DD0',items.filter(i=>i.img).length+'장'],rec:['기록','#8FC7B8',''],
     '유형 미지정':['미분류','#7d8177','']};
   let nm,col,sub;
-  if(LB[seg]){[nm,col,sub]=LB[seg];}
+  if(seg==='run'){const n=items.filter(isRun).length;nm='🏃 실행 모음';col='#C8FF00';sub=n?n+'개 대기':'비어 있음';}
+  else if(LB[seg]){[nm,col,sub]=LB[seg];}
   else{nm=seg;col=ideaGroupColor(seg);const n=items.filter(i=>(i.group||'유형 미지정')===seg).length;sub=n?n+'개':'비어 있음';}
   if(seg==='유형 미지정'){const n=items.filter(i=>!i.group||i.group==='유형 미지정').length;sub=n?n+'개':'비어 있음';}
   return `<div class="ir-head" style="color:${col}"><span class="irh-d"></span>
@@ -3341,6 +3438,17 @@ function ideaGroupHtml(g,items){
     <div class="sg-head sg-toggle"><span class="sg-tw">▾</span><span class="sg-name">${esc(g)}</span><span class="sg-n">${gi.length}</span><span class="sg-line"></span></div>
     <div class="wgrid">${gi.map(cardHtml).join('')}${(g==='유형 미지정'&&!favOnly)?addCard('idea',g):''}</div></div>`;
 }
+function runCardHtml(i){
+  const cc=ideaGroupColor(i.group);
+  const cap=esc(((i.text||i.title||(i.url?host(i.url):''))||'(내용 없음)')).slice(0,100);
+  const catTag=(i.group&&i.group!=='유형 미지정')?`<span class="rc-cat" style="background:${cc}22;color:${cc}">${esc(i.group)}</span>`:'';
+  return `<div class="run-card" data-id="${i.id}">
+    <button class="run-cancel" data-cancelrun="${i.id}" aria-label="실행 모음에서 빼기">✕</button>
+    ${catTag}
+    <div class="rc-cap">${cap}</div>
+    <button class="run-complete" data-complete="${i.id}">✓ 실행 완료 · 러너 출발 🏃</button>
+  </div>`;
+}
 function ideaSegBodyHtml(items,groups){
   const seg=ideaSeg;
   if(seg==='home'){
@@ -3348,6 +3456,16 @@ function ideaSegBodyHtml(items,groups){
   }
   if(seg==='rec'){
     return homeCalHtml()+homeInsightsHtml()+homeDayItemsHtml();
+  }
+  if(seg==='run'){
+    const q=items.filter(isRun).sort(sortFn);
+    const doneN=items.filter(isDone).length, total=q.length+doneN, pct=total?Math.round(doneN/total*100):0;
+    let h=`<div class="run-prog"><div class="rp-top"><span>🎯 실행할 것 ${q.length}</span><span class="rp-done">${doneN}개 실행함</span></div>
+      <div class="rp-bar"><i style="width:${pct}%"></i></div>
+      <div class="rp-sub">${q.length?'하나씩 실행하고 <b style="color:#C8FF00">✓ 실행 완료</b>를 눌러요. 러너가 달려 나가요 🏃':'대기 중인 게 없어요. 전체보기·유형에서 카드의 🏃 를 눌러 담아보세요.'}</div></div>`;
+    if(!q.length) return h+`<div class="home-first" style="margin-top:8px">실행 모음이 비었어요.</div>`;
+    h+=q.map(runCardHtml).join('');
+    return h;
   }
   if(seg==='gal'){
     const photos=items.filter(i=>i.img).sort((a,b)=>b.ts-a.ts);
@@ -4376,6 +4494,22 @@ function bindFeed(){
     if(!Array.isArray(it.tags))it.tags=[];
     if(it.tags.includes('__done')){ it.tags=it.tags.filter(t=>t!=='__done'); save();render(); toast('실행 취소'); }
     else{ it.tags.push('__done'); save();render(); toast('실행 완료 ✓ 잘하셨어요!'); }});
+  /* 🏃 실행 모음으로 담기 (러너 달려나가기 후 갱신) */
+  feed.querySelectorAll('[data-torun]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const it=store.items.find(x=>x.id===b.dataset.torun); if(!it)return;
+    if(!Array.isArray(it.tags))it.tags=[]; if(!it.tags.includes('__run'))it.tags.push('__run');
+    b.classList.add('filed'); ebBuzz(8); save(); toast('🏃 실행 모음으로 담았어요');
+    setTimeout(()=>render(),480);});
+  feed.querySelectorAll('[data-complete]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const it=store.items.find(x=>x.id===b.dataset.complete); if(!it)return;
+    if(!Array.isArray(it.tags))it.tags=[]; if(!it.tags.includes('__done'))it.tags.push('__done');
+    it.tags=it.tags.filter(t=>t!=='__run');
+    const card=b.closest('.run-card'); ebBuzz(16); save(); toast('🎉 실행 완료! 잘하셨어요');
+    if(card){card.classList.add('celebrate'); setTimeout(()=>{card.classList.add('gone');setTimeout(()=>render(),450)},650);}
+    else render();});
+  feed.querySelectorAll('[data-cancelrun]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const it=store.items.find(x=>x.id===b.dataset.cancelrun); if(!it)return;
+    it.tags=(it.tags||[]).filter(t=>t!=='__run'); save(); render(); toast('실행 모음에서 뺐어요');});
   feed.querySelectorAll('.card:not(.add), .ccard:not(.add), .wrow:not(.add)').forEach(c=>c.onclick=()=>openDetail(c.dataset.id));
   feed.querySelectorAll('[data-memo]').forEach(b=>b.onclick=e=>{e.stopPropagation();b.closest('.ccard').classList.add('memo-open')});
   feed.querySelectorAll('[data-mclose]').forEach(b=>b.onclick=e=>{e.stopPropagation();b.closest('.ccard').classList.remove('memo-open')});
@@ -4451,7 +4585,9 @@ function initComposer(){
   document.getElementById('uniText').oninput=()=>{compValidate();updatePreview();compSuggest()};
   document.getElementById('uniUrl').oninput=compValidate;
   const um=document.getElementById('uniMemo');if(um)um.oninput=()=>{cMemoVal=um.value};
-  document.getElementById('cSave').onclick=compSave;
+  document.getElementById('cSave').onclick=()=>compSave(false);
+  const cr=document.getElementById('cRun');
+  if(cr)cr.onclick=function(){ if(cr.disabled)return; cr.classList.add('filed'); setTimeout(()=>compSave(true),380); };
   compGroups();compTags();compValidate();compSuggest();
 }
 function compDest(){
@@ -4554,8 +4690,10 @@ function compValidate(){
   const hasImg=!!cImg;
   const hasText=(document.getElementById('uniText')?.value.trim().length>0);
   const hasUrl=(document.getElementById('uniUrl')?.value.trim().length>0);
-  const btn=document.getElementById('cSave');if(btn)btn.disabled=!(hasImg||hasText||hasUrl)}
-function compSave(){
+  const ok=(hasImg||hasText||hasUrl);
+  const btn=document.getElementById('cSave');if(btn)btn.disabled=!ok;
+  const rb=document.getElementById('cRun');if(rb)rb.disabled=!ok;}
+function compSave(runFlag){
   const text=(document.getElementById('uniText')?.value||'').trim();
   let url=(document.getElementById('uniUrl')?.value||'').trim();
   const item={id:uid(),ws:cWs,group:cGroup||'유형 미지정',ts:Date.now(),fav:false,uses:0,tags:[...cTags]};
@@ -4565,11 +4703,13 @@ function compSave(){
   if(cViewsVal)item.views=cViewsVal;
   if(cMemoVal.trim())item.memo=cMemoVal.trim();
   item.type=cImg?'image':(item.url?'link':'idea');
+  if(runFlag){item.tags.push('__run');ebBuzz(10);}     // 🏃 빠르게 실행하기 = 실행 모음으로도
   store.items.unshift(item);save();
   lastAddedId=item.id;lastWs=cWs;
   // stay on home; just refresh so the new card lands in 최근
   render();
-  const w=WS.find(x=>x.key===cWs);toast('담았어요 ✓  ·  '+w.title+'에 저장');
+  const w=WS.find(x=>x.key===cWs);
+  toast(runFlag?'🏃 담고 · 실행 모음으로 보냈어요':('담았어요 ✓  ·  '+w.title+'에 저장'));
 }
 
 /* ── Search ── */
