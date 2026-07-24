@@ -1869,6 +1869,64 @@
   .cc-runflag{position:absolute;right:8px;bottom:8px;z-index:4;font-size:10px;font-weight:800;border-radius:8px;padding:5px 8px;cursor:pointer;border:0;font-family:inherit}
   .cc-runflag.inq{color:var(--lime);background:rgba(var(--lime-rgb),.12);border:1px solid rgba(var(--lime-rgb),.3)}
   .cc-runflag.done{color:#8FC7B8;background:rgba(143,199,184,.12)}
+  /* 📥 전자책 미분류 인박스 (재료 서랍과 구분) */
+  .eb-inbox{border-color:rgba(var(--lime-rgb),.26)!important;background:linear-gradient(160deg,rgba(var(--lime-rgb),.05),transparent 70%)}
+  .eb-inbox .eb-mh{color:var(--lime)}
+  .ds-ebox{margin-top:7px}
+
+  /* ▾ 홈 메모 하단 펼침 — 유형 · 보내기 (조용하게) */
+  .nh-pull{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 0 4px;cursor:pointer;position:relative}
+  .nh-pull::before{content:'';position:absolute;left:14px;right:14px;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+  .nh-pull .pc{font-size:10px;color:#4a4e44;transition:transform .5s var(--rspring),color .3s}
+  .nh-pull .pt{font-size:10px;font-weight:700;color:#4a4e44;transition:.3s}
+  .nh-box:hover .nh-pull .pc,.nh-box:hover .nh-pull .pt{color:var(--ink-faint)}
+  .nh-box.sendopen .nh-pull .pc{transform:rotate(180deg);color:var(--ink-dim)}
+  .nh-box.sendopen .nh-pull .pt{opacity:0}
+  .nh-unfold{display:grid;grid-template-rows:0fr;transition:grid-template-rows .44s var(--rspring)}
+  .nh-box.sendopen .nh-unfold{grid-template-rows:1fr}
+  .nh-ufmask{overflow:hidden;min-height:0}
+  .nh-ufin{padding:6px 2px 4px;opacity:0;transform:translateY(-5px);transition:opacity .32s,transform .42s var(--rspring)}
+  .nh-box.sendopen .nh-ufin{opacity:1;transform:none}
+  .nh-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+  .nh-cat{border:1px solid #2c2c2c;background:transparent;border-radius:999px;padding:6px 11px;font-size:11.5px;
+    font-weight:700;color:var(--ink-dim);cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;transition:.16s}
+  .nh-cat i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.85}
+  .nh-cat.on{color:var(--ink);border-color:#484848}
+  .nh-sendrow{display:flex;align-items:center;gap:9px;padding-top:10px;border-top:1px solid #222}
+  .nh-sendrow .sl{font-size:10.5px;color:#54584e;font-weight:700;flex:1}
+  .nh-sb{position:relative;width:42px;height:42px;border-radius:50%;flex:0 0 auto;cursor:pointer;display:grid;place-items:center;
+    background:#0f120c;border:1.5px solid rgba(var(--lime-rgb),.45);transition:transform .18s,border-color .2s;
+    box-shadow:0 0 10px rgba(var(--lime-rgb),.13)}
+  .nh-sb:hover{border-color:rgba(var(--lime-rgb),.8)}
+  .nh-sb:active{transform:scale(.9)}
+  .nh-sb svg{width:21px;height:21px;overflow:visible;position:relative;z-index:3}
+  .nh-sb svg *{stroke:var(--lime);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .nh-sb .cc-orbit{position:absolute;inset:4px;border-radius:50%;pointer-events:none;animation:ccorbit 4.5s linear infinite}
+  .nh-sb .cc-orbit::after{content:'';position:absolute;top:-2px;left:50%;width:4px;height:4px;border-radius:50%;
+    background:var(--lime);box-shadow:0 0 6px var(--lime);transform:translateX(-50%)}
+  .nh-sb .cc-ripple{position:absolute;inset:0;border-radius:50%;border:2px solid var(--lime);opacity:0;pointer-events:none}
+  .nh-sb.filed{animation:ccinhale .5s var(--rspring)}
+  .nh-sb.filed .cc-ripple{animation:ccripple .55s ease-out}
+  .nh-sb.filed svg{animation:ccdash .5s cubic-bezier(.4,0,.3,1)}
+  .nh-sb.ebox svg{width:22px;height:22px}
+  .nh-undo{display:none;margin:2px auto 0;background:none;border:0;font-family:inherit;font-size:10.5px;
+    font-weight:700;color:#54584e;cursor:pointer;padding:4px 8px;border-radius:8px}
+  .nh-undo:hover{color:var(--ink-dim);background:rgba(255,255,255,.04)}
+  .nh-undo.show{display:block}
+  .nh-tip{position:absolute;bottom:50px;right:0;white-space:nowrap;font-size:10px;color:var(--ink-faint);
+    background:#191919;border:1px solid #2a2a2a;border-radius:99px;padding:4px 9px;opacity:0;transition:.15s;pointer-events:none}
+  .nh-sb:hover .nh-tip{opacity:1}
+
+  /* ✍️ 홈 글창 안 «제목 줄» — 얇은 선 하나 (그 위가 제목) */
+  .nh-title{width:100%;background:transparent;border:0;outline:0;color:var(--ink);font-family:inherit;
+    font-size:17px;font-weight:800;letter-spacing:-.025em;line-height:1.4;padding:2px 3px 8px;
+    border-bottom:1px solid rgba(var(--lime-rgb),.26);margin-bottom:11px;transition:border-color .25s}
+  .nh-title::placeholder{color:#3a3a36;font-weight:800}
+  .nh-title:focus{border-bottom-color:rgba(var(--lime-rgb),.5)}
+  .nh.diary .nh-title{border-bottom-color:rgba(224,178,122,.3)}
+  .nh.diary .nh-title:focus{border-bottom-color:rgba(224,178,122,.55)}
+
   /* 담기 폼: 담기 + 러너 «빠르게 실행하기» 한 줄 */
   .comp-saverow{display:flex;gap:10px;align-items:stretch;margin-top:12px}
   .comp-saverow .comp-save{flex:1;margin-top:0}
@@ -2172,6 +2230,7 @@ function renderTabs(){
     ${counts[w.key]?`<span class="tb-n">${counts[w.key]}</span>`:''}
     <span class="tb-ic">${tabSvg(w.key)}</span><span class="tb-l">${w.title}</span></button>`).join('');
   bar.querySelectorAll('button').forEach(b=>b.onclick=()=>{const nw=b.dataset.ws;
+    if(activeWs==='home'&&nw!=='home')nhBeforeLeave();          // ✍️ 쓰던 글 절대 안 날아가게
     if(nw==='book'){bkCur=null;ebSel=null;bkCreating=false;}   // 전자책 재진입 시 항상 책장부터
     activeWs=nw;
     search='';document.getElementById('search').value='';document.getElementById('clrSearch').style.display='none';
@@ -2182,7 +2241,11 @@ function renderTabs(){
 function isDone(i){return Array.isArray(i.tags)&&i.tags.includes('__done')}
 /* 🏃 아이디어 실행 모음: __run = 실행 대기 큐 (완료되면 빠짐) */
 function isRun(i){return Array.isArray(i.tags)&&i.tags.includes('__run')&&!isDone(i)}
+/* 실행 모음은 워크스페이스 가리지 않음 — 홈(내 생각)에서 보낸 것도 들어옴 */
+function runItems(){return store.items.filter(isRun).sort((a,b)=>b.ts-a.ts)}
 const RUNNER_SVG='<svg viewBox="0 0 24 24"><circle cx="14.8" cy="4.8" r="2.2"/><path d="M13.6 7.2 C12.8 9 12 10.6 10.6 12.2"/><path d="M10.6 12.2 L13.8 13.4 L14.4 17.6"/><path d="M10.6 12.2 L8 14.6 L5.8 17.4"/><path d="M12.4 8.6 L15.6 9.4 L16.2 12.2"/><path d="M12.4 8.6 L9.6 8.6 L7.6 10.2"/></svg>';
+/* 📖 펼친 책 — 러너와 같은 네온 라인 톤 */
+const BOOK_SVG='<svg viewBox="0 0 24 24"><path d="M12 6.6C10.7 5.3 8.9 4.6 6.6 4.6H3.8v13h2.8c2.3 0 4.1.7 5.4 2"/><path d="M12 6.6c1.3-1.3 3.1-2 5.4-2h2.8v13h-2.8c-2.3 0-4.1.7-5.4 2"/><path d="M12 6.6v13"/></svg>';
 function visibleTags(i){return (i.tags||[]).filter(t=>t&&t.indexOf('__')!==0)}
 function cardHtml(i){
   const cap=esc(i.text||(i.url?(i.title||host(i.url)):''));
@@ -2349,7 +2412,9 @@ function wireHome(){
   const ta=document.getElementById('nhTa'),sv=document.getElementById('nhSave'),go=document.getElementById('nhGo');
   if(!ta)return;
   const grow=()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,Math.round(window.innerHeight*0.44))+'px';};
-  const upd=()=>{const has=ta.value.trim().length>0||nhShots.length>0;sv.disabled=!has;go.disabled=!has;grow();};
+  const upd=()=>{const ti=document.getElementById('nhTitle');
+    const has=ta.value.trim().length>0||nhShots.length>0||(ti&&ti.value.trim().length>0);
+    sv.disabled=!has;go.disabled=!has;grow();};
   nhUpd=upd;
   ta.addEventListener('input',upd);
   ta.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();if(!sv.disabled)sv.click();}});
@@ -2367,15 +2432,69 @@ function wireHome(){
     const fs=e.dataTransfer&&e.dataTransfer.files?[...e.dataTransfer.files].filter(f=>f.type&&f.type.indexOf('image')===0):[];
     if(!fs.length)return;e.preventDefault();await nhAddShots(fs);
   });
-  sv.addEventListener('click',()=>{const t=ta.value.trim();if(!t&&!nhShots.length)return;homeQuickSave(t);ta.value='';nhShots=[];nhRenderShots();upd();ta.focus();
+  const ti=document.getElementById('nhTitle');
+  /* ✍️ 초안 복원 — 워크스페이스 갔다 와도 쓰던 글 그대로 */
+  const dft=nhReadDraft();
+  if(dft){
+    if(ti&&dft.title)ti.value=dft.title;
+    if(dft.text)ta.value=dft.text;
+    if(Array.isArray(dft.shots)&&dft.shots.length){nhShots=dft.shots.slice();}
+    if(dft.cat)nhCat=dft.cat;
+  }
+  if(ti)ti.addEventListener('input',()=>{upd();nhSaveDraft()});
+  if(ti)ti.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();ta.focus();}});   // 제목 → 본문
+  ta.addEventListener('input',nhSaveDraft);
+  sv.addEventListener('click',()=>{const t=ta.value.trim();const tt=ti?ti.value.trim():'';
+    if(!t&&!nhShots.length&&!tt)return;
+    homeQuickSave(t,tt);nhClearDraft(true);ta.value='';if(ti)ti.value='';nhShots=[];nhCat='';nhRenderShots();upd();ta.focus();
     ritualFx(homeMode==='diary');                                   // 저장 리추얼
     const c=document.getElementById('nhCont');                       // 담긴 뒤에야 「이어서」 등장
     if(c) setTimeout(()=>c.classList.add('show'),620);});
-  go.addEventListener('click',()=>{const t=ta.value.trim();if(!t&&!nhShots.length)return;homeGoWrite(t);});
+  go.addEventListener('click',()=>{const t=ta.value.trim();const tt=ti?ti.value.trim():'';
+    if(!t&&!nhShots.length&&!tt)return;nhClearDraft(true);homeGoWrite(t,tt);});
+  /* ↩ 방금 비운 글 되돌리기 (실수로 날렸을 때) */
+  const und=document.getElementById('nhUndo');
+  if(und){ let hasPrev=false; try{hasPrev=!!localStorage.getItem(NH_PREV)}catch(e){}
+    und.classList.toggle('show', hasPrev && !ta.value.trim() && !(ti&&ti.value.trim())); }
+  if(und)und.onclick=()=>{
+    let p=null; try{p=JSON.parse(localStorage.getItem(NH_PREV)||'null')}catch(e){}
+    if(!p){toast('되돌릴 글이 없어요');return}
+    if(ti)ti.value=p.title||''; ta.value=p.text||'';
+    nhShots=Array.isArray(p.shots)?p.shots.slice():[]; nhCat=p.cat||'';
+    nhRenderShots(); upd(); nhSaveDraft(); ta.focus();
+    try{localStorage.removeItem(NH_PREV)}catch(e){}
+    toast('↩ 되돌렸어요');
+  };
   nhRenderShots();
+  /* ▾ 하단 펼침: 유형 고르기 + 실행 모음 / 전자책 미분류로 보내기 */
+  const box=document.querySelector('.nh-box'), pull=document.getElementById('nhPull');
+  if(pull&&box)pull.onclick=()=>{box.classList.toggle('sendopen');ebBuzz(5)};
+  document.querySelectorAll('[data-nhcat]').forEach(b=>b.onclick=()=>{
+    nhCat=(nhCat===b.dataset.nhcat)?'':b.dataset.nhcat;
+    document.querySelectorAll('[data-nhcat]').forEach(x=>x.classList.toggle('on',x.dataset.nhcat===nhCat));
+    ebBuzz(5);});
+  const sendTo=(btn,tag,msg)=>{
+    if(!btn)return;
+    btn.onclick=()=>{
+      const t=ta.value.trim(), tt=ti?ti.value.trim():'';
+      if(!t&&!nhShots.length&&!tt){toast('내용을 먼저 써주세요');return}
+      btn.classList.add('filed');
+      setTimeout(()=>{
+        homeQuickSave(t,tt,[tag]); nhClearDraft(true);
+        ta.value='';if(ti)ti.value='';nhShots=[];nhRenderShots();
+        nhCat='';if(box)box.classList.remove('sendopen');
+        upd();toast(msg);render();
+      },380);
+    };
+  };
+  sendTo(document.getElementById('nhRun'),'__run','🏃 담고 · 실행 모음으로 보냈어요');
+  sendTo(document.getElementById('nhEbox'),'__ebox','📥 담고 · 전자책 미분류로 보냈어요');
   // 전구 토글: 쓰던 글 유지한 채 모드 전환
   const setMode=m=>{ if(homeMode===m)return; homeMode=m; try{localStorage.setItem('idf_homemode',m)}catch(e){}
-    const keep=ta.value; render(); const ta2=document.getElementById('nhTa'); if(ta2){ta2.value=keep;ta2.dispatchEvent(new Event('input'));ta2.focus();} ebBuzz(5); };
+    const keep=ta.value, keepT=ti?ti.value:''; render();
+    const ta2=document.getElementById('nhTa'), ti2=document.getElementById('nhTitle');
+    if(ti2)ti2.value=keepT;
+    if(ta2){ta2.value=keep;ta2.dispatchEvent(new Event('input'));ta2.focus();} ebBuzz(5); };
   const mi=document.getElementById('nhModeIdea'),md=document.getElementById('nhModeDiary');
   if(mi)mi.onclick=()=>setMode('idea');
   if(md)md.onclick=()=>setMode('diary');
@@ -2400,9 +2519,44 @@ async function nhAddShots(files){
   toast(urls.length>1?('사진 '+urls.length+'장 담았어요 ✓'):'사진 담았어요 ✓');
 }
 function nhShotsHtml(){return nhShots.map(u=>ebFigHtml(u)).join('')}
-function homeMakeThought(t,diary){return {id:uid(),ws:'think',type:'journal',diary:!!diary,title:'',text:(t?esc(t).replace(/\n/g,'<br>'):'')+nhShotsHtml(),memo:'',ts:Date.now(),fav:false,uses:0,tags:[]};}
-function homeQuickSave(t){const it=homeMakeThought(t,homeMode==='diary');store.items.unshift(it);save();ebBuzz(6);}
-function homeGoWrite(t){const it=homeMakeThought(t,homeMode==='diary');nhShots=[];store.items.unshift(it);save();activeWs='think';thinkRoom=(it.diary?'diary':'idea');try{localStorage.setItem('idf_thinkroom',thinkRoom)}catch(e){}thinkEdit(it.id);}
+let nhCat='';   // 홈에서 고른 유형 (내 생각 카테고리 id)
+/* ═══════════ ✍️ 홈 초안 보호 — 워크스페이스 오가도 절대 안 날아가게 ═══════════ */
+const NH_DRAFT='idf_homedraft', NH_PREV='idf_homedraft_prev';
+let nhDraftTmr=null;
+function nhReadDraft(){try{return JSON.parse(localStorage.getItem(NH_DRAFT)||'null')}catch(e){return null}}
+function nhWriteDraft(d){try{d?localStorage.setItem(NH_DRAFT,JSON.stringify(d)):localStorage.removeItem(NH_DRAFT)}catch(e){}}
+function nhSnapshot(){
+  const ti=document.getElementById('nhTitle'), ta=document.getElementById('nhTa');
+  if(!ta)return null;
+  const t=ta.value||'', tt=ti?(ti.value||''):'';
+  if(!t.trim()&&!tt.trim()&&!nhShots.length)return null;
+  return {title:tt,text:t,shots:nhShots.slice(),mode:homeMode,cat:nhCat,ts:Date.now()};
+}
+function nhSaveDraft(){ clearTimeout(nhDraftTmr);
+  nhDraftTmr=setTimeout(()=>{ nhWriteDraft(nhSnapshot()); },250); }
+function nhClearDraft(stash,live){
+  clearTimeout(nhDraftTmr);                       // 대기 중인 저장 취소(오래된 값 덮어쓰기 방지)
+  const cur=live||nhSnapshot()||nhReadDraft();    // ⚠️ 반드시 «지금 화면의 값»을 되돌리기용으로
+  if(stash&&cur){try{localStorage.setItem(NH_PREV,JSON.stringify(cur))}catch(e){}}
+  nhWriteDraft(null);
+}
+/* 홈을 떠날 때: 100자 넘는 긴 글은 저장 안 눌러도 «미분류»에 자동 보관 */
+function nhBeforeLeave(){
+  const d=nhSnapshot(); if(!d)return;
+  const len=(d.text||'').replace(/\s/g,'').length+(d.title||'').replace(/\s/g,'').length;
+  if(len>=100){
+    const it=homeMakeThought(d.text,d.mode==='diary',d.title,['__auto']);
+    it.group=d.mode==='diary'?'':(d.cat||'');
+    store.items.unshift(it); save();
+    nhClearDraft(true,d); nhShots=[]; nhCat='';
+    toast('📌 긴 글이라 자동 보관했어요 · 목록에서 이어 쓰세요');
+  } else { nhWriteDraft(d); }   // 짧으면 초안으로 그대로 보존
+}
+function homeMakeThought(t,diary,title,extraTags){return {id:uid(),ws:'think',type:'journal',diary:!!diary,
+  title:(title||'').trim(),text:(t?esc(t).replace(/\n/g,'<br>'):'')+nhShotsHtml(),memo:'',
+  group:(diary?'':nhCat)||'',ts:Date.now(),fav:false,uses:0,tags:(extraTags||[]).slice()};}
+function homeQuickSave(t,title,extraTags){const it=homeMakeThought(t,homeMode==='diary',title,extraTags);store.items.unshift(it);save();ebBuzz(6);return it;}
+function homeGoWrite(t,title){const it=homeMakeThought(t,homeMode==='diary',title);nhShots=[];store.items.unshift(it);save();activeWs='think';thinkRoom=(it.diary?'diary':'idea');try{localStorage.setItem('idf_thinkroom',thinkRoom)}catch(e){}thinkEdit(it.id);}
 
 /* ═══════════ 왼쪽 목록 서랍 (list drawer) ═══════════ */
 let lcWsCur='think', lcCollapsed={};
@@ -2503,12 +2657,27 @@ function render(){
         <div class="nh-stage"><div class="nh-emblem"><img class="nh-ic" src="${HOME_ICON}" alt=""><div class="nh-reflect"></div></div></div>
         <div class="nh-writewrap">
           <div class="nh-box">
+            <input class="nh-title" id="nhTitle" placeholder="제목 — 비우면 첫 줄이 제목">
             <textarea class="nh-ta" id="nhTa" rows="1" placeholder="${dj?'지금 마음에 걸리는 것을 그냥 흘려보내듯 적어보세요…':'지금 떠오른 생각을 툭 적어보세요…'}"></textarea>
             <div class="nh-shots" id="nhShots"></div>
             <div class="nh-bar">
               <button class="nh-save" id="nhSave" disabled aria-label="저장">
                 <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg></button>
             </div>
+            <div class="nh-pull" id="nhPull"><span class="pc">▾</span><span class="pt">유형 · 보내기</span></div>
+            <button class="nh-undo" id="nhUndo" title="방금 비운 글 되돌리기">↩ 되돌리기</button>
+            <div class="nh-unfold"><div class="nh-ufmask"><div class="nh-ufin">
+              ${dj?'':`<div class="nh-cats" id="nhCats">${tkCats().map(c=>`<button class="nh-cat" data-nhcat="${c.id}" style="color:${c.color}"><i></i>${esc(c.nm)}</button>`).join('')}</div>`}
+              <div class="nh-sendrow">
+                <span class="sl">${dj?'이 글을 어디로 보낼까요':'유형 고르고 · 어디로 보낼까요'}</span>
+                <button class="nh-sb" id="nhRun" aria-label="실행 모음으로 보내기">
+                  <span class="nh-tip">🏃 실행 모음으로</span>
+                  <span class="cc-orbit"></span><span class="cc-ripple"></span>${RUNNER_SVG}</button>
+                <button class="nh-sb ebox" id="nhEbox" aria-label="전자책 미분류로 보내기">
+                  <span class="nh-tip">전자책 미분류로</span>
+                  <span class="cc-orbit"></span><span class="cc-ripple"></span>${BOOK_SVG}</button>
+              </div>
+            </div></div></div>
           </div>
           <div class="nh-moderow">
             <button class="nh-mode idea${dj?'':' on'}" id="nhModeIdea">${bulb}<span>아이디어</span></button>
@@ -2960,6 +3129,7 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
       ${s.guide?`<div class="eb-guide" id="ebGuide"><button class="eb-gx" onclick="document.getElementById('ebGuide').remove()">✕</button><div class="eb-gh">💬 이 꼭지엔 이런 걸 써보세요</div><div class="eb-gq">${esc(s.guide)}</div></div>`:''}
       ${ebMatsHtml(b,c,s)}
+      ${ebInboxHtml()}
       <div class="eb-edbody" id="ebEdBody" contenteditable="true" spellcheck="false" data-ph="여기에 편하게 써 내려가세요. 🎤로 말하면 글이 되고, / 를 누르면 블록 메뉴가 떠요. 오늘은 이 한 꼭지만 ✍️">${s.html||''}</div>
       <div class="eb-edtip">💡 ${ebTip()}</div>
       <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>
@@ -3082,6 +3252,7 @@ function ebMoreMenu(e){
   const m=document.createElement('div');m.className='eb-moremenu';m.id='ebMoreMenu';
   m.innerHTML='<button onclick="ebMoreClose();ebViewSettings()">🅰 배경·글자·글꼴</button>'
     +(isBook&&s?`<button id="ebDoneBtn" onclick="ebToggleDone();ebMoreClose()">${s.status==='done'?'✓ 완성됨':'✓ 완성 표시'}</button>`:'')
+    +(!isBook?'<button onclick="ebMoreClose();thinkSendToEbox()">📥 전자책 미분류로 보내기</button>':'')
     +(!isBook?'<button onclick="ebMoreClose();thinkSendToBook()">📖 전자책 꼭지로 승격</button>':'')
     +(!isBook?'<button onclick="ebMoreClose();thinkSendToIdea()">💡 아이디어(콘텐츠)로 승격</button>':'')
     +'<button onclick="ebMoreClose();ebHistOpen()">🕐 되돌리기</button>';
@@ -3329,7 +3500,7 @@ function ideaRailHtml(items,groups){
       <span class="irn">${n===null?'':n}</span>
       ${fixed?'':`<button class="irm" data-irm="${esc(seg)}" aria-label="이 칸 지우기">−</button>`}
     </div>`;
-  const runN=items.filter(i=>isRun(i)).length;
+  const runN=runItems().length;
   let h=`<div class="ir-rail${ideaRailEditing?' editing':''}" id="ideaRail">`;
   h+=row('home','#BCDE55','담기',null,true);
   h+=row('run','#C8FF00','🏃 실행 모음',runN,true);
@@ -3355,7 +3526,7 @@ function ideaHeadHtml(items){
     gal:['갤러리','#B49DD0',items.filter(i=>i.img).length+'장'],rec:['기록','#8FC7B8',''],
     '유형 미지정':['미분류','#7d8177','']};
   let nm,col,sub;
-  if(seg==='run'){const n=items.filter(isRun).length;nm='🏃 실행 모음';col='#C8FF00';sub=n?n+'개 대기':'비어 있음';}
+  if(seg==='run'){const n=runItems().length;nm='🏃 실행 모음';col='#C8FF00';sub=n?n+'개 대기':'비어 있음';}
   else if(LB[seg]){[nm,col,sub]=LB[seg];}
   else{nm=seg;col=ideaGroupColor(seg);const n=items.filter(i=>(i.group||'유형 미지정')===seg).length;sub=n?n+'개':'비어 있음';}
   if(seg==='유형 미지정'){const n=items.filter(i=>!i.group||i.group==='유형 미지정').length;sub=n?n+'개':'비어 있음';}
@@ -3439,9 +3610,15 @@ function ideaGroupHtml(g,items){
     <div class="wgrid">${gi.map(cardHtml).join('')}${(g==='유형 미지정'&&!favOnly)?addCard('idea',g):''}</div></div>`;
 }
 function runCardHtml(i){
-  const cc=ideaGroupColor(i.group);
-  const cap=esc(((i.text||i.title||(i.url?host(i.url):''))||'(내용 없음)')).slice(0,100);
-  const catTag=(i.group&&i.group!=='유형 미지정')?`<span class="rc-cat" style="background:${cc}22;color:${cc}">${esc(i.group)}</span>`:'';
+  const isTh=i.ws==='think';
+  const tc=isTh?tkCat(i.group):null;
+  const cc=isTh?((tc&&tc.color)||'#7d8177'):ideaGroupColor(i.group);
+  const gname=isTh?((tc&&tc.nm)||''):((i.group&&i.group!=='유형 미지정')?i.group:'');
+  const raw=isTh?((i.title||'').trim()||ebPlainText(i.text||''))
+                :((i.text||i.title||(i.url?host(i.url):'')));
+  const cap=esc(((raw||'').replace(/\s+/g,' ').trim()||'(내용 없음)')).slice(0,100);
+  const catTag=gname?`<span class="rc-cat" style="background:${cc}22;color:${cc}">${esc(gname)}</span>`
+    :(isTh?`<span class="rc-cat" style="background:#7d817722;color:#9a9a94">💭 내 생각</span>`:'');
   return `<div class="run-card" data-id="${i.id}">
     <button class="run-cancel" data-cancelrun="${i.id}" aria-label="실행 모음에서 빼기">✕</button>
     ${catTag}
@@ -3458,8 +3635,8 @@ function ideaSegBodyHtml(items,groups){
     return homeCalHtml()+homeInsightsHtml()+homeDayItemsHtml();
   }
   if(seg==='run'){
-    const q=items.filter(isRun).sort(sortFn);
-    const doneN=items.filter(isDone).length, total=q.length+doneN, pct=total?Math.round(doneN/total*100):0;
+    const q=runItems();
+    const doneN=store.items.filter(isDone).length, total=q.length+doneN, pct=total?Math.round(doneN/total*100):0;
     let h=`<div class="run-prog"><div class="rp-top"><span>🎯 실행할 것 ${q.length}</span><span class="rp-done">${doneN}개 실행함</span></div>
       <div class="rp-bar"><i style="width:${pct}%"></i></div>
       <div class="rp-sub">${q.length?'하나씩 실행하고 <b style="color:#C8FF00">✓ 실행 완료</b>를 눌러요. 러너가 달려 나가요 🏃':'대기 중인 게 없어요. 전체보기·유형에서 카드의 🏃 를 눌러 담아보세요.'}</div></div>`;
@@ -3761,6 +3938,52 @@ function ebPushToSec(bid,cid,sid){const b=store.books.find(x=>x.id===bid);const 
 
 /* ═══════ 재료 배정 · 재료 서랍 (콘텐츠 → 책 꼭지) ═══════ */
 function matsForSec(bid,cid,sid){return store.items.filter(i=>i.bookRef&&i.bookRef.bookId===bid&&i.bookRef.cid===cid&&i.bookRef.sid===sid)}
+/* ═══ 📥 전자책 미분류(공용 인박스) — 꼭지 안 정해도 일단 담기 ═══ */
+function isEbox(i){return Array.isArray(i.tags)&&i.tags.includes('__ebox')}
+function eboxItems(){return store.items.filter(isEbox).sort((a,b)=>b.ts-a.ts)}
+function sendToEbox(itemId){
+  const it=store.items.find(x=>x.id===itemId); if(!it)return;
+  if(!Array.isArray(it.tags))it.tags=[];
+  if(it.tags.includes('__ebox')){toast('이미 전자책 미분류에 있어요');return}
+  it.tags.push('__ebox'); save(); ebBuzz(10);
+  toast('📥 전자책 미분류로 보냈어요 · 책 쓸 때 꺼내 쓰세요');
+}
+/* 내 생각 편집기 ⋯ 에서 보내기 */
+function thinkSendToEbox(){
+  if(!curThink)return;
+  const b=document.getElementById('thinkBody'); if(b)curThink.text=b.innerHTML;
+  const t=document.getElementById('thinkTitle'); if(t)curThink.title=(t.textContent||'').trim();
+  if(!ebPlainText(curThink.text||'').trim() && !(curThink.title||'').trim()){toast('내용을 먼저 써주세요');return}
+  save(); sendToEbox(curThink.id);
+}
+/* 꼭지 쓰는 중 — 미분류에서 쇼핑하듯 꺼내 획득 */
+function ebInboxHtml(){
+  const xs=eboxItems(); if(!xs.length)return '';
+  return `<div class="eb-mats eb-inbox"><div class="eb-mh">📥 전자책 미분류 <b>${xs.length}</b><span>탭하면 본문에 넣고 미분류에서 빠져요</span></div>
+    <div class="eb-mrow">${xs.map(i=>{
+      const cap=esc((ebPlainText(i.text||'')||i.memo||'재료').replace(/\s+/g,' ').trim().slice(0,26))||'재료';
+      return `<div class="eb-mcard" onclick="ebUseEbox('${i.id}')">
+        ${i.img?`<span class="eb-mth" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')"></span>`:`<span class="eb-mth txt">${i.ws==='think'?'💭':'📝'}</span>`}
+        <span class="eb-mt">${cap}</span></div>`;}).join('')}</div></div>`;
+}
+function ebUseEbox(id){
+  const it=store.items.find(x=>x.id===id); if(!it)return;
+  const body=document.getElementById('ebEdBody'); if(!body){toast('꼭지를 먼저 열어주세요');return}
+  body.focus();
+  let html='';
+  if(it.img)html+=`<img class="eb-img" src="${(it.img||'').replace(/"/g,'&quot;')}" alt=""/>`;
+  const txt=(it.ws==='think')?ebPlainText(it.text||''):((it.text||'').trim());
+  const memo=(it.memo||'').trim();
+  const src=(it.ws==='think')?'💭 내 생각에서':'💡 아이디어에서';
+  if(txt||memo)html+=`<div class="eb-pulled"><span class="eb-pusrc">${src}</span>${esc(txt||memo).replace(/\n/g,'<br>')}</div>`;
+  html+='<p><br></p>';
+  document.execCommand('insertHTML',false,html);
+  it.tags=(it.tags||[]).filter(t=>t!=='__ebox');            // 획득 = 미분류에서 빠짐
+  if(typeof ebOnEdit==='function')ebOnEdit(); else save();
+  save(); ebBuzz(14);
+  toast('✓ 획득 — 본문에 넣었어요');
+  const inb=document.querySelector('.eb-inbox'); if(inb){const nw=ebInboxHtml(); if(nw)inb.outerHTML=nw; else inb.remove();}
+}
 function matRefLabel(it){
   if(!it.bookRef)return '＋ 꼭지에 배정하기';
   const b=(store.books||[]).find(x=>x.id===it.bookRef.bookId); if(!b)return '＋ 꼭지에 배정하기';
@@ -4542,7 +4765,8 @@ function openDetail(id){
       <span class="d-when">${new Date(i.ts).toLocaleDateString('ko-KR')}</span></div>
     ${media}
     ${i.ws==='idea'?`<div class="d-set"><div class="ds-label">📖 쓸 꼭지 <span style="color:var(--ink-faint);font-weight:400">(그 꼭지 쓸 때 옆에 떠요)</span></div>
-      <button class="ds-book${i.bookRef?' on':''}" onclick="ebAssignMat('${i.id}')">${matRefLabel(i)}</button></div>`:''}
+      <button class="ds-book${i.bookRef?' on':''}" onclick="ebAssignMat('${i.id}')">${matRefLabel(i)}</button>
+      <button class="ds-book ds-ebox${isEbox(i)?' on':''}" onclick="sendToEbox('${i.id}');openDetail('${i.id}')">${isEbox(i)?'📥 전자책 미분류에 있음':'📥 전자책 미분류로 보내기'}</button></div>`:''}
     <div class="d-set"><div class="ds-label">📝 메모</div>
       <textarea id="dMemo" class="d-memoedit" placeholder="메모 추가… (아이디어 카드엔 ＋메모로 펼쳐져요)">${esc(i.memo||'')}</textarea></div>
     ${meta?`<div class="d-meta">${meta}</div>`:''}
@@ -4711,6 +4935,14 @@ function compSave(runFlag){
   const w=WS.find(x=>x.key===cWs);
   toast(runFlag?'🏃 담고 · 실행 모음으로 보냈어요':('담았어요 ✓  ·  '+w.title+'에 저장'));
 }
+
+/* ✍️ 안전망: 앱 닫기·전환·홈버튼 — 쓰던 글 무조건 보존 */
+(function(){
+  const keep=()=>{try{const d=nhSnapshot();if(d)nhWriteDraft(d)}catch(e){}};
+  window.addEventListener('beforeunload',keep);
+  window.addEventListener('pagehide',keep);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)keep()});
+})();
 
 /* ── Search ── */
 const searchEl=document.getElementById('search');
