@@ -5612,6 +5612,8 @@ function toast(msg){const t=document.getElementById('toast');if(!t)return;
     function fb(){ try{ const ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0;top:0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); ta.remove(); ok(); }catch(e){ toast('복사 실패 — 길게 눌러 복사하세요'); } }
   }
 
+/* 🧹 앱 시작(로그인) 땐 홈 메모 빈칸 — 첫 그리기 전에 옛 임시저장 제거 (탭 전환 중 보존은 이후 동작이라 영향 없음) */
+try{ localStorage.removeItem(NH_DRAFT); localStorage.removeItem(NH_PREV); }catch(e){}
 render();
 </script>
 
@@ -6970,6 +6972,9 @@ render();
       addLogoutBtn(); toast('오프라인 — 저장된 내용 표시');
     }
   }
+  /* 🧹 로그인(앱 시작) 땐 홈 메모를 항상 빈칸으로 — 옛 임시저장 딸려오지 않게.
+     (탭 전환 중 글 보존은 로그인 이후 동작이라 영향 없음 · 100자↑ 긴 글은 미분류로 자동보관돼 안 사라짐) */
+  try{ localStorage.removeItem('idf_homedraft'); localStorage.removeItem('idf_homedraft_prev'); }catch(e){}
   const saved=sessRead();
   const _hn=location.hostname, _isPreview=(_hn==='localhost'||_hn==='127.0.0.1'||_hn==='0.0.0.0'||_hn===''||/^192\.168\./.test(_hn)||location.protocol==='file:');
   playIntro(INTRO_VARIANT, ()=>{
