@@ -681,6 +681,7 @@
   .lc-handle:hover{color:var(--lime);background:rgba(38,38,38,.96);width:34px}
   .lc-handle svg{width:18px;height:18px}
   body.lc-open .lc-handle{opacity:0;pointer-events:none}
+  body.hide-lchandle .lc-handle{display:none}   /* 내 목록 서랍은 아이디어 노트·전자책에서만 */
   .lc-scrim{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.2s}
   body.lc-open .lc-scrim{opacity:1;pointer-events:auto}
   .lc-drawer{position:fixed;left:0;top:0;bottom:0;z-index:510;width:300px;max-width:82vw;background:#121212;border-right:1px solid var(--line);transform:translateX(-101%);transition:transform .24s cubic-bezier(.22,.7,.2,1);display:flex;flex-direction:column;box-shadow:14px 0 40px rgba(0,0,0,.5)}
@@ -2022,6 +2023,10 @@
   /* ── 📌 보드 놀이터: 트레이→드래그 꽂기·도장 쾅·자국·꼬치·명판·정리 ── */
   .bd-tray{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
   .bd-trayt{font-size:11.5px;font-weight:800;color:var(--ink-faint)}
+  .bd-addbtn{margin-left:auto;background:rgba(var(--lime-rgb),.12);border:1px solid rgba(var(--lime-rgb),.4);
+    color:var(--lime);border-radius:999px;font-family:inherit;font-size:12px;font-weight:800;padding:7px 15px;cursor:pointer;transition:.15s}
+  .bd-addbtn:hover{background:rgba(var(--lime-rgb),.2)}
+  .bd-addbtn:active{transform:scale(.95)}
   .bd-tcard{position:relative;width:168px;padding:13px 12px 26px;cursor:grab;user-select:none;touch-action:none;
     background:repeating-linear-gradient(#F6F2E6 0 19px,#d9d2bd 19px 20px);color:#28241a;border-radius:3px;
     box-shadow:0 7px 16px rgba(0,0,0,.45);font-size:12px;font-weight:700;line-height:20px;word-break:break-word}
@@ -2363,7 +2368,7 @@ const WS=[
   {key:'home',ic:'🏠',title:'홈',accent:'',desc:'',groups:[]},
   {key:'think',ic:'💭',title:'아이디어 노트',accent:'노트',desc:'떠오른 생각·하루를 자유롭게 적는 일기장. 제목 달아 검색하고 전자책으로 보낼 수 있어요.',groups:[]},
   {key:'book',ic:'📖',title:'전자책',accent:'전자책',desc:'하루 한 꼭지씩. 쓰다 보면 어느덧 한 권이 완성돼요.',groups:[]},
-  {key:'idea',ic:'📌',title:'실행 보드',accent:'실행 보드',desc:'포스트잇·실행 대기·갤러리가 한 판에. 담고, 꽂고, 실행하세요.',
+  {key:'idea',ic:'📌',title:'실행 보드',accent:'실행 보드',desc:'담고, 판에 꽂고, 해내세요. 해낸 자국이 쌓여요.',
     groups:['후킹','정보','전환','문제해결','꿀팁','콘텐츠','강의','사업','이미지 생성','카피','기획','유형 미지정']},
   {key:'osmu',ic:'🎭',title:'선보이기',accent:'선보이기',desc:'전자책 꼭지·내 생각 글을 카드뉴스·릴스·블로그로 자동 재조립.',groups:[]}
 ];
@@ -2873,6 +2878,7 @@ function render(){
   ebWireGlow();
   if(migrateWs()) save();
   document.getElementById('cTotal').textContent=store.items.length;
+  document.body.classList.toggle('hide-lchandle', !(activeWs==='think'||activeWs==='book'));  // 목록 서랍 = 노트·전자책에서만
   renderTabs();
   applySearchVisibility();
   const feed=document.getElementById('feed');
@@ -2954,24 +2960,11 @@ function render(){
 
   // ── 콘텐츠(idea) = 세그먼트 탭(홈=담기폼 / 기록 / 전체보기 / 각 유형 / 갤러리)
   if(w.key==='idea'){
-    // 유효하지 않은 세그(삭제된 유형 등) → 홈
-    const gHas={}; items.forEach(i=>{const g=i.group||'유형 미지정';gHas[g]=1;});
-    const validSeg=groups.includes(ideaSeg)||gHas[ideaSeg];      // 빈 칸도 유효
-    if(!(ideaSeg==='board'||ideaSeg==='home'||ideaSeg==='rec'||ideaSeg==='all'||ideaSeg==='gal'||ideaSeg==='run'||validSeg)) ideaSeg='board';
-    feed.innerHTML=`<div class="ir-lay">${ideaRailHtml(items,groups)}
-      <div class="ir-main">${ideaHeadHtml(items)}<div id="ideaSegBody">${ideaSegBodyHtml(items,groups)}</div></div></div>`;
-    bindSortBar(); bindFeed();
-    if(ideaSeg==='home') initComposer();   // 담기폼이 있을 때만 배선(요소 없으면 터짐)
-    if(ideaSeg==='rec') bindHomeCal();
-    if(ideaSeg==='board') bindBoard();     // 📌 놀이터: 드래그 꽂기·도장·해냄 시트·판 정리
-    const rail=document.getElementById('ideaRail');
-    if(rail){
-      rail.querySelectorAll('[data-rseg]').forEach(el=>el.onclick=e=>{
-        if(e.target.closest('[data-irm]'))return;
-        ideaSetSeg(el.dataset.rseg); window.scrollTo({top:0,behavior:'smooth'});
-      });
-      rail.querySelectorAll('[data-irm]').forEach(b=>b.onclick=e=>{e.stopPropagation();ideaAskDelete(b.dataset.irm)});
-    }
+    // 🗑 유리 레일·유형 분류·전체보기·갤러리·기록 뷰 삭제 (2026-07-26) — 실행 보드 = 코르크 보드 하나
+    // 데이터는 안 지움(클라우드 보존). 구버전 레일은 ideaRenderLegacy로 되돌리기용 보존.
+    ideaSeg='board';
+    feed.innerHTML=`<div class="ir-main" style="max-width:1020px;margin:0 auto">${ideaSegBodyHtml(items,groups)}</div>`;
+    bindFeed(); bindBoard();
     return;
   }
 
@@ -3915,10 +3908,10 @@ function ideaBoardHtml(items){
   const pinnedRuns=runs.filter(i=>i.bdp);
   const photos=ideaAllPhotos().slice(0,6);
   const doneN=doneItems().length;
-  let tray='';
+  let tray=`<div class="bd-tray"><span class="bd-trayt">🏃 실행 대기 ${trayRuns.length?trayRuns.length+' — 잡아서 판에 끌어다 꽂으세요':''}</span>
+      <button class="bd-addbtn" id="bdAdd">＋ 실행할 것</button></div>`;
   if(trayRuns.length){
-    tray=`<div class="bd-tray"><span class="bd-trayt">🏃 실행 대기 ${trayRuns.length} — 잡아서 판에 끌어다 꽂으세요</span></div>
-      <div class="bd-tray" id="bdTray">${trayRuns.map(i=>`<div class="bd-tcard" data-bdt="${i.id}">${bdRunCap(i)}<span class="bd-lb">잡아서 드래그</span></div>`).join('')}</div>`;
+    tray+=`<div class="bd-tray" id="bdTray">${trayRuns.map(i=>`<div class="bd-tcard" data-bdt="${i.id}">${bdRunCap(i)}<span class="bd-lb">잡아서 드래그</span></div>`).join('')}</div>`;
   }
   let stuff='';
   stuff+=pins.map(i=>{
@@ -3946,16 +3939,23 @@ function ideaBoardHtml(items){
   const clean=bd.holes.length?`<button class="bd-cleanbtn${bd.plqN?' shift':''}" id="bdClean">🧹 판 정리</button>`:'';
   if(!stuff&&!pinnedRuns.length&&!bd.holes.length){
     stuff=`<div class="bd-hint"><span class="bd-tack" style="background:#8FAECF"></span>
-      아직 빈 판이에요.<br>· 카드의 <b>📌</b> → 할일 포스트잇으로<br>· 카드의 <b>🏃</b> → 실행 대기로 (위 트레이에서 판으로 드래그)<br>· 글에 사진을 넣으면 폴라로이드로 꽂혀요</div>`;
+      아직 빈 판이에요.<br>· 위 <b>＋ 실행할 것</b>으로 담고 → 판에 끌어다 꽂기<br>· 홈·노트에서 <b>🏃</b>로 보내도 여기로 와요<br>· 글에 사진을 넣으면 폴라로이드로 꽂혀요</div>`;
   }
   return tray+`<div class="bd-board" id="bdBoard" style="min-height:440px;padding-bottom:130px">
     <div class="bd-sub">끌어다 꽂고 · ✓ 해냄 · 자국이 남아요</div>${plaque}${clean}
     <div class="bd-stuff">${stuff}</div>${pinnedHtml}${holesHtml}${spike}</div>`;
 }
+/* ＋ 실행할 것 — 레일 담기 대체 (실행 대기 트레이에 바로 추가) */
+function ideaQuickAdd(){
+  const v=(prompt('실행할 것 한 줄')||'').trim(); if(!v)return;
+  const it={id:uid(),ws:'idea',type:'idea',text:v,group:'',ts:Date.now(),fav:false,uses:0,tags:['__run']};
+  store.items.unshift(it); save(); ebBuzz(8); render(); toast('🏃 실행 대기에 담았어요 — 판에 끌어다 꽂으세요');
+}
 /* 보드 배선 — 드래그 꽂기·도장 쾅·해냄 시트·판 정리 */
 let _bdSlam=null;
 function bindBoard(){
   const board=document.getElementById('bdBoard'); if(!board)return;
+  const addb=document.getElementById('bdAdd'); if(addb)addb.onclick=ideaQuickAdd;
   document.querySelectorAll('[data-bdt]').forEach(c=>{
     c.addEventListener('pointerdown',e=>{
       e.preventDefault();
