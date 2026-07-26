@@ -6452,6 +6452,20 @@ render();
   function roundRect(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y);
     g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r);
     g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+  /* 💡 카드 로고 = 라임 타일 + 벡터 전구 (canvas 이모지가 회색으로 죽는 문제 해결) */
+  function cardBulb(g,x,y,s,tile,ink){
+    g.save();
+    g.fillStyle=tile; roundRect(g,x,y,s,s,Math.round(s*0.27)); g.fill();   // 라임 둥근 타일
+    const cx=x+s/2, cy=y+s*0.42, r=s*0.2;
+    g.strokeStyle=ink; g.fillStyle=ink; g.lineWidth=Math.max(3,s*0.055); g.lineCap='round'; g.lineJoin='round';
+    g.beginPath(); g.arc(cx,cy,r,0,Math.PI*2); g.stroke();                 // 전구 유리
+    g.beginPath();                                                          // 필라멘트 살짝
+    g.moveTo(cx-r*0.4,cy+r*0.15); g.lineTo(cx,cy-r*0.35); g.lineTo(cx+r*0.4,cy+r*0.15); g.stroke();
+    const by=cy+r+s*0.06;                                                   // 나사 밑동 2줄
+    g.beginPath(); g.moveTo(cx-r*0.55,by); g.lineTo(cx+r*0.55,by); g.stroke();
+    g.beginPath(); g.moveTo(cx-r*0.38,by+s*0.07); g.lineTo(cx+r*0.38,by+s*0.07); g.stroke();
+    g.restore();
+  }
 
   /* 눈에 안 띄는 관리자 진입 문양(항상 우상단, 로그인 화면 위에서도 클릭됨) */
   function ensureAdminDot(){
@@ -6651,9 +6665,7 @@ render();
       rg.addColorStop(0,'rgba(200,255,0,.16)'); rg.addColorStop(1,'rgba(200,255,0,0)');
       g.fillStyle=rg; g.fillRect(0,0,W,H);
       g.strokeStyle='rgba(255,255,255,.10)'; g.lineWidth=2; roundRect(g,14,14,W-28,H-28,34); g.stroke();
-      g.fillStyle='rgba(200,255,0,.09)'; roundRect(g,56,52,74,74,20); g.fill();
-      g.strokeStyle='rgba(200,255,0,.55)'; g.lineWidth=2.5; roundRect(g,56,52,74,74,20); g.stroke();
-      g.font='40px '+F; g.textAlign='center'; g.fillText('💡', 93, 103);
+      cardBulb(g,56,52,74,'#C8FF00','#0D0D0D');   // 라임 타일 + 어두운 전구 (이모지 대신 벡터 — 안 죽음)
       g.textAlign='left';
       g.fillStyle='#cfd3c2'; g.font='800 32px '+F; g.fillText('아이디어 폴더', 152, 100);
       const tierTxt = tier==='life'?'LIFETIME':'1 YEAR';
