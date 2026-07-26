@@ -561,10 +561,29 @@
   .cal-star{position:absolute;top:3px;left:4px;font-size:9px;line-height:1;color:#ffd24a;
     text-shadow:0 0 6px rgba(255,210,74,.7);pointer-events:none}
   .cal-cell.sel .cal-star{color:#0D0D0D;text-shadow:none}
-  /* ── 🖍 형광 강조 (A: 글자 + 옅은 배경) ── */
-  mark.eb-hl{transition:.2s;border-radius:4px;padding:1px 4px;margin:0 -1px}
-  mark.eb-hl.lime{color:var(--lime);background:rgba(var(--lime-rgb),.15)}
-  mark.eb-hl.amber{color:#E0B27A;background:rgba(224,178,122,.15)}
+  /* ── 🖍 형광 강조 6색 (배경) + 글자색 6색 ── */
+  mark.eb-hl{transition:.2s;border-radius:4px;padding:1px 4px;margin:0 -1px;color:inherit}
+  mark.eb-hl.lime{background:rgba(var(--lime-rgb),.20)}
+  mark.eb-hl.amber{background:rgba(224,178,122,.24)}
+  mark.eb-hl.rose{background:rgba(219,138,160,.26)}
+  mark.eb-hl.blue{background:rgba(143,174,207,.26)}
+  mark.eb-hl.violet{background:rgba(180,157,208,.28)}
+  mark.eb-hl.mint{background:rgba(127,200,169,.26)}
+  .eb-tc{font-weight:700}
+  .eb-tc.lime{color:var(--lime)} .eb-tc.amber{color:#E0B27A} .eb-tc.rose{color:#E58AA0}
+  .eb-tc.blue{color:#8FAECF} .eb-tc.violet{color:#B49DD0} .eb-tc.mint{color:#7FC8A9}
+  /* 색 팔레트 팝오버 (툴바) */
+  .tk-pal{display:none;gap:8px;padding:9px 11px;background:#1c1c15;border:1px solid var(--line);
+    border-radius:12px;margin:6px 12px 0;flex-wrap:wrap;align-items:center}
+  .tk-pal.on{display:flex}
+  .tk-pal .pl{font-size:10px;color:var(--ink-dim);font-weight:700;width:100%}
+  .tk-pal .sw{width:28px;height:28px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:.12s}
+  .tk-pal .sw.on{border-color:#fff}
+  .tk-pal .sw.tc{display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;background:#0f0f0a}
+  .tk-fmtbar .tk-sw{width:11px;height:11px;border-radius:3px;margin-left:5px;border:1px solid rgba(255,255,255,.25);display:inline-block;vertical-align:middle}
+  .tk-fmtbar .tk-cvt{padding:8px 6px!important;font-size:9px;color:var(--ink-dim);margin-left:-4px}
+  .eb-edbody pre,.tk-inner pre{background:#111109;border:1px solid var(--line);border-radius:8px;padding:11px 13px;
+    font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:13.5px;line-height:1.6;overflow-x:auto;white-space:pre-wrap;color:#cfd3c2;margin:12px 0}
   .eb-selbar .sb-hl{font-size:15px;line-height:1}
   /* ── 저장 버튼 = 편집기 오른쪽 상단 ── */
   .eb-edtop .eb-savetop{background:rgba(var(--lime-rgb),.14);border:1px solid rgba(var(--lime-rgb),.45);
@@ -1591,6 +1610,14 @@
   .tk-fmtbar .tk-fmtdiv{flex:0 0 auto;width:1px;background:var(--line);margin:4px 3px;align-self:stretch}
   .tk-ed.diary .tk-fmtbar button:hover{border-color:rgba(224,178,122,.45);color:#E0B27A}
   .tk-ed.diary .tk-fmtbar button.hl{color:#E0B27A}
+  /* A안: 🎤 음성 · 🖼 사진을 툴바 오른쪽 그룹으로 (편집툴 옆) */
+  .tk-fmtbar .tk-msp{flex:1 1 8px;min-width:6px}                 /* 서식과 미디어를 밀어내는 스페이서 */
+  .tk-fmtbar button.tk-mbtn{color:var(--lime);border-color:rgba(var(--lime-rgb),.34);background:rgba(var(--lime-rgb),.08);gap:4px;font-size:12px;padding:7px 11px}
+  .tk-fmtbar button.tk-mbtn:hover{color:var(--lime);border-color:rgba(var(--lime-rgb),.55);background:rgba(var(--lime-rgb),.16)}
+  .tk-ed.diary .tk-fmtbar button.tk-mbtn{color:#E0B27A;border-color:rgba(224,178,122,.34);background:rgba(224,178,122,.09)}
+  .tk-ed.diary .tk-fmtbar button.tk-mbtn:hover{color:#E0B27A;border-color:rgba(224,178,122,.55);background:rgba(224,178,122,.17)}
+  /* 전자책도 툴바가 붙으면 헤더 밑줄 제거(한 판처럼) */
+  .eb-editor:has(.tk-fmtbar) .eb-edtop{border-bottom:0;padding-bottom:8px}
 
   /* ── 하단 바: 🎤 · 🖼 ─── 자수 ─── 저장 ── */
   .eb-editor.tk-ed .eb-edstatus{justify-content:flex-start;flex-wrap:nowrap;gap:7px;padding-top:9px;padding-bottom:calc(9px + env(safe-area-inset-bottom))}
@@ -1712,14 +1739,18 @@
   .tk-card.open .tk-chev,.tk-hero.open .tk-chev{transform:rotate(180deg)}
   .tk-peek{max-height:0;opacity:0;overflow:hidden;
     transition:max-height .32s cubic-bezier(.3,.9,.3,1),opacity .22s,margin .32s}
-  .tk-card.open .tk-peek,.tk-hero.open .tk-peek{max-height:400px;opacity:1;margin-top:13px;overflow-y:auto}
+  .tk-card.open .tk-peek,.tk-hero.open .tk-peek{max-height:440px;opacity:1;margin-top:13px}
   .tk-card.open,.tk-hero.open{border-color:rgba(var(--acc-rgb),.45)}
+  /* 본문만 스크롤 · 「수정하기」 버튼은 스크롤 밖(항상 보임) */
+  .tk-peek .pk-scroll{max-height:330px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .tk-peek .pk-scroll::-webkit-scrollbar{width:0}
   .tk-peek .pk-img{width:100%;max-height:190px;object-fit:cover;border-radius:12px;margin-bottom:11px;display:block}
   .tk-peek .pk-txt{font-size:13.5px;line-height:1.82;color:#d0d1c9;word-break:break-word}
   .tk-peek .pk-txt mark,.tk-peek .pk-txt .eb-hl{background:rgba(var(--acc-rgb),.18);color:var(--acc);border-radius:3px;padding:0 3px}
-  .tk-peek .pk-open{margin-top:13px;width:100%;border:0;border-radius:12px;background:rgba(var(--acc-rgb),.14);
-    color:var(--acc);font-family:inherit;font-size:13.5px;font-weight:800;padding:12px;cursor:pointer;transition:.16s}
-  .tk-peek .pk-open:hover{background:rgba(var(--acc-rgb),.22)}
+  .tk-peek .pk-open{margin-top:12px;width:100%;border:0;border-radius:12px;background:rgba(var(--acc-rgb),.16);
+    color:var(--acc);font-family:inherit;font-size:13.5px;font-weight:800;padding:12px;cursor:pointer;transition:.16s;
+    display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:inset 0 0 0 1px rgba(var(--acc-rgb),.3)}
+  .tk-peek .pk-open:hover{background:rgba(var(--acc-rgb),.24)}
   .tk-card.w3 .tk-card-t,.tk-card.w2 .tk-card-t{padding-right:34px}   /* 셰브론 자리 */
 
   /* ═══ 편집기 제목 헤어라인 + 형광 모드 ═══ */
@@ -2220,6 +2251,10 @@
     .eb-editor{inset:auto;top:0;bottom:0;left:calc(50% - var(--colw)/2);width:var(--colw);
       border-left:1px solid #242424;border-right:1px solid #242424;
       box-shadow:0 0 90px rgba(0,0,0,.85)}
+    /* 하단바·＋버튼도 기둥(680px) 안에만 — 전체 너비로 퍼져 흩어지던 것 교정 */
+    .eb-edstatus{left:calc(50% - var(--colw)/2);right:auto;width:var(--colw)}
+    .eb-plus{right:calc(50% - var(--colw)/2 + 18px)}
+    .tk-toolwrap{right:calc(50% - var(--colw)/2 + 16px)}
     .eb-sheetc{max-width:var(--colw)}
     .lc-handle{left:calc(50% - var(--colw)/2 - 30px);border-radius:17px 0 0 17px;border:1px solid var(--line);border-right:none;box-shadow:-3px 0 12px rgba(0,0,0,.4)}
     .lc-handle:hover{width:34px;left:calc(50% - var(--colw)/2 - 34px)}
@@ -3107,6 +3142,11 @@ function ebToggleChap(i){
 }
 let edPref=(function(){try{return Object.assign({bg:'dark',fs:17,fam:'sans'},JSON.parse(localStorage.getItem('idf_edpref')||'{}'))}catch(e){return{bg:'dark',fs:17,fam:'sans'}}})();
 let ebActiveBody=null, ebOnEdit=function(){}, ebActiveId=null;   // 공유 에디터 엔진(전자책·내생각 공용)
+let ebHlColor='lime', ebTxColor='lime';   // 🖍 형광·글자색 현재 선택 (6색)
+const EB_HL_COLORS=[['라임','lime'],['앰버','amber'],['로즈','rose'],['블루','blue'],['바이올렛','violet'],['민트','mint']];
+/* 지금 선택이 들어있는 편집 영역 (제목·본문 어디든 부분 형광 가능) */
+function ebSelEditable(){const sel=window.getSelection();if(!sel.rangeCount)return ebActiveBody;
+  let n=sel.anchorNode;while(n){if(n.nodeType===1&&n.getAttribute&&n.getAttribute('contenteditable')==='true')return n;n=n.parentNode;}return ebActiveBody;}
 let curThink=null;                               // 내 생각 편집중 항목
 
 function ebProgress(b){let tot=0,done=0;b.chapters.forEach(c=>c.secs.forEach(s=>{tot++;if(s.status==='done')done++}));return{tot,done,pct:tot?Math.round(done/tot*100):0}}
@@ -3454,6 +3494,26 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <button class="eb-focusbtn hero" id="ebFocusBtn" onclick="ebFocBtn()">🎯 몰입</button>
       <button class="eb-savetop" id="ebSaveBtn" onclick="ebSaveNow()">💾 저장</button>
       <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
+    <div class="tk-fmtbar" id="tkFmtBar">
+      <button onmousedown="ebFp(event)" onclick="ebFmt('h2')" title="제목">제목</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')" title="굵게"><b>굵게</b></button>
+      <span class="tk-fmtdiv"></span>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('list')" title="목록">• 목록</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('numlist')" title="번호 목록">1. 번호</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')" title="인용">❝</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')" title="강조 박스">💡</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('code')" title="코드·고정폭">‹›</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('divider')" title="구분선">—</button>
+      <span class="tk-fmtdiv"></span>
+      <button class="hl" onmousedown="ebFp(event)" onclick="ebHl()" title="형광 — 드래그 후 누르면 칠 · 색은 ▾">🖍<span class="tk-sw" id="tkHlSw" style="background:rgba(200,255,0,.4)"></span></button>
+      <button class="tk-cvt" onmousedown="ebFp(event)" onclick="ebOpenPal('hl')" title="형광 색 고르기" aria-label="형광 색">▾</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('textcolor')" title="글자색 — 드래그 후 누르면 색 · 색은 ▾"><span style="color:#C8FF00;font-weight:900">A</span><span class="tk-sw" id="tkTxSw" style="background:#C8FF00"></span></button>
+      <button class="tk-cvt" onmousedown="ebFp(event)" onclick="ebOpenPal('tc')" title="글자색 고르기" aria-label="글자색">▾</button>
+      <span class="tk-msp"></span>
+      <button class="tk-mbtn eb-mic" id="ebMicBtn" onclick="ebToggleMic()" title="음성 입력">🎤 음성</button>
+      <button class="tk-mbtn" onclick="ebPickImg()" title="사진 넣기">🖼 사진</button>
+    </div>
+    <div class="tk-pal" id="tkPal"></div>
     <div class="eb-edscroll"><div class="eb-edinner">
       <div class="eb-edchap">${esc(c.title)}</div>
       <textarea class="eb-edtitle" id="ebEdTitle" rows="1" placeholder="꼭지 제목">${esc(s.title)}</textarea>
@@ -3465,7 +3525,6 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
       <div class="eb-navsec">${prv?`<button onclick="ebGoSec('${prv.c.id}','${prv.s.id}')">‹ 이전 꼭지</button>`:'<span></span>'}<button class="eb-navtoc" onclick="ebCloseEdit()">☰ 목차</button>${nxt?`<button onclick="ebGoSec('${nxt.c.id}','${nxt.s.id}')">다음 꼭지 ›</button>`:'<span></span>'}</div></div></div>
     <button class="eb-plus" onclick="ebInsSheet()" aria-label="넣기">＋</button>
     <div class="eb-edstatus">
-      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
       <span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></div>`;
   document.body.appendChild(w);
   const body=document.getElementById('ebEdBody'),title=document.getElementById('ebEdTitle');
@@ -4377,10 +4436,13 @@ function ebFmt(kind){const body=ebActiveBody;if(!body)return;ebUndoSnap(body,tru
   if(kind==='bold')document.execCommand('bold');
   else if(kind==='h2')document.execCommand('formatBlock',false,'h2');
   else if(kind==='list')document.execCommand('insertUnorderedList');
+  else if(kind==='numlist')document.execCommand('insertOrderedList');
+  else if(kind==='code')document.execCommand('formatBlock',false,'pre');
   else if(kind==='quote')ebInsert('<blockquote>인용할 문장을 여기에…</blockquote>');
   else if(kind==='callout')ebInsert('<div class="eb-callout">💡 강조하고 싶은 핵심 메시지</div>');
   else if(kind==='divider')ebInsert('<hr class="eb-divider">');
   else if(kind==='hl'){ebHl();return}
+  else if(kind==='textcolor'){ebTextColor();return}
   ebOnEdit()}
 /* ── 🖍 형광 강조: 라임 → 앰버 → 해제 (여러 문단 걸쳐도 글 안 깨짐) ── */
 function ebHlAt(n,body){while(n&&n!==body){if(n.nodeType===1&&n.classList&&n.classList.contains('eb-hl'))return n;n=n.parentNode}return null}
@@ -4392,26 +4454,26 @@ function ebHlFragHtml(range){
   while(n=w.nextNode()){if(n.nodeValue.replace(/\s/g,''))list.push(n)}
   list.forEach(tn=>{
     if(tn.parentNode.closest&&tn.parentNode.closest('mark.eb-hl'))return;   // 이미 칠해진 부분은 그대로
-    const mk=document.createElement('mark'); mk.className='eb-hl lime';
+    const mk=document.createElement('mark'); mk.className='eb-hl '+ebHlColor;
     tn.parentNode.insertBefore(mk,tn); mk.appendChild(tn);
   });
   return list.length?div.innerHTML:'';
 }
 /* ⚠️ 모든 변형을 execCommand로 — 브라우저 undo 스택에 남아 Ctrl+Z로 되돌아간다 */
 function ebHl(){
-  const body=ebActiveBody; if(!body)return;
-  ebUndoSnap(body,true);                       // 칠하기 전 상태를 스냅 → Ctrl+Z 한 방에 복귀
+  const body=ebSelEditable()||ebActiveBody; if(!body)return;   // 제목·본문 어디든
+  if(ebActiveBody)ebUndoSnap(ebActiveBody,true);               // 칠하기 전 상태 스냅 → Ctrl+Z
   const sel=window.getSelection(); if(!sel.rangeCount)return;
   const hit=ebHlAt(sel.anchorNode,body);
-  if(hit){                                    // 이미 칠해진 곳 → 순환 (라임→앰버→해제)
+  if(hit){                                    // 이미 칠해진 곳 → 같은 색이면 해제, 다른 색이면 그 색으로
     const r=document.createRange(); r.selectNode(hit);
     body.focus(); sel.removeAllRanges(); sel.addRange(r);
-    if(hit.classList.contains('lime')){
-      document.execCommand('insertHTML',false,'<mark class="eb-hl amber">'+hit.innerHTML+'</mark>');
-      toast('앰버로 바꿨어요');
-    }else{
-      document.execCommand('insertHTML',false,hit.innerHTML);
+    if(hit.classList.contains(ebHlColor)){
+      document.execCommand('insertHTML',false,hit.innerHTML);   // 같은 색 다시 → 해제
       toast('형광 해제');
+    }else{
+      document.execCommand('insertHTML',false,'<mark class="eb-hl '+ebHlColor+'">'+hit.innerHTML+'</mark>');
+      toast('형광 바꿨어요');
     }
     sel.removeAllRanges(); ebBuzz(6); ebOnEdit(); return;
   }
@@ -4424,6 +4486,42 @@ function ebHl(){
   sel.removeAllRanges(); ebBuzz(6); ebOnEdit();
   toast('형광 ✓');
 }
+/* A 글자색 — 선택 텍스트만 색 (형광=배경, 글자색=단어 강조) */
+function ebTextColor(){
+  const body=ebSelEditable()||ebActiveBody; if(!body)return;
+  const sel=window.getSelection(); if(!sel.rangeCount||sel.isCollapsed){toast('글자를 드래그한 뒤 눌러주세요');return;}
+  if(ebActiveBody)ebUndoSnap(ebActiveBody,true);
+  const div=document.createElement('div'); div.appendChild(sel.getRangeAt(0).cloneContents());
+  const w=document.createTreeWalker(div,NodeFilter.SHOW_TEXT,null); const list=[]; let n;
+  while(n=w.nextNode()){if(n.nodeValue.replace(/\s/g,''))list.push(n)}
+  list.forEach(tn=>{if(tn.parentNode.closest&&tn.parentNode.closest('.eb-tc'))return;
+    const sp=document.createElement('span'); sp.className='eb-tc '+ebTxColor;
+    tn.parentNode.insertBefore(sp,tn); sp.appendChild(tn);});
+  if(!list.length){toast('다시 시도해보세요');return;}
+  body.focus(); document.execCommand('insertHTML',false,div.innerHTML);
+  sel.removeAllRanges(); ebBuzz(6); ebOnEdit(); toast('글자색 ✓');
+}
+/* 툴바 색 팔레트 열기 (hl / tc) */
+function ebOpenPal(which){
+  const pal=document.getElementById('tkPal'); if(!pal)return;
+  const cur=(which==='hl')?ebHlColor:ebTxColor;
+  const label=(which==='hl')?'🖍 형광 색 — 고르면 그 색으로 칠해요':'글자색 — 중요한 단어에';
+  pal.dataset.which=which;
+  pal.innerHTML='<span class="pl">'+label+'</span>'+EB_HL_COLORS.map(c=>
+    '<span class="sw'+(which==='tc'?' tc':'')+(c[1]===cur?' on':'')+'" data-c="'+c[1]+'" title="'+c[0]+'" style="'+
+    (which==='hl'?('background:'+ebHlBg(c[1])):('color:'+ebTcCss(c[1])))+'">'+(which==='tc'?'A':'')+'</span>').join('');
+  pal.classList.toggle('on', !(pal.classList.contains('on')&&pal.dataset.openFor===which));
+  pal.dataset.openFor=which;
+  pal.querySelectorAll('.sw').forEach(s=>s.onclick=()=>{
+    const c=s.dataset.c;
+    if(which==='hl'){ebHlColor=c; ebPaintSw('tkHlSw',ebHlBg(c)); ebHl();}
+    else{ebTxColor=c; ebPaintSw('tkTxSw',ebTcCss(c)); ebTextColor();}
+    pal.classList.remove('on');
+  });
+}
+function ebHlBg(c){return {lime:'rgba(200,255,0,.4)',amber:'rgba(224,178,122,.5)',rose:'rgba(219,138,160,.5)',blue:'rgba(143,174,207,.5)',violet:'rgba(180,157,208,.55)',mint:'rgba(127,200,169,.5)'}[c]||c;}
+function ebTcCss(c){return {lime:'#C8FF00',amber:'#E0B27A',rose:'#E58AA0',blue:'#8FAECF',violet:'#B49DD0',mint:'#7FC8A9'}[c]||c;}
+function ebPaintSw(id,col){const s=document.getElementById(id);if(s)s.style.background=col;}
 /* ═══ ↩️ 글쓰기 되돌리기 — 앱이 직접 기억하는 Ctrl+Z (형광·서식·사진에도 안 끊김) ═══ */
 let ebUndoSt={id:null,stack:[],redo:[],tmr:null};
 function ebUndoCaret(body){
@@ -4833,9 +4931,11 @@ function tkPeekBody(i){
   const img=tkFirstImg(i);
   let html=(i.text||'').replace(/<figure[\s\S]*?<\/figure>/gi,'').replace(/<img[^>]*>/gi,'');
   if(!ebPlainText(html).trim() && !img) html='<span style="color:#5c6055">(내용 없음)</span>';
-  return (img?`<img class="pk-img" src="${img.replace(/"/g,'&quot;')}" alt="">`:'')
+  return `<div class="pk-scroll">`
+    +(img?`<img class="pk-img" src="${img.replace(/"/g,'&quot;')}" alt="">`:'')
     +`<div class="pk-txt">${html}</div>`
-    +`<button class="pk-open" data-pkopen="${i.id}">✏️ 이어서 쓰기</button>`;
+    +`</div>`
+    +`<button class="pk-open" data-pkopen="${i.id}">✏️ 수정하기</button>`;
 }
 /* 미리보기: 형광 친 문장이 있으면 그 자리부터 보여준다 */
 function tkPvHtml(i,limit){
@@ -5024,16 +5124,25 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
       <button class="tk-metabtn" id="tkMetaBtn" onclick="tkToggleMeta()" aria-label="유형·기분">⊕</button>
       <button class="eb-more" onclick="ebMoreMenu(event)" aria-label="더보기">⋯</button></div>
     <div class="tk-fmtbar" id="tkFmtBar">
-      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')" title="굵게"><b>굵게</b></button>
-      <button class="hl" id="tkHlBtn" onmousedown="ebFp(event)" onclick="tkToggleHlMode()" title="형광 — 드래그하고 누르면 바로 칠해요 · 그냥 누르면 단어 탭 모드 (ee · Ctrl+M)">🖍</button>
-      <span class="tk-fmtdiv"></span>
       <button onmousedown="ebFp(event)" onclick="ebFmt('h2')" title="제목">제목</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')" title="인용">❝</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')" title="강조">💡</button>
-      <button onmousedown="ebFp(event)" onclick="ebFmt('list')" title="목록">✓</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('bold')" title="굵게"><b>굵게</b></button>
       <span class="tk-fmtdiv"></span>
-      <button onmousedown="ebFp(event)" onclick="ebPickImg()" title="사진">🖼</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('list')" title="목록">• 목록</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('numlist')" title="번호 목록">1. 번호</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('quote')" title="인용">❝</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('callout')" title="강조 박스">💡</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('code')" title="코드·고정폭">‹›</button>
+      <button onmousedown="ebFp(event)" onclick="ebFmt('divider')" title="구분선">—</button>
+      <span class="tk-fmtdiv"></span>
+      <button class="hl" id="tkHlBtn" onmousedown="ebFp(event)" onclick="tkToggleHlMode()" title="형광 — 드래그 후 누르면 칠 · 색은 ▾">🖍<span class="tk-sw" id="tkHlSw" style="background:rgba(200,255,0,.4)"></span></button>
+      <button class="tk-cvt" onmousedown="ebFp(event)" onclick="ebOpenPal('hl')" title="형광 색 고르기" aria-label="형광 색">▾</button>
+      <button id="tkTxBtn" onmousedown="ebFp(event)" onclick="ebFmt('textcolor')" title="글자색 — 드래그 후 누르면 색 · 색은 ▾"><span style="color:#C8FF00;font-weight:900">A</span><span class="tk-sw" id="tkTxSw" style="background:#C8FF00"></span></button>
+      <button class="tk-cvt" onmousedown="ebFp(event)" onclick="ebOpenPal('tc')" title="글자색 고르기" aria-label="글자색">▾</button>
+      <span class="tk-msp"></span>
+      <button class="tk-mbtn eb-mic" id="ebMicBtn" onclick="ebToggleMic()" title="음성 입력">🎤 음성</button>
+      <button class="tk-mbtn" onclick="ebPickImg()" title="사진 넣기">🖼 사진</button>
     </div>
+    <div class="tk-pal" id="tkPal"></div>
     <div class="tk-meta" id="tkMeta"><div class="tk-metainner">
       ${it.diary?`<div class="tk-catrow"><span class="tk-cattag diary">🌙 생각 정리 · 나만 보는 글</span></div>`:`<div class="tk-catrow" id="thinkCats">${tkCats().map(c=>`<span class="tk-catchip ${it.group===c.id?'on':''}" data-cat="${c.id}"${it.group===c.id?` style="border-color:${c.color};background:${c.color}22"`:''}><span class="cd" style="background:${c.color}"></span>${esc(c.nm)}</span>`).join('')}</div>`}
       <div class="tk-moodrow" id="thinkMoods">${MOODS.map(m=>`<span class="tk-mood ${it.memo===m?'on':''}" data-m="${m}">${m}</span>`).join('')}</div>
@@ -5049,8 +5158,6 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
       </div>
     </div></div>
     <div class="eb-edstatus">
-      <button class="eb-mic" id="ebMicBtn" onmousedown="ebFp(event)" onclick="ebToggleMic()">🎤 음성</button>
-      <button class="tk-photo" onclick="ebPickImg()" aria-label="사진 넣기">🖼 사진</button>
       <span class="tk-wcwrap"><span class="eb-wc" id="ebWc">0자</span><span class="eb-wc" id="ebAtChip" onclick="atDashboard()">⏱ 0분</span></span>
       <button class="tk-save" id="ebSaveBtn" onclick="thinkSaveNow()">
         <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span class="tk-savetxt">저장</span></button>
@@ -6654,9 +6761,11 @@ render();
         <div class="set-hint">홈 화면에서는 검색창이 항상 숨겨져요.</div>
         <div class="set-row"><span class="set-k">내 코드</span><span class="set-v">${esc(CURRENT||'')}</span></div>
         <button id="setBackup" class="set-backup">📦 내 자료 백업 · 내보내기</button>
+        <button id="setGuide" class="set-backup" style="margin-top:9px">💡 앱 소개 · 사용법 다시 보기</button>
         <button id="setSave" class="set-save">저장</button>
       </div>`;
-    setTimeout(()=>{const bb=document.getElementById('setBackup');if(bb)bb.onclick=()=>{close();openBackup();};},0);
+    setTimeout(()=>{const bb=document.getElementById('setBackup');if(bb)bb.onclick=()=>{close();openBackup();};
+      const gb=document.getElementById('setGuide');if(gb)gb.onclick=()=>{close();try{localStorage.removeItem(IDF_ONB_KEY)}catch(e){}idfOnboard();};},0);
     document.body.appendChild(ov);
     const close=()=>ov.remove();
     ov.onclick=e=>{ if(e.target===ov) close(); };
