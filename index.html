@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#0D0D0D">
 <title>아이디어 폴더 · 고객관점</title>
 <style>
@@ -1131,7 +1131,8 @@
   .eb-focusbtn.hero{border-color:rgba(var(--lime-rgb),.45);color:var(--lime);box-shadow:0 0 12px rgba(var(--lime-rgb),.16)}
   .eb-plus{position:fixed;right:18px;bottom:calc(66px + env(safe-area-inset-bottom));z-index:90;width:48px;height:48px;border-radius:50%;background:var(--lime);color:#0b0b0b;border:none;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 10px 26px rgba(var(--lime-rgb),.32);display:flex;align-items:center;justify-content:center;transition:transform .15s;font-family:inherit}
   .eb-plus:active{transform:scale(.9)}
-  .eb-edstatus{position:fixed;left:0;right:0;bottom:0;z-index:88;display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));font-size:11.5px;color:var(--ink-faint);background:rgba(13,13,13,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+  /* 하단바 = «흐름 안» 마지막 칸 (편집기 세로 기둥의 바닥) — 키보드가 올라오면 기둥 높이가 줄며 함께 올라감 */
+  .eb-edstatus{flex:0 0 auto;z-index:88;display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 14px calc(8px + env(safe-area-inset-bottom));font-size:11.5px;color:var(--ink-faint);background:rgba(13,13,13,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line);font-variant-numeric:tabular-nums;flex-wrap:wrap}
   .eb-edstatus .eb-savebtn{margin-left:0;padding:4px 10px;font-size:11.5px;border-radius:8px}
   .eb-edstatus .eb-mic{padding:4px 10px;font-size:11.5px;border-radius:8px}
   .eb-insheet{position:fixed;left:0;right:0;bottom:0;z-index:95;transform:translateY(102%);transition:transform .34s cubic-bezier(.22,.9,.3,1);background:rgba(22,22,22,.98);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 16px 22px;box-shadow:0 -18px 40px rgba(0,0,0,.5)}
@@ -1148,7 +1149,7 @@
   .eb-moremenu button{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:var(--ink);font-size:13px;font-weight:700;padding:10px 12px;border-radius:9px;cursor:pointer;font-family:inherit;text-align:left}
   .eb-moremenu button:hover{background:rgba(255,255,255,.07)}
   .eb-edscroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .eb-edinner{max-width:680px;margin:0 auto;padding:22px 22px 130px}
+  .eb-edinner{max-width:680px;margin:0 auto;padding:22px 22px 48px}
   .eb-edchap{font-size:12px;font-weight:800;color:var(--lime);letter-spacing:.04em;margin-bottom:12px}
   .eb-edtitle{width:100%;background:none;border:none;outline:none;color:var(--ink);font-size:27px;font-weight:800;font-family:inherit;letter-spacing:-.02em;line-height:1.3;margin-bottom:6px;resize:none}.eb-edtitle::placeholder{color:#3f3f3b}
   .eb-guide{background:rgba(200,139,255,.08);border:1px solid rgba(200,139,255,.25);border-radius:12px;padding:12px 14px;margin-bottom:16px}
@@ -1197,6 +1198,19 @@
   .eb-selbar.on{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
   .eb-selbar button{background:none;border:none;color:var(--ink);font-size:13.5px;font-weight:700;padding:7px 11px;border-radius:8px;cursor:pointer;font-family:inherit;white-space:nowrap}
   .eb-selbar button:active{background:rgba(var(--lime-rgb),.2);transform:scale(.92)}
+  /* 🖍 드래그하면 상단 우측에 «고정»으로 뜨는 형광 버튼 (선택 위치·iOS 복사메뉴와 안 겹침) */
+  .tk-hlfab{position:fixed;z-index:97;top:calc(env(safe-area-inset-top) + 100px);right:14px;
+    display:flex;align-items:center;gap:6px;background:var(--lime);color:#0b0b0b;border:0;border-radius:999px;
+    font-family:inherit;font-size:13.5px;font-weight:800;padding:10px 15px;cursor:pointer;
+    box-shadow:0 6px 22px rgba(var(--lime-rgb),.42),0 0 0 4px rgba(var(--lime-rgb),.12);
+    opacity:0;transform:translateY(-8px) scale(.9);pointer-events:none;
+    transition:opacity .16s ease,transform .2s cubic-bezier(.2,1.4,.3,1)}
+  .tk-hlfab.on{opacity:1;transform:none;pointer-events:auto}
+  .tk-hlfab:active{transform:scale(.94)}
+  .tk-hlfab .ic{font-size:16px;line-height:1}
+  .tk-hlfab .sw{width:12px;height:12px;border-radius:4px;background:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+  .tk-ed.diary .tk-hlfab{background:#E0B27A;box-shadow:0 6px 22px rgba(224,178,122,.42),0 0 0 4px rgba(224,178,122,.12)}
+  @media(prefers-reduced-motion:reduce){.tk-hlfab{transition:opacity .12s}}
   /* 블록 삽입 미세 등장 */
   .eb-edbody .eb-callout,.eb-edbody .eb-pulled,.eb-edbody .eb-imgph,.eb-edbody blockquote{animation:ebpop .22s ease}
   @keyframes ebpop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
@@ -1560,8 +1574,8 @@
   /* ═══════════ ✍️ 생각 쓰기 = 홈이 그대로 이어짐 (B안) ═══════════ */
   .tk-scroll{display:flex;flex-direction:column;justify-content:center;transition:justify-content .4s}
   .tk-scroll.writing{justify-content:flex-start}
-  .eb-edinner.tk-inner{max-width:640px;margin:0 auto;padding:18px 22px 140px;width:100%}
-  @media(min-width:768px){.eb-edinner.tk-inner{padding:26px 40px 150px}}
+  .eb-edinner.tk-inner{max-width:640px;margin:0 auto;padding:18px 22px 48px;width:100%}
+  @media(min-width:768px){.eb-edinner.tk-inner{padding:26px 40px 56px}}
   /* 홈과 같은 카드 → 쓰기 시작하면 녹아 사라짐 */
   .tk-card{background:linear-gradient(180deg,#181818,#121212);border:1px solid #2c2c2c;border-radius:22px;
     padding:20px 18px 18px;box-shadow:0 10px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.03);
@@ -2251,10 +2265,10 @@
     .eb-editor{inset:auto;top:0;bottom:0;left:calc(50% - var(--colw)/2);width:var(--colw);
       border-left:1px solid #242424;border-right:1px solid #242424;
       box-shadow:0 0 90px rgba(0,0,0,.85)}
-    /* 하단바·＋버튼도 기둥(680px) 안에만 — 전체 너비로 퍼져 흩어지던 것 교정 */
-    .eb-edstatus{left:calc(50% - var(--colw)/2);right:auto;width:var(--colw)}
+    /* ＋버튼(플로팅)만 기둥 안으로 — 하단바는 이제 편집기 흐름 안이라 자동 정렬 */
     .eb-plus{right:calc(50% - var(--colw)/2 + 18px)}
     .tk-toolwrap{right:calc(50% - var(--colw)/2 + 16px)}
+    .tk-hlfab{right:calc(50% - var(--colw)/2 + 14px)}
     .eb-sheetc{max-width:var(--colw)}
     .lc-handle{left:calc(50% - var(--colw)/2 - 30px);border-radius:17px 0 0 17px;border:1px solid var(--line);border-right:none;box-shadow:-3px 0 12px rgba(0,0,0,.4)}
     .lc-handle:hover{width:34px;left:calc(50% - var(--colw)/2 - 34px)}
@@ -3531,7 +3545,7 @@ function ebEdit(cid,sid){const b=bkCur,c=b.chapters.find(x=>x.id===cid),s=c.secs
   ebActiveBody=body; ebActiveId=s.id; ebOnEdit=function(){bkSec.s.html=body.innerHTML;ebUpdWc();ebMark()};
   ebUndoReset(body);                              // ↩️ 여는 순간의 상태가 되돌리기의 바닥
   ebAutoGrow(title);
-  ebEnsureSelBar();
+  tkHlFabEnsure();tkVVAttach();
   title.addEventListener('input',()=>{ebAutoGrow(title);s.title=title.value;const tm=document.getElementById('ebEdTitleMini');if(tm)tm.textContent=title.value||'제목 없는 꼭지';ebMark()});
   body.addEventListener('input',()=>{atNote();ebSmartType();s.html=body.innerHTML;if(s.status==='empty'&&ebPlain(s.html)>0)s.status='draft';ebUpdWc();ebMark();if(bkFocus)ebHiFocus()});
   body.addEventListener('keydown',e=>{
@@ -3617,9 +3631,49 @@ function ebHistOpen(){const sid=ebActiveId;const arr=(ebHistGet()[sid]||[]).slic
 function ebHistRestore(i){const h=(window.__ebHist||[])[i];if(!h||!ebActiveId)return;if(!confirm('이 시점으로 되돌릴까요?\n지금 내용은 사라져요 (되돌리기엔 다시 남아요).'))return;
   if(ebActiveBody)ebHistPush(ebActiveId,ebActiveBody.innerHTML);ebHistLast[ebActiveId]=0; // 현재본도 기록에 남기고 throttle 해제
   if(ebActiveBody)ebActiveBody.innerHTML=h.html;ebOnEdit();ebCloseSheet();toast('되돌렸어요 ✓');ebBuzz(10)}
-function ebSelHandler(){if(bkFocus)ebHiFocus();ebSelBar()}
-function ebCloseEdit(){ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
-function ebGoSec(cid,sid){ebInsClose();ebMoreClose();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
+function ebSelHandler(){if(bkFocus)ebHiFocus();tkHlFabUpd()}
+/* 🖍 드래그하면 상단 우측 고정 형광 버튼 — 선택 위치·iOS 복사메뉴와 안 겹쳐 놓칠 일 없음 */
+function tkHlFabEnsure(){
+  if(document.getElementById('tkHlFab'))return;
+  const b=document.createElement('button'); b.id='tkHlFab'; b.className='tk-hlfab';
+  b.setAttribute('aria-label','드래그한 부분 형광');
+  b.innerHTML='<span class="ic">🖍</span>형광<span class="sw" id="tkHlFabSw"></span>';
+  let fired=false;
+  const act=e=>{ e.preventDefault(); ebHl(); };                 // 선택 유지 위해 press 순간 실행(click 아님)
+  b.addEventListener('touchstart',e=>{fired=true;act(e);setTimeout(()=>fired=false,450);},{passive:false});
+  b.addEventListener('mousedown',e=>{if(fired)return;act(e);}); // 데스크톱
+  document.body.appendChild(b);
+}
+function tkHlFabUpd(){
+  const b=document.getElementById('tkHlFab'); if(!b)return;
+  const body=ebActiveBody,sel=window.getSelection();
+  const on=!!(body&&sel&&sel.rangeCount&&!sel.isCollapsed&&body.contains(sel.anchorNode));
+  b.classList.toggle('on',on);
+  if(on){const sw=document.getElementById('tkHlFabSw');if(sw)sw.style.background=ebHlBg(ebHlColor);}
+}
+function tkHlFabRemove(){const b=document.getElementById('tkHlFab');if(b)b.remove();}
+/* ⌨️ 키보드가 올라올 때 편집기 «기둥»을 보이는 영역(visualViewport)에 맞춰 줄임 → 툴바·글·저장바가 키보드를 따라 «한 덩어리»로 움직임(iOS 이질감 해소) */
+let tkVVh=null;
+function tkVVFit(){
+  const vv=window.visualViewport; if(!vv)return;
+  const ed=document.getElementById('thinkEditor')||document.getElementById('ebEditor'); if(!ed)return;
+  ed.style.height=Math.round(vv.height)+'px';
+  ed.style.top=Math.round(vv.offsetTop)+'px';
+  ed.style.bottom='auto';
+}
+function tkVVAttach(){
+  const vv=window.visualViewport; if(!vv)return;
+  tkVVh=function(){tkVVFit();};
+  vv.addEventListener('resize',tkVVh); vv.addEventListener('scroll',tkVVh);
+  tkVVFit();
+}
+function tkVVDetach(){
+  const vv=window.visualViewport;
+  if(vv&&tkVVh){vv.removeEventListener('resize',tkVVh);vv.removeEventListener('scroll',tkVVh);}
+  tkVVh=null;
+}
+function ebCloseEdit(){ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();tkHlFabRemove();tkVVDetach();save();const e=document.getElementById('ebEditor');if(e)e.remove();bkSec=null;render()}
+function ebGoSec(cid,sid){ebInsClose();ebMoreClose();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();tkHlFabRemove();tkVVDetach();save();const e=document.getElementById('ebEditor');if(e)e.remove();ebEdit(cid,sid);ebBuzz(5)}
 function ebToggleDone(){const s=bkSec.s;s.status=(s.status==='done')?(ebPlain(s.html)?'draft':'empty'):'done';
   if(s.status==='done')s.doneAt=Date.now(); else delete s.doneAt;   // 오늘 몫 계산용
   save();const btn=document.getElementById('ebDoneBtn');if(btn){btn.classList.toggle('is-done',s.status==='done');btn.textContent=s.status==='done'?'✓ 완성됨':'완성 표시';}
@@ -5194,6 +5248,7 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
   document.querySelectorAll('#thinkMoods .tk-mood').forEach(m=>m.onclick=()=>{document.querySelectorAll('#thinkMoods .tk-mood').forEach(x=>x.classList.toggle('on',x===m));curThink.memo=m.dataset.m;thinkMark();ebBuzz(5)});
   document.querySelectorAll('#thinkCats .tk-catchip').forEach(el=>el.onclick=()=>{const id=el.dataset.cat;curThink.group=(curThink.group===id?'':id);
     document.querySelectorAll('#thinkCats .tk-catchip').forEach(x=>{const on=x.dataset.cat===curThink.group;const cc=tkCat(x.dataset.cat);x.classList.toggle('on',on);x.style.borderColor=on&&cc?cc.color:'';x.style.background=on&&cc?cc.color+'22':''});thinkMark();ebBuzz(5)});
+  tkHlFabEnsure();tkVVAttach();
   document.addEventListener('selectionchange',ebSelHandler);
   ebUpdWc();ebHistPush(it.id,it.text||'');atStart();setTimeout(()=>body.focus(),180);
   // 스크롤 가장자리 페이드 (딱딱한 선 대신)
@@ -5213,7 +5268,7 @@ function tkCaretIntoView(){
   }
   if(!r||(!r.height&&!r.top))return;
   const box=sc.getBoundingClientRect();
-  const bottomGuard=box.bottom-118;              // 하단 바(저장·자수) 높이만큼 띄움
+  const bottomGuard=box.bottom-28;               // 하단바는 이제 스크롤 밖(흐름 안)이라 작은 여백만
   const topGuard=box.top+24;
   if(r.bottom>bottomGuard) sc.scrollTop+=(r.bottom-bottomGuard);
   else if(r.top<topGuard) sc.scrollTop-=(topGuard-r.top);
@@ -5343,7 +5398,7 @@ function thinkSendToIdea(){
   save();ebBuzz(12);
   toast('💡 아이디어로 승격'+(sug?(' · '+sug):'')+' ✓');
 }
-function thinkClose(){tkHlOff();ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();
+function thinkClose(){tkHlOff();ebInsClose();ebMoreClose();ebFocEnd();atStop();ebStopMic();ebCloseImgResize();document.removeEventListener('selectionchange',ebSelHandler);const sb=document.getElementById('ebSelBar');if(sb)sb.remove();tkHlFabRemove();tkVVDetach();
   if(curThink){const b=document.getElementById('thinkBody');if(b)curThink.text=b.innerHTML;const t=document.getElementById('thinkTitle');if(t)curThink.title=(t.textContent||'').trim();
     if(!(curThink.title||'').trim() && !ebPlainText(curThink.text||'').trim()){store.items=store.items.filter(x=>x.id!==curThink.id);} // 빈 글은 저장 안 함
     save();}
