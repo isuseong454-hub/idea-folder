@@ -38,6 +38,11 @@
   .brand h1{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:0}
   .brand .sub{font-size:11px;color:var(--ink-faint);letter-spacing:.14em;font-weight:600;text-transform:uppercase}
   .count{margin-left:auto;font-size:12px;color:var(--ink-dim)}
+  /* ═══ 헤더 다이어트 — 앱 이름·브랜드는 «홈»에서만. 다른 탭은 「N개 보관 + ⚙」만 (2026-07-27) ═══ */
+  body.hdr-min header{padding-top:calc(9px + env(safe-area-inset-top));padding-bottom:9px}
+  body.hdr-min .brand h1,body.hdr-min .brand .sub{display:none}
+  body.hdr-min .brand-icon{width:30px;height:30px;border-radius:9px;padding:5px;box-shadow:0 0 10px rgba(var(--lime-rgb),.25)}
+  body.hdr-min .count{font-size:12.5px}
   .count b{color:var(--lime);font-weight:700}
   .searchbar{margin-top:12px;display:flex;align-items:center;gap:9px;
     background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 13px}
@@ -3183,6 +3188,7 @@ function render(){
   if(migrateWs()) save();
   document.getElementById('cTotal').textContent=store.items.length;
   document.body.classList.toggle('hide-lchandle', !(activeWs==='think'||activeWs==='book'));  // 목록 서랍 = 노트·전자책에서만
+  document.body.classList.toggle('hdr-min', activeWs!=='home');   // 앱 이름은 «홈»에서만 — 다른 탭은 헤더 다이어트
   renderTabs();
   applySearchVisibility();
   const feed=document.getElementById('feed');
@@ -7090,12 +7096,9 @@ render();
     let s=document.getElementById('idfGear');
     if(!s){ s=document.createElement('button'); s.id='idfGear'; s.title='설정'; s.setAttribute('aria-label','설정');
       s.innerHTML='⚙'; s.onclick=openSettings; (brand||document.body).appendChild(s); }
-    let b=document.getElementById('idfOut');
-    if(!b){ b=document.createElement('button'); b.id='idfOut';
-      b.onclick=()=>{ if(confirm('로그아웃할까요?')){ localStorage.removeItem(SESS);
-        try{ localStorage.removeItem(KEY); }catch(e){} location.reload(); } };
-      (brand||document.body).appendChild(b); }
-    b.textContent='로그아웃';
+    /* 🔒 로그아웃은 헤더에서 뺐다 (2026-07-27) — 거의 안 쓰는데 위험한 버튼이 화면 맨 위에
+       상시 노출돼 오탭 위험 + 자리 낭비였음. 이제 ⚙ 설정 맨 아래에 있음 (idfLogout) */
+    const old=document.getElementById('idfOut'); if(old)old.remove();
     expiryNotice(expiresAt);
   }
   /* ⏳ 만료 신호 — 1달 전 한 번, 1주일 전부터는 하루 한 번 (사장님 지시 2026-07-26) */
@@ -7150,9 +7153,13 @@ render();
         <button id="setBackup" class="set-backup">📦 내 자료 백업 · 내보내기</button>
         <button id="setGuide" class="set-backup" style="margin-top:9px">💡 앱 소개 · 사용법 다시 보기</button>
         <button id="setSave" class="set-save">저장</button>
+        <button id="idfLogout" class="set-out">로그아웃</button>
       </div>`;
     setTimeout(()=>{const bb=document.getElementById('setBackup');if(bb)bb.onclick=()=>{close();openBackup();};
-      const gb=document.getElementById('setGuide');if(gb)gb.onclick=()=>{close();try{localStorage.removeItem(IDF_ONB_KEY)}catch(e){}idfOnboard();};},0);
+      const gb=document.getElementById('setGuide');if(gb)gb.onclick=()=>{close();try{localStorage.removeItem(IDF_ONB_KEY)}catch(e){}idfOnboard();};
+      const lo=document.getElementById('idfLogout');
+      if(lo)lo.onclick=()=>{ if(confirm('로그아웃할까요?\n(기기에 저장된 사본도 지워요 — 자료는 클라우드에 안전해요)')){
+        localStorage.removeItem(SESS); try{ localStorage.removeItem(KEY); }catch(e){} location.reload(); } };},0);
     document.body.appendChild(ov);
     const close=()=>ov.remove();
     ov.onclick=e=>{ if(e.target===ov) close(); };
@@ -7339,6 +7346,10 @@ render();
       cursor:pointer;font-family:inherit;transition:color .15s,transform .3s;padding:0}
     #idfGear:hover{color:var(--lime)}
     #idfGear:active{transform:rotate(90deg)}
+    /* 로그아웃 = 설정 맨 아래 · 조용한 위험 동작 */
+    #idfSet .set-out{width:100%;margin-top:14px;background:none;border:0;color:#7a7a76;
+      font-family:inherit;font-size:12.5px;font-weight:700;padding:11px;cursor:pointer;border-radius:10px;transition:.15s}
+    #idfSet .set-out:hover{background:rgba(217,69,95,.12);color:#ff9aa8}
     /* 설정 모달 */
     #idfSet{position:fixed;inset:0;z-index:10060;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);
       display:flex;align-items:center;justify-content:center;padding:22px;animation:idfBgIn .25s ease}
