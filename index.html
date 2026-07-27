@@ -2041,12 +2041,32 @@
   .pinote.done-fly,.bd-note.done-fly{animation:pinfly .5s cubic-bezier(.4,0,.5,1) forwards}
   @keyframes pinfly{to{opacity:0;transform:rotate(9deg) translateY(-28px) scale(.85)}}
   /* ═══ 📌 실행 보드 — 코르크판 (포스트잇·실행 대기·폴라로이드가 한 판에) ═══ */
-  .bd-board{position:relative;border-radius:14px;border:10px solid #533c22;padding:38px 18px 22px;min-height:300px;
-    background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2"/><feColorMatrix type="saturate" values="0"/></filter><rect width="180" height="180" filter="url(%23n)" opacity="0.2"/></svg>'),
-    linear-gradient(160deg,#8a6a45,#6b5133 60%,#5d4429);
-    box-shadow:0 22px 50px rgba(0,0,0,.5),inset 0 2px 10px rgba(0,0,0,.4)}
-  .bd-sub{position:absolute;top:11px;left:16px;font-size:10.5px;font-weight:700;color:rgba(255,247,232,.6)}
-  .bd-stuff{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+  /* ═══ 현장 보드 = 진짜 코르크 + 위에서 내려오는 조명 + 가장자리 어둠 ═══ */
+  .bd-board{position:relative;border-radius:16px;padding:40px 18px 96px;min-height:340px;isolation:isolate;
+    border:9px solid transparent;
+    background:
+      radial-gradient(rgba(0,0,0,.17) 1px,transparent 1.7px) 0 0/9px 9px,
+      radial-gradient(rgba(255,225,180,.045) 1px,transparent 1.5px) 4px 5px/9px 9px,
+      radial-gradient(125% 95% at 32% 4%,#4b3a23,#2e2314 72%,#221a0f 100%);
+    background-clip:padding-box;
+    box-shadow:0 26px 56px rgba(0,0,0,.58),inset 0 2px 14px rgba(0,0,0,.5);
+    /* 나무 액자 */
+    outline:0;position:relative}
+  .bd-board::before{content:'';position:absolute;inset:-9px;border-radius:16px;z-index:-2;pointer-events:none;
+    background:linear-gradient(160deg,#6d4f2c,#432f18 55%,#5a3f22);
+    box-shadow:inset 0 1px 0 rgba(255,224,175,.22),inset 0 -2px 3px rgba(0,0,0,.5)}
+  /* 위에서 내려오는 조명 + 가장자리 비네트 (현장 분위기) */
+  .bd-board::after{content:'';position:absolute;inset:0;border-radius:8px;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(78% 46% at 50% -8%,rgba(255,240,205,.13),transparent 62%),
+      radial-gradient(120% 100% at 50% 50%,transparent 52%,rgba(0,0,0,.42) 100%)}
+  .bd-sub{position:absolute;top:13px;left:17px;z-index:3;font-size:10px;font-weight:800;letter-spacing:.1em;
+    color:rgba(255,244,225,.42);text-transform:uppercase}
+  .bd-stuff{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+  /* 붉은 실 — 같은 유형끼리 이어짐 */
+  .bd-strings{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:hidden}
+  .bd-strings path{fill:none;stroke:rgba(196,72,58,.5);stroke-width:1.6;stroke-linecap:round;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
   .bd-tack{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;
     box-shadow:0 3px 6px rgba(0,0,0,.5),inset 0 -2px 3px rgba(0,0,0,.28),inset 0 2px 2px rgba(255,255,255,.4)}
   .bd-note{position:relative;width:150px;min-height:108px;padding:16px 12px 36px;cursor:pointer;
@@ -2089,22 +2109,34 @@
     color:var(--lime);border-radius:999px;font-family:inherit;font-size:12px;font-weight:800;padding:7px 15px;cursor:pointer;transition:.15s}
   .bd-addbtn:hover{background:rgba(var(--lime-rgb),.2)}
   .bd-addbtn:active{transform:scale(.95)}
-  .bd-tcard{position:relative;width:168px;padding:13px 12px 26px;cursor:grab;user-select:none;touch-action:none;
-    background:repeating-linear-gradient(#F6F2E6 0 19px,#d9d2bd 19px 20px);color:#28241a;border-radius:3px;
-    box-shadow:0 7px 16px rgba(0,0,0,.45);font-size:12px;font-weight:700;line-height:20px;word-break:break-word}
-  .bd-tcard::before{content:'';position:absolute;left:0;right:0;top:11px;height:2px;background:#d98a8a}
-  .bd-tcard .bd-lb{bottom:6px}
+  .bd-tcard{position:relative;width:168px;padding:15px 13px 26px;cursor:grab;user-select:none;touch-action:none;--acc:var(--lime);
+    background:linear-gradient(180deg,#1c1c1c,#131313);color:#e6e8e0;border:1px solid #2c2c2c;border-radius:12px;
+    box-shadow:0 9px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.045);
+    font-size:12.5px;font-weight:700;line-height:1.45;word-break:break-word;transition:transform .18s var(--rspring),box-shadow .18s}
+  .bd-tcard::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;border-radius:12px 12px 0 0;
+    background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.7}
+  .bd-tcard:hover{transform:translateY(-3px);box-shadow:0 14px 26px rgba(0,0,0,.58)}
+  .bd-tcard .bd-lb{bottom:7px;left:13px;color:#767a6d}
   .bd-tcard.ghosted{opacity:.25;pointer-events:none}
   .bd-ghost{position:fixed;z-index:9000;pointer-events:none;transform:translate(-50%,-60%) rotate(-3deg) scale(1.04);
     filter:drop-shadow(0 18px 24px rgba(0,0,0,.55))}
   .bd-board.dropon{box-shadow:0 22px 50px rgba(0,0,0,.5),inset 0 0 0 3px rgba(var(--lime-rgb),.35),inset 0 2px 10px rgba(0,0,0,.4)}
   .bd-board.thud{animation:bdthud .3s}
   @keyframes bdthud{30%{transform:translate(1px,1.5px)}60%{transform:translate(-1px,.5px)}}
-  .bd-pinCard{position:absolute;width:168px;padding:15px 12px 44px;z-index:2;
-    background:repeating-linear-gradient(#F6F2E6 0 19px,#d9d2bd 19px 20px);color:#28241a;border-radius:3px;
-    box-shadow:0 9px 20px rgba(0,0,0,.5);font-size:12px;font-weight:700;line-height:20px;word-break:break-word;overflow:hidden}
-  .bd-pinCard::before{content:'';position:absolute;left:0;right:0;top:11px;height:2px;background:#d98a8a}
-  .bd-pinCard>.bd-tack{background:var(--lime)}
+  /* ═══ 옵시디언 노트 — 판에 꽂힌 카드 (읽기 쉬움 + 물성) ═══ */
+  .bd-pinCard{position:absolute;width:174px;padding:16px 13px 44px;z-index:2;--acc:var(--lime);
+    background:linear-gradient(180deg,#1f1f1f,#141414);color:#eaece4;border:1px solid #313131;border-radius:13px;
+    box-shadow:0 15px 30px rgba(0,0,0,.62),0 2px 6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.055);
+    font-size:12.5px;font-weight:700;line-height:1.46;word-break:break-word;overflow:hidden;
+    cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+    transition:box-shadow .2s,transform .2s var(--rspring)}
+  .bd-pinCard::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;border-radius:13px 13px 0 0;
+    background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.75}
+  .bd-pinCard:hover{box-shadow:0 20px 38px rgba(0,0,0,.68),0 0 0 1px rgba(var(--lime-rgb),.14),inset 0 1px 0 rgba(255,255,255,.07)}
+  .bd-pinCard.grabbing{cursor:grabbing;z-index:40;transform:scale(1.045) rotate(-1.2deg)!important;
+    box-shadow:0 30px 54px rgba(0,0,0,.72),0 0 0 1px rgba(var(--lime-rgb),.3)}
+  .bd-pinCard>.bd-tack{background:var(--acc)}
+  .bd-pinCard .bd-lb{color:#7d8174;bottom:11px;left:14px}
   /* 해냄 버튼 = 인주 도장 (누르는 것·찍히는 것·남는 것이 한 혈통) */
   .bd-doneb{position:absolute;bottom:6px;right:7px;width:34px;height:34px;border-radius:50%;border:0;cursor:pointer;
     background:radial-gradient(circle at 42% 36%,#E05656,#B23030 68%,#8f2424);
@@ -2113,6 +2145,18 @@
   .bd-doneb::after{content:'';position:absolute;inset:3px;border:1.5px solid rgba(255,235,225,.55);border-radius:50%}
   .bd-doneb:hover{transform:scale(1.08)}
   .bd-doneb:active{transform:scale(.9)}
+  /* ✕ 삭제/빼기 — 카드 좌상단 작은 버튼 (해냄=오른쪽 도장과 안 겹침) */
+  .bd-x{position:absolute;top:8px;left:9px;width:21px;height:21px;border-radius:50%;border:0;cursor:pointer;z-index:5;
+    background:rgba(255,255,255,.07);color:#8b8f83;font-family:inherit;font-size:11px;font-weight:900;line-height:1;padding:0;
+    display:grid;place-items:center;transition:transform .12s,background .15s,color .15s;opacity:0}
+  .bd-pinCard:hover .bd-x,.bd-tcard:hover .bd-x,.bd-x:focus-visible{opacity:1}
+  @media(hover:none){.bd-x{opacity:1}}                       /* 폰은 항상 보이게 */
+  .bd-x:hover{background:#d9455f;color:#fff}
+  .bd-x:active{transform:scale(.85)}
+  /* ⠿ 옮기기 손잡이 — 폰에서 스크롤과 안 부딪히게 (손잡이로만 이동) */
+  .bd-grab{position:absolute;top:7px;right:9px;z-index:5;width:24px;height:22px;display:grid;place-items:center;
+    color:rgba(255,255,255,.26);font-size:13px;letter-spacing:-1px;cursor:grab;touch-action:none;user-select:none}
+  .bd-grab:hover{color:rgba(var(--lime-rgb),.75)}
   .bd-pinCard.slam{animation:bdslam .5s var(--rspring)}
   @keyframes bdslam{0%{transform:scale(1.18) rotate(-1deg)}55%{transform:scale(.97)}100%{transform:scale(1)}}
   .bd-pinCard .bd-tack.drop{animation:bdtkdrop .45s cubic-bezier(.2,0,.2,1)}
@@ -2122,8 +2166,8 @@
     letter-spacing:.1em;opacity:0;pointer-events:none;mix-blend-mode:multiply}
   .bd-stampmk.on{animation:bdstamp .38s cubic-bezier(.2,0,.2,1) forwards}
   @keyframes bdstamp{60%{opacity:1;transform:translate(-50%,-50%) rotate(-14deg) scale(.94)}100%{opacity:1;transform:translate(-50%,-50%) rotate(-14deg) scale(1)}}
-  .bd-pinCard.sink{animation:bdsink .5s cubic-bezier(.4,0,.6,1) .5s forwards}
-  @keyframes bdsink{100%{opacity:0;transform:translateY(10px) scale(.94)}}
+  /* 해냄 = 떼어져서 종결함으로 날아간다 (목적지는 JS가 계산) */
+  .bd-pinCard.fly{transition:transform .62s cubic-bezier(.55,-.16,.35,1),opacity .5s ease .2s;opacity:0;z-index:50}
   .bd-hole{position:absolute;width:7px;height:7px;border-radius:50%;z-index:1;
     background:radial-gradient(circle at 35% 30%,#3a2a18,#241708 70%);
     box-shadow:inset 0 1.5px 2px rgba(0,0,0,.8),0 1px 0 rgba(255,220,170,.18)}
@@ -2133,27 +2177,44 @@
   .bd-hole:hover::after,.bd-hole.say::after{opacity:1}
   .bd-hole.new{animation:bdholein .45s var(--rspring)}
   @keyframes bdholein{0%{transform:scale(0)}}
-  .bd-spike{position:absolute;right:14px;bottom:10px;width:104px;height:112px;cursor:pointer;z-index:3}
-  .bd-spike .sp-pin{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:3px;height:84px;border-radius:2px;
-    background:linear-gradient(180deg,#efe9d8,#8f8a7a);box-shadow:0 0 6px rgba(0,0,0,.5)}
-  .bd-spike .sp-base{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:50px;height:12px;border-radius:50%;
-    background:radial-gradient(circle at 50% 35%,#5a4530,#332516);box-shadow:0 4px 10px rgba(0,0,0,.5)}
-  /* 도장 종이 — 보드 위에선 인장이 회색(글자+틀만), 빨강은 찍는 순간에만 */
-  .bd-slip{position:absolute;left:50%;width:72px;height:20px;background:linear-gradient(165deg,#F2EDE0,#DDD5C0);
-    border-radius:2px;box-shadow:0 3px 8px rgba(0,0,0,.4)}
-  .bd-slip::before{content:'';position:absolute;left:7px;right:30px;top:6px;height:1.5px;
-    background:rgba(60,50,30,.22);box-shadow:0 4px 0 rgba(60,50,30,.15)}
-  .bd-slip::after{content:'해냄';position:absolute;right:4px;top:50%;transform:translateY(-50%) rotate(-12deg);
-    border:1.5px solid rgba(90,85,70,.5);color:rgba(90,85,70,.6);font-size:7.5px;font-weight:900;
-    border-radius:3px;padding:0 3px;line-height:1.4}
-  .bd-spkn{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:800;
-    color:rgba(255,247,232,.65);white-space:nowrap}
-  .bd-plaque{position:absolute;right:12px;top:6px;background:linear-gradient(180deg,#d9c184,#a8905a);z-index:3;
-    color:#3a2c14;font-size:9.5px;font-weight:900;border-radius:4px;padding:3px 9px;
-    box-shadow:0 2px 5px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.5)}
-  .bd-cleanbtn{position:absolute;top:7px;right:12px;z-index:4;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.14);
-    color:rgba(255,247,232,.78);border-radius:999px;font-family:inherit;font-size:10px;font-weight:800;padding:5px 10px;cursor:pointer}
-  .bd-plaque~.bd-cleanbtn,.bd-cleanbtn.shift{top:7px;right:120px}
+  /* ═══ 판 아래 «성장 바» — 종결함 + 이번 달 게이지 (하고 싶게 만드는 장치) ═══ */
+  .bd-foot{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:flex-end;gap:12px;
+    padding:0 15px 13px;pointer-events:none}
+  .bd-foot>*{pointer-events:auto}
+  /* 종결함 = 서류가 쌓이는 함 */
+  .bd-vault{position:relative;width:104px;height:70px;cursor:pointer;flex:0 0 auto}
+  .bd-vault .vt-files{position:absolute;left:8px;right:8px;bottom:19px;height:32px}
+  .bd-vault .vt-f{position:absolute;left:0;right:0;height:7px;border-radius:2px 2px 0 0;
+    background:linear-gradient(180deg,#efe7d4,#c9c0a6);box-shadow:0 -1px 2px rgba(0,0,0,.35)}
+  .bd-vault .vt-box{position:absolute;left:0;right:0;bottom:12px;height:30px;border-radius:4px 4px 7px 7px;
+    background:linear-gradient(180deg,#6a4e2e,#3d2c17);box-shadow:0 6px 14px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,224,175,.25)}
+  .bd-vault .vt-box::before{content:'';position:absolute;left:50%;top:9px;transform:translateX(-50%);
+    width:30px;height:5px;border-radius:3px;background:rgba(0,0,0,.4);box-shadow:inset 0 1px 0 rgba(255,224,175,.18)}
+  .bd-vault .vt-n{position:absolute;left:0;right:0;bottom:-2px;text-align:center;font-size:10px;font-weight:900;
+    color:rgba(255,244,225,.7);white-space:nowrap}
+  .bd-vault:hover .vt-box{transform:translateY(-2px)}
+  .bd-vault .vt-box{transition:transform .18s var(--rspring)}
+  .bd-vault.pop .vt-box{animation:vtpop .42s var(--rspring)}
+  @keyframes vtpop{40%{transform:translateY(3px) scaleY(.9)}100%{transform:none}}
+  /* 이번 달 게이지 — 다음 목표까지 몇 개 남았는지 */
+  .bd-gauge{flex:1;min-width:0;background:rgba(0,0,0,.36);border:1px solid rgba(255,224,175,.14);border-radius:12px;
+    padding:9px 12px 10px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .bd-gauge .gg-top{display:flex;align-items:baseline;gap:7px;margin-bottom:7px}
+  .bd-gauge .gg-l{font-size:10.5px;font-weight:900;color:rgba(255,244,225,.82);letter-spacing:.01em}
+  .bd-gauge .gg-l b{color:var(--lime);font-size:12.5px}
+  .bd-gauge .gg-r{margin-left:auto;font-size:9.5px;font-weight:800;color:rgba(255,244,225,.5);white-space:nowrap}
+  .bd-gauge .gg-bar{height:7px;border-radius:99px;background:rgba(0,0,0,.5);overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+  .bd-gauge .gg-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#9ac91e,var(--lime));
+    box-shadow:0 0 12px rgba(var(--lime-rgb),.5);transition:width .8s cubic-bezier(.2,.9,.3,1)}
+  .bd-cleanbtn{position:absolute;top:10px;right:13px;z-index:4;background:rgba(0,0,0,.34);border:1px solid rgba(255,224,175,.16);
+    color:rgba(255,247,232,.75);border-radius:999px;font-family:inherit;font-size:10px;font-weight:800;padding:5px 11px;cursor:pointer;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:.15s}
+  .bd-cleanbtn:hover{background:rgba(0,0,0,.5);color:#fff}
+  @media(max-width:430px){
+    .bd-vault{width:84px;height:62px}
+    .bd-gauge{padding:8px 10px 9px}
+  }
   /* 해냄 시트 (새김눈 머리) */
   .bds-ov{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center}
   .bds-c{width:100%;max-width:560px;background:#141414;border:1px solid #2a2a2a;border-radius:20px 20px 0 0;
@@ -2176,11 +2237,12 @@
     border-radius:999px;font-family:inherit;font-size:10.5px;font-weight:800;padding:5px 11px;cursor:pointer}
   .bds-empty{padding:26px 0;text-align:center;font-size:12.5px;color:var(--ink-faint)}
   @media (max-width:560px){
-    .bd-board{padding:34px 12px 18px;border-width:8px}
+    .bd-board{padding:36px 12px 92px;border-width:8px}
     .bd-stuff{gap:13px}
     .bd-note,.bd-pola{width:calc(50% - 7px)}
     .bd-idx{width:100%}
-    .bd-tcard,.bd-pinCard{width:150px}
+    .bd-tcard{width:152px}
+    .bd-pinCard{width:156px;padding:15px 12px 42px}
   }
   /* 카드의 📌 (★ 옆) */
   .ccard .cc-pin{position:absolute;top:7px;left:37px;z-index:3;background:rgba(0,0,0,.42);border:none;
@@ -4109,7 +4171,7 @@ function ideaBoardHtml(items){
   let tray=`<div class="bd-tray"><span class="bd-trayt">🏃 실행 대기 ${trayRuns.length?trayRuns.length+' — 잡아서 판에 끌어다 꽂으세요':''}</span>
       <button class="bd-addbtn" id="bdAdd">＋ 실행할 것</button></div>`;
   if(trayRuns.length){
-    tray+=`<div class="bd-tray" id="bdTray">${trayRuns.map(i=>`<div class="bd-tcard" data-bdt="${i.id}">${bdRunCap(i)}<span class="bd-lb">잡아서 드래그</span></div>`).join('')}</div>`;
+    tray+=`<div class="bd-tray" id="bdTray">${trayRuns.map(i=>`<div class="bd-tcard" data-bdt="${i.id}"><button class="bd-x" data-bddel="${i.id}" title="삭제" aria-label="삭제">✕</button>${bdRunCap(i)}<span class="bd-lb">잡아서 드래그</span></div>`).join('')}</div>`;
   }
   let stuff='';
   stuff+=pins.map(i=>{
@@ -4123,25 +4185,63 @@ function ideaBoardHtml(items){
     return `<div class="bd-pola" onclick="galOpenSrc(this.querySelector('.bd-ph'))"><span class="bd-tack" style="background:#B49DD0"></span>
       <div class="bd-ph" style="background-image:url('${(p.src||'').replace(/'/g,'%27')}')"></div></div>`;
   }).join('');
-  const pinnedHtml=pinnedRuns.map(i=>`<div class="bd-pinCard" data-bdpin="${i.id}" style="left:${i.bdp.x}%;top:${i.bdp.y}%">
-      <span class="bd-tack"></span>${bdRunCap(i)}<span class="bd-lb">🏃 꽂힘</span>
-      <button class="bd-doneb" data-bddone="${i.id}">해냄</button></div>`).join('');
+  const pinnedHtml=pinnedRuns.map(i=>{
+    const col=ideaGroupColor(i.group)||'#C8FF00';
+    return `<div class="bd-pinCard" data-bdpin="${i.id}" data-grp="${esc(i.group||'')}" style="left:${i.bdp.x}%;top:${i.bdp.y}%;--acc:${col}">
+      <span class="bd-tack"></span><button class="bd-x" data-bddel="${i.id}" title="삭제" aria-label="삭제">✕</button>
+      <span class="bd-grab" data-bdmove="${i.id}" title="끌어서 옮기기" aria-label="옮기기">⠿</span>
+      ${bdRunCap(i)}<span class="bd-lb">🏃 꽂힘</span>
+      <button class="bd-doneb" data-bddone="${i.id}">해냄</button></div>`;
+  }).join('');
   const holesHtml=bd.holes.map(h=>`<span class="bd-hole" data-t="${esc(h.txt||'해냄 ✓')}" style="left:${h.x}%;top:${h.y}%"></span>`).join('');
-  let slipsHtml='';
-  for(let k=0;k<Math.min(doneN,12);k++){
-    slipsHtml+=`<div class="bd-slip" style="bottom:${18+k*5.5}px;transform:translateX(-50%) rotate(${(k%2?-1:1)*(3+(k*7)%6)}deg)"></div>`;
-  }
-  const spike=`<div class="bd-spike" id="bdSpike" title="해낸 것들 보기"><div class="sp-pin"></div><div class="sp-base"></div>${slipsHtml}
-      <span class="bd-spkn">해냄 <b>${doneN}</b> · 누르면 보기</span></div>`;
-  const plaque=bd.plqN?`<span class="bd-plaque">${bd.plqN}판 · 총 ${bd.plqTotal}개 해냄</span>`:'';
-  const clean=bd.holes.length?`<button class="bd-cleanbtn${bd.plqN?' shift':''}" id="bdClean">🧹 판 정리</button>`:'';
+  /* 종결함 — 해낸 게 서류로 쌓임 */
+  let vfiles='';
+  for(let k=0;k<Math.min(doneN,7);k++) vfiles+=`<span class="vt-f" style="bottom:${k*4}px;transform:rotate(${(k%2?-1:1)*(1+k%3)}deg)"></span>`;
+  const vault=`<div class="bd-vault" id="bdVault" title="해낸 것들 보기">
+      <div class="vt-files">${vfiles}</div><div class="vt-box"></div>
+      <span class="vt-n">🗂 종결 <b>${doneN}</b></span></div>`;
+  /* 이번 달 게이지 — 다음 목표가 늘 하나씩 앞에 (욕심이 나게) */
+  const nowD=new Date(), mKey=nowD.getFullYear()+'-'+nowD.getMonth();
+  const mDone=doneItems().filter(i=>{const d=new Date(i.doneAt||i.ts);return d.getFullYear()+'-'+d.getMonth()===mKey}).length;
+  const goal=Math.max(10,Math.ceil((mDone+1)/10)*10), left=goal-mDone;
+  const gauge=`<div class="bd-gauge"><div class="gg-top">
+      <span class="gg-l">이번 달 해냄 <b>${mDone}</b></span>
+      <span class="gg-r">${left>0?`다음 ${goal}까지 ${left}개`:'목표 달성 🎉'}</span></div>
+    <div class="gg-bar"><i class="gg-fill" style="width:${Math.min(100,Math.round(mDone/goal*100))}%"></i></div></div>`;
+  const clean=bd.holes.length?`<button class="bd-cleanbtn" id="bdClean">🧹 판 정리${bd.plqN?` · ${bd.plqN}판째`:''}</button>`:'';
   if(!stuff&&!pinnedRuns.length&&!bd.holes.length){
     stuff=`<div class="bd-hint"><span class="bd-tack" style="background:#8FAECF"></span>
       아직 빈 판이에요.<br>· 위 <b>＋ 실행할 것</b>으로 담고 → 판에 끌어다 꽂기<br>· 홈·노트에서 <b>🏃</b>로 보내도 여기로 와요<br>· 글에 사진을 넣으면 폴라로이드로 꽂혀요</div>`;
   }
-  return tray+`<div class="bd-board" id="bdBoard" style="min-height:440px;padding-bottom:130px">
-    <div class="bd-sub">끌어다 꽂고 · ✓ 해냄 · 자국이 남아요</div>${plaque}${clean}
-    <div class="bd-stuff">${stuff}</div>${pinnedHtml}${holesHtml}${spike}</div>`;
+  return tray+`<div class="bd-board" id="bdBoard" style="min-height:460px">
+    <div class="bd-sub">꽂고 · ⠿로 옮기고 · 해내면 종결함으로</div>${clean}
+    <svg class="bd-strings" id="bdStrings"></svg>
+    <div class="bd-stuff">${stuff}</div>${pinnedHtml}${holesHtml}
+    <div class="bd-foot">${vault}${gauge}</div></div>`;
+}
+/* 붉은 실 — 같은 유형끼리 이어준다 (사건 보드처럼, 늘어진 곡선) */
+function bdDrawStrings(){
+  const svg=document.getElementById('bdStrings'), board=document.getElementById('bdBoard');
+  if(!svg||!board)return;
+  const br=svg.getBoundingClientRect();          // SVG(=판 안쪽) 기준 — 테두리 포함 크기로 재면 넘침
+  svg.setAttribute('viewBox',`0 0 ${Math.round(br.width)} ${Math.round(br.height)}`);
+  svg.removeAttribute('width'); svg.removeAttribute('height');
+  const byGrp={};
+  board.querySelectorAll('.bd-pinCard').forEach(c=>{
+    const g=c.dataset.grp; if(!g)return;
+    const r=c.getBoundingClientRect();
+    (byGrp[g]=byGrp[g]||[]).push({x:r.left-br.left+r.width/2, y:r.top-br.top+10});
+  });
+  let d='';
+  Object.keys(byGrp).forEach(g=>{
+    const pts=byGrp[g]; if(pts.length<2)return;
+    pts.sort((a,b)=>a.x-b.x);
+    for(let k=0;k<pts.length-1;k++){
+      const a=pts[k],b=pts[k+1], mx=(a.x+b.x)/2, sag=Math.min(26,Math.abs(b.x-a.x)*0.18+9);
+      d+=`M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${mx.toFixed(1)} ${(Math.max(a.y,b.y)+sag).toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)} `;
+    }
+  });
+  svg.innerHTML=d?`<path d="${d}"/>`:'';
 }
 /* ＋ 실행할 것 — 레일 담기 대체 (실행 대기 트레이에 바로 추가) */
 function ideaQuickAdd(){
@@ -4156,6 +4256,7 @@ function bindBoard(){
   const addb=document.getElementById('bdAdd'); if(addb)addb.onclick=ideaQuickAdd;
   document.querySelectorAll('[data-bdt]').forEach(c=>{
     c.addEventListener('pointerdown',e=>{
+      if(e.target.closest('.bd-x'))return;          // ✕(삭제)는 드래그 시작 안 함
       e.preventDefault();
       const id=c.dataset.bdt;
       const g=c.cloneNode(true);g.classList.add('bd-ghost');g.style.width=c.offsetWidth+'px';
@@ -4192,25 +4293,71 @@ function bindBoard(){
     const id=b.dataset.bddone; const it=store.items.find(x=>x.id===id); if(!it)return;
     const card=b.closest('.bd-pinCard'); if(!card||card.dataset.doing)return; card.dataset.doing=1;
     const st=document.createElement('span'); st.className='bd-stampmk'; st.textContent='해 냄';
-    card.appendChild(st); void st.offsetWidth; st.classList.add('on');
-    card.classList.add('sink'); ebBuzz(24);
+    card.appendChild(st); void st.offsetWidth; st.classList.add('on'); ebBuzz(24);
+    /* 자국 좌표는 «떼기 전»에 확보 */
+    const r=card.getBoundingClientRect(), br=board.getBoundingClientRect();
+    const hx=(r.left+r.width/2-br.left)/br.width*100, hy=Math.max(1,(r.top-br.top-3)/br.height*100);
+    /* 도장 찍고 → 종결함으로 날아가 꽂힌다 */
+    setTimeout(()=>{
+      const vault=document.getElementById('bdVault');
+      if(vault){
+        const vr=vault.getBoundingClientRect();
+        const dx=(vr.left+vr.width/2)-(r.left+r.width/2), dy=(vr.top+vr.height*0.35)-(r.top+r.height/2);
+        card.classList.add('fly');
+        card.style.transform=`translate(${dx.toFixed(0)}px,${dy.toFixed(0)}px) rotate(-13deg) scale(.18)`;
+        setTimeout(()=>{vault.classList.add('pop');ebBuzz(10)},430);
+      }else card.style.opacity='0';
+    },380);
     setTimeout(()=>{
       const bd=bdData();
-      const r=card.getBoundingClientRect(), br=board.getBoundingClientRect();
-      const hx=(r.left+r.width/2-br.left)/br.width*100, hy=Math.max(1,(r.top-br.top-3)/br.height*100);
       bd.holes.push({x:+hx.toFixed(2), y:+hy.toFixed(2), ts:Date.now(), txt:ago(Date.now())+' · '+bdRunCap(it).slice(0,26)+' ✓'});
       if(!Array.isArray(it.tags))it.tags=[];
       if(!it.tags.includes('__done'))it.tags.push('__done');
       it.tags=it.tags.filter(t=>t!=='__run'); it.doneAt=Date.now(); delete it.bdp;
-      save(); toast('🎉 해냄! 판에 자국이 남았어요'); render();
-    },1050);
+      save(); toast('🎉 해냄! 종결함에 쌓였어요'); render();
+    },1120);
   });
-  const sp=document.getElementById('bdSpike'); if(sp)sp.onclick=bdDoneSheet;
+  /* ⠿ 손잡이로 «꽂은 카드 위치 옮기기» — 폰 스크롤과 안 부딪히게 손잡이로만 */
+  document.querySelectorAll('[data-bdmove]').forEach(h=>{
+    h.addEventListener('pointerdown',e=>{
+      e.preventDefault(); e.stopPropagation();
+      const card=h.closest('.bd-pinCard'); if(!card)return;
+      const id=h.dataset.bdmove, it=store.items.find(x=>x.id===id); if(!it)return;
+      const br=board.getBoundingClientRect(), cr=card.getBoundingClientRect();
+      const offX=e.clientX-cr.left, offY=e.clientY-cr.top;
+      card.classList.add('grabbing'); ebBuzz(6);
+      const mv=ev=>{
+        let x=ev.clientX-br.left-offX, y=ev.clientY-br.top-offY;
+        x=Math.max(6,Math.min(x,board.clientWidth-cr.width-6));
+        y=Math.max(10,Math.min(y,board.clientHeight-cr.height-80));   // 하단 성장바 위까지만
+        card.style.left=(x/board.clientWidth*100).toFixed(2)+'%';
+        card.style.top=(y/board.clientHeight*100).toFixed(2)+'%';
+        bdDrawStrings();
+      };
+      const up=()=>{
+        window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up);
+        card.classList.remove('grabbing');
+        it.bdp={x:parseFloat(card.style.left), y:parseFloat(card.style.top)};
+        save(); ebBuzz(10); bdDrawStrings();
+      };
+      window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
+    });
+  });
+  document.querySelectorAll('[data-bddel]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const id=b.dataset.bddel, it=store.items.find(x=>x.id===id); if(!it)return;
+    if(!confirm('이 메모를 삭제할까요?\n판에서도 사라지고 되돌릴 수 없어요.'))return;
+    store.items=store.items.filter(x=>x.id!==id);
+    save(); ebBuzz(6); render(); toast('🗑 삭제했어요');
+  });
+  const vt=document.getElementById('bdVault'); if(vt)vt.onclick=bdDoneSheet;
   const cl=document.getElementById('bdClean'); if(cl)cl.onclick=()=>{
     const bd=bdData(); if(!bd.holes.length)return;
     bd.plqN++; bd.plqTotal+=bd.holes.length; bd.holes=[];
-    save(); render(); toast('🧹 판을 정리했어요 — 명판에 새겼습니다');
+    save(); render(); toast('🧹 판을 정리했어요 — 자국은 종결함에 남아요');
   };
+  bdDrawStrings();
+  clearTimeout(bindBoard._st); bindBoard._st=setTimeout(bdDrawStrings,120);   // 폰트·레이아웃 확정 후 한 번 더
+  if(!bindBoard._rs){bindBoard._rs=1;window.addEventListener('resize',()=>{clearTimeout(bindBoard._rt);bindBoard._rt=setTimeout(bdDrawStrings,140)});}
   document.querySelectorAll('.bd-hole').forEach(h=>h.onclick=()=>{     // 폰: 탭하면 속삭임
     h.classList.add('say'); setTimeout(()=>h.classList.remove('say'),1400)});
 }
