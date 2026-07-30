@@ -1085,8 +1085,23 @@
   .eb-cele-big{font-size:66px;line-height:1}.eb-cele-t{font-size:22px;font-weight:800;margin:12px 0 8px}.eb-cele-s{font-size:14px;color:var(--ink-dim);line-height:1.6;margin-bottom:22px}
   .eb-cele-card .eb-primary{width:100%}.eb-cele-x{margin-top:12px;background:none;border:none;color:var(--ink-faint);font-size:13px;font-weight:600;cursor:pointer}
   .eb-today{background:var(--surface);border:1px solid rgba(var(--lime-rgb),.28);border-radius:16px;padding:16px;margin-bottom:18px;box-shadow:0 0 24px rgba(var(--lime-rgb),.05)}
-  .eb-ttag{font-size:11px;font-weight:800;color:var(--lime);letter-spacing:.04em;margin-bottom:7px}.eb-ttitle{font-size:16px;font-weight:800;margin-bottom:3px}.eb-tchap{font-size:12px;color:var(--ink-faint);margin-bottom:13px}
-  .eb-tgo{width:100%;background:var(--lime);color:#0D0D0D;border:none;border-radius:11px;font-weight:800;font-size:14.5px;padding:12px;cursor:pointer;font-family:inherit}
+  .eb-ttag{display:flex;align-items:baseline;font-size:11px;font-weight:800;color:var(--lime);letter-spacing:.04em;margin-bottom:7px}.eb-ttitle{font-size:16px;font-weight:800;margin-bottom:3px}.eb-tchap{font-size:12px;color:var(--ink-faint);margin-bottom:13px}
+  .eb-tgo{width:100%;background:var(--lime);color:#0D0D0D;border:none;border-radius:11px;font-weight:800;font-size:14.5px;padding:12px;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .18s}
+  .eb-tgo:hover{box-shadow:0 6px 18px rgba(var(--lime-rgb),.35)}
+  .eb-tgo:active{transform:scale(.97)}
+  .eb-tpos{margin-left:auto;font-size:10.5px;font-weight:800;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+  /* 📥 작업실 재료 스트립 — «홈에서 보낸 게 기다린다»를 쓰기 전에 알려준다 */
+  .eb-wsmats{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:14px;cursor:pointer;transition:.16s}
+  .eb-wsmats:hover{border-color:rgba(var(--lime-rgb),.4)}
+  .eb-wsmh{display:flex;align-items:baseline;gap:6px;font-size:12px;font-weight:800;color:var(--ink-dim);margin-bottom:9px}
+  .eb-wsmh b{color:var(--lime)}
+  .eb-wsmh .hint{margin-left:auto;font-size:10px;font-weight:700;color:var(--ink-faint)}
+  .eb-wsmrow{display:flex;gap:7px;overflow:hidden}
+  .eb-wsmth{flex:0 0 auto;width:44px;height:44px;border-radius:9px;background-size:cover;background-position:center;
+    background-color:#191919;border:1px solid #2a2a2a}
+  .eb-wsmth.txt{display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--ink-dim);padding:3px;text-align:center;line-height:1.3;overflow:hidden}
+  .eb-wsmth.more{display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--lime);background:rgba(var(--lime-rgb),.08);border-color:rgba(var(--lime-rgb),.3)}
+  .eb-util3{grid-template-columns:1fr 1fr 1.4fr!important}
   .eb-toch{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 12px}.eb-thT{font-size:15px;font-weight:800}
   .eb-thE{background:none;border:1px solid var(--line);color:var(--ink-dim);border-radius:9px;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;font-family:inherit}.eb-thE.on{border-color:var(--lime);color:var(--lime)}
   .eb-chap{margin-bottom:16px}.eb-chapt{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink-dim);margin:0 2px 9px}
@@ -2205,6 +2220,9 @@
   @media(hover:none){.bd-x{opacity:1}}                       /* 폰은 항상 보이게 */
   .bd-x:hover{background:#d9455f;color:#fff}
   .bd-x:active{transform:scale(.85)}
+  /* 밝은 카드(포스트잇·폴라로이드) 위에선 어두운 톤으로 */
+  .bd-note .bd-x,.bd-pola .bd-x{background:rgba(43,39,23,.13);color:#4a4430;top:6px;left:7px}
+  .bd-note .bd-x:hover,.bd-pola .bd-x:hover{background:#d9455f;color:#fff}
   /* ⠿ 옮기기 손잡이 — 폰에서 스크롤과 안 부딪히게 (손잡이로만 이동) */
   .bd-grab{position:absolute;top:7px;right:9px;z-index:5;width:24px;height:22px;display:grid;place-items:center;
     color:rgba(255,255,255,.26);font-size:13px;letter-spacing:-1px;cursor:grab;touch-action:none;user-select:none}
@@ -3444,7 +3462,9 @@ function ebViewList(){
     <div class="ebs-hint">${ebSel?'펼치는 중…':'책을 눌러 펼쳐보세요'}</div>
     <button class="ebs-fab" onclick="ebStart()" aria-label="새 전자책 쓰기"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`;
 }
-function ebPick(id){ bkCur=null; ebSel=id; render(); setTimeout(function(){ if(ebSel===id && !bkCur && !bkCreating){ ebShowcase(id); } }, 560); }
+/* 토스식: 책을 누르면 «바로 작업실» — 쇼케이스가 길을 막지 않는다 (2026-07-27 재정렬).
+   상상(쇼케이스)은 작업실 하단 🔮 버튼으로 언제든. */
+function ebPick(id){ ebSel=null; ebOpen(id); ebBuzz(6); }
 function ebShowcase(id){
   const b=store.books.find(x=>x.id===id);if(!b)return;ebShape(b);
   const p=ebProgress(b),st=ebStreak(),dd=ebDday(b),nx=ebNext(b),au=ebAuthor(),rem=p.tot-p.done,sf=b.font==='serif'?' srf':'';
@@ -3566,24 +3586,40 @@ function ebMiniCover(b){ebShape(b);const sf=b.font==='serif'?' srf':'';
       <span class="ebs-em">${b.em}</span><div class="ebs-ct${sf}">${esc(b.title)}</div>${ebObiHtml(b)}
     </div></div>`;
 }
+/* ═══ 작업실 = 토스식 «다음 할 일이 항상 하나» (2026-07-27 재정렬)
+   위계: 책(정체) → ✍️오늘 쓸 한 꼭지(주인공) → 📥재료 도착 → 기록 → 목차 → 유틸(표지·상상·발행) ═══ */
 function ebViewWorkspace(b){const p=ebProgress(b),nx=ebNext(b),dd=ebDday(b),st=ebStreak(),bs=ebStats(b);
+  const flat=ebFlat(b), ni=nx?flat.findIndex(x=>x.s.id===nx.s.id):-1;
+  const first=p.done===0 && !flat.some(x=>x.s.status==='draft');           // 아직 한 글자도 없는 책
+  /* 📥 홈에서 보낸 재료 — 작업실에서도 보이게 (있는 줄 몰라 못 쓰던 것) */
+  const ebox=eboxItems(), secMats=nx?matsForSec(b.id,nx.c.id,nx.s.id):[];
+  const matN=ebox.length+secMats.length;
+  const matThumbs=[...secMats,...ebox].slice(0,5).map(i=>
+    i.img?`<span class="eb-wsmth" style="background-image:url('${(i.img||'').replace(/'/g,"%27")}')"></span>`
+      :`<span class="eb-wsmth txt">${esc((ebPlainText(i.text||'')||i.memo||'✎').replace(/\s+/g,' ').trim().slice(0,8))||'✎'}</span>`).join('');
   return `<button class="eb-backfix" onclick="ebBackList()" aria-label="책장으로">‹ 책장</button>
     <div class="eb-hero">${ebMiniCover(b)}
       <div class="eb-hinfo"><div class="eb-htitle">${esc(b.title)}</div>${b.sub?`<div class="eb-hsub">${esc(b.sub)}</div>`:''}
-        <div class="eb-hmeta">${(EB_TEMPLATES[b.type]||{}).name||'내 책'} · ${p.done}/${p.tot} 꼭지</div>
-        <div class="eb-hchips"><button class="eb-chip" onclick="ebCustomize('${b.id}')">🎨 표지</button><button class="eb-chip" onclick="ebImagine()">🔮 상상</button></div></div>
+        <div class="eb-hmeta">${(EB_TEMPLATES[b.type]||{}).name||'내 책'} · ${p.done}/${p.tot} 꼭지</div></div>
       <div class="eb-ring" style="--p:${p.pct}"><svg width="56" height="56"><circle class="eb-rc" cx="28" cy="28" r="24"/><circle class="eb-rf" cx="28" cy="28" r="24"/></svg><div class="eb-rt">${p.pct}%</div></div></div>
+    ${nx?`<div class="eb-today"><div class="eb-ttag">${first?'✍️ 첫 꼭지부터':'✍️ 오늘 쓸 한 꼭지'}${ni>-1?`<span class="eb-tpos">${ni+1} / ${p.tot}</span>`:''}</div>
+      <div class="eb-ttitle">${esc(nx.s.title)}</div>
+      <div class="eb-tchap">${esc(nx.c.title)}${first?' · 세 문장이면 충분해요':''}</div>
+      <button class="eb-tgo" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">${first?'첫 문장 쓰기 →':'이어 쓰기 →'}</button></div>`
+    :`<div class="eb-today" style="border-color:rgba(var(--lime-rgb),.5)"><div class="eb-ttag">🎉 완성!</div><div class="eb-ttitle">모든 꼭지를 다 쓰셨어요</div><div class="eb-tchap">미리보기로 감상하고 PDF로 발행해보세요.</div><button class="eb-tgo" onclick="ebPreview()">📖 미리보기 · 발행</button></div>`}
+    ${matN&&nx?`<div class="eb-wsmats" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">
+      <div class="eb-wsmh">📥 홈에서 보낸 재료 <b>${matN}</b><span class="hint">쓰기 화면에서 탭하면 본문에 들어가요</span></div>
+      <div class="eb-wsmrow">${matThumbs}${matN>5?`<span class="eb-wsmth more">+${matN-5}</span>`:''}</div></div>`:''}
     <div class="eb-strip" onclick="atDashboard()">
       ${st>0?`<span class="fire">🔥 ${st}일</span>·`:''}<span><b>${ebDays(b)}일째</b> 함께</span>·<span><b>${bs.ch.toLocaleString()}자</b></span>·<span>⏱ <b>${atFmt(atGetBook()[b.id]||0)}</b></span>·${dd?`<span class="dd" onclick="event.stopPropagation();ebSetTarget()">D-${dd.left>=0?dd.left:'지남'} · 하루 ${dd.perDay}꼭지</span>`:`<span class="dd" onclick="event.stopPropagation();ebSetTarget()">＋ 완성일</span>`}
     </div>
     ${ebQuotaHtml(b)}
-    ${nx?`<div class="eb-today"><div class="eb-ttag">✍️ 오늘 쓸 한 꼭지</div><div class="eb-ttitle">${esc(nx.s.title)}</div><div class="eb-tchap">${esc(nx.c.title)}</div><button class="eb-tgo" onclick="ebEdit('${nx.c.id}','${nx.s.id}')">이어 쓰기 →</button></div>`:`<div class="eb-today" style="border-color:rgba(var(--lime-rgb),.5)"><div class="eb-ttag">🎉 완성!</div><div class="eb-ttitle">모든 꼭지를 다 쓰셨어요</div><div class="eb-tchap">미리보기로 감상하고 PDF로 발행해보세요.</div></div>`}
     <div class="eb-toch"><span class="eb-thT">목차</span><button class="eb-thE ${bkTocEdit?'on':''}" onclick="bkTocEdit=!bkTocEdit;render()">${bkTocEdit?'완료':'편집'}</button></div>
     ${b.chapters.map(c=>`<div class="eb-chap"><div class="eb-chapt">${bkTocEdit?'<span class="eb-grip">⠿</span>':''}<span class="eb-ctitle"${bkTocEdit?` contenteditable="true" onblur="ebChapName('${c.id}',this)" onkeydown="ebNameKey(event)"`:''}>${esc(c.title)}</span><span class="eb-ctline"></span>${bkTocEdit?`<button class="eb-cte" onclick="ebDelChap('${c.id}')">✕</button>`:''}</div>
       ${c.secs.map(s=>`<div class="eb-sec ${s.status}"${bkTocEdit?` draggable="true" data-c="${c.id}" data-s="${s.id}"`:''}>${bkTocEdit?'<span class="eb-grip">⠿</span>':'<span class="eb-dot"></span>'}<div class="eb-smain"${bkTocEdit?'':` onclick="ebEdit('${c.id}','${s.id}')"`}><div class="eb-st"${bkTocEdit?` contenteditable="true" onblur="ebSecName('${c.id}','${s.id}',this)" onkeydown="ebNameKey(event)"`:''}>${esc(s.title)}</div>${bkTocEdit?'':`<div class="eb-ssub">${s.status==='done'?'완성 · '+ebPlain(s.html)+'자':s.status==='draft'?'초안 '+ebPlain(s.html)+'자':'아직 비어있어요'}</div>`}</div>${bkTocEdit?`<button class="eb-cte" onclick="ebDelSec('${c.id}','${s.id}')">✕</button>`:`<span class="eb-arrow" onclick="ebEdit('${c.id}','${s.id}')">›</span>`}</div>`).join('')}
       ${bkTocEdit?`<button class="eb-add" onclick="ebAddSec('${c.id}')">＋ 꼭지 추가</button>`:''}</div>`).join('')}
     ${bkTocEdit?`<button class="eb-add" onclick="ebAddChap()">＋ 챕터 추가</button>`:''}
-    <div class="eb-wsacts" style="grid-template-columns:1fr"><button class="eb-ghost" onclick="ebPreview()">📖 미리보기 · 발행</button></div>`;
+    <div class="eb-wsacts eb-util3"><button class="eb-ghost" onclick="ebCustomize('${b.id}')">🎨 표지</button><button class="eb-ghost" onclick="ebImagine()">🔮 상상</button><button class="eb-ghost" onclick="ebPreview()">📖 미리보기 · 발행</button></div>`;
 }
 /* 목차 인라인 편집 — prompt/confirm 없이 */
 function ebNameKey(e){if(e.key==='Enter'){e.preventDefault();e.target.blur()}}
@@ -4284,7 +4320,9 @@ function ideaBoardHtml(items){
   const runs=runItems();
   const trayRuns=runs.filter(i=>!i.bdp);
   const pinnedRuns=runs.filter(i=>i.bdp);
-  const photos=ideaAllPhotos().slice(0,6);
+  /* 폴라로이드: ✕로 뺀 사진은 보드에만 안 나옴 (글 속 원본·갤러리는 그대로) */
+  const hidP=Array.isArray(bd.hidePhotos)?bd.hidePhotos:[];
+  const photos=ideaAllPhotos().filter(p=>hidP.indexOf(p.src)<0).slice(0,6);
   const doneN=doneItems().length;
   let tray=`<div class="bd-tray"><span class="bd-trayt">🏃 실행 대기 ${trayRuns.length?trayRuns.length+' — 잡아서 판에 끌어다 꽂으세요':''}</span>
       <button class="bd-addbtn" id="bdAdd">＋ 실행할 것</button></div>`;
@@ -4296,11 +4334,13 @@ function ideaBoardHtml(items){
     const col=ideaGroupColor(i.group);
     const cap=esc(((i.text||i.title||(i.url?host(i.url):''))||'').replace(/\s+/g,' ').trim().slice(0,64))||'(내용 없음)';
     return `<div class="bd-note" data-pinopen="${i.id}"><span class="bd-tack" style="background:${col}"></span>
+      <button class="bd-x" data-bddel="${i.id}" title="삭제" aria-label="삭제">✕</button>
       <div class="bd-t">${cap}</div><span class="bd-lb">📌 할일</span>
       <div class="bd-act"><button class="bd-b" data-pindone="${i.id}">✓ 실행</button><button class="bd-b off" data-pinoff="${i.id}">떼기</button></div></div>`;
   }).join('');
   stuff+=photos.map(p=>{
     return `<div class="bd-pola" onclick="galOpenSrc(this.querySelector('.bd-ph'))"><span class="bd-tack" style="background:#B49DD0"></span>
+      <button class="bd-x" data-bdunpola="${(p.src||'').replace(/"/g,'&quot;')}" title="보드에서 빼기" aria-label="보드에서 빼기">✕</button>
       <div class="bd-ph" style="background-image:url('${(p.src||'').replace(/'/g,'%27')}')"></div></div>`;
   }).join('');
   const pinnedHtml=pinnedRuns.map(i=>{
@@ -4466,6 +4506,13 @@ function bindBoard(){
     if(!confirm('이 메모를 삭제할까요?\n판에서도 사라지고 되돌릴 수 없어요.'))return;
     store.items=store.items.filter(x=>x.id!==id);
     save(); ebBuzz(6); render(); toast('🗑 삭제했어요');
+  });
+  /* 폴라로이드 ✕ = 보드에서만 빼기 (원본 사진은 글·갤러리에 그대로) */
+  document.querySelectorAll('[data-bdunpola]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const bd=bdData(); if(!Array.isArray(bd.hidePhotos))bd.hidePhotos=[];
+    const src=b.dataset.bdunpola;
+    if(bd.hidePhotos.indexOf(src)<0)bd.hidePhotos.push(src);
+    save(); ebBuzz(6); render(); toast('보드에서 뺐어요 — 글 속 원본은 그대로예요');
   });
   const vt=document.getElementById('bdVault'); if(vt)vt.onclick=bdDoneSheet;
   const cl=document.getElementById('bdClean'); if(cl)cl.onclick=()=>{
