@@ -728,6 +728,13 @@
   .lc-ws{display:flex;gap:6px;padding:12px 14px}
   .lc-ws button{flex:1;padding:8px 0;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink-dim);font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}
   .lc-ws button.on{background:rgba(var(--lime-rgb),.14);border-color:rgba(var(--lime-rgb),.5);color:var(--lime)}
+  /* 서랍 안 방 전환 — 💡아이디어 / 🌙생각 정리 */
+  .lc-rooms{display:flex;gap:5px;margin:0 0 10px;background:#131313;border:1px solid #212121;border-radius:999px;padding:3px}
+  .lc-rooms button{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:0;
+    color:var(--ink-faint);font-family:inherit;font-size:12px;font-weight:800;padding:8px 4px;border-radius:999px;cursor:pointer;transition:.18s}
+  .lc-rooms button i{font-style:normal;font-size:10px;font-weight:800;opacity:.55;font-variant-numeric:tabular-nums}
+  .lc-rooms button.on{background:rgba(var(--lime-rgb),.15);color:var(--lime);box-shadow:inset 0 0 0 1px rgba(var(--lime-rgb),.38)}
+  .lc-rooms button.dia.on{background:rgba(224,178,122,.15);color:#E0B27A;box-shadow:inset 0 0 0 1px rgba(224,178,122,.42)}
   .lc-search{margin:2px 12px 8px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:0 11px;height:38px}
   .lc-search-ic{font-size:12px;opacity:.7}
   .lc-search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);font-size:13px;font-family:inherit}
@@ -2333,7 +2340,8 @@
   .bd-gauge .gg-bar{height:7px;border-radius:99px;background:rgba(0,0,0,.12);overflow:hidden}
   .bd-gauge .gg-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#8fbb1c,#b9e33a);
     transition:width .8s cubic-bezier(.2,.9,.3,1)}
-  .bd-cleanbtn{position:absolute;top:9px;right:12px;z-index:4;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);
+  .bd-topbtns{position:absolute;top:9px;right:12px;z-index:4;display:flex;gap:6px}
+  .bd-cleanbtn{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);
     color:#48524a;border-radius:999px;font-family:inherit;font-size:10px;font-weight:800;padding:5px 11px;cursor:pointer;
     -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:.15s}
   .bd-cleanbtn:hover{background:#fff;color:#20261f}
@@ -3208,14 +3216,26 @@ function lcCatHtml(id,nm,color,its){
   const rows=its.length?its.map(it=>{const d=new Date(it.ts);return `<div class="lc-item" style="--c:${color}" data-think="${it.id}"><span class="lc-it-t">${lcThoughtTitle(it)}</span><span class="lc-it-d">${(d.getMonth()+1)}/${d.getDate()}</span></div>`;}).join(''):`<div class="lc-empty">아직 없어요</div>`;
   return `<div class="lc-cat${col?' col':''}" data-cat="${esc(id)}"><div class="lc-cat-h"><span class="lc-tw">▾</span><span class="lc-dot" style="background:${color}"></span><span class="lc-nm">${esc(nm)}</span><span class="lc-n">${its.length}</span></div><div class="lc-items">${rows}</div></div>`;
 }
+/* 서랍 안 방 전환 — 💡아이디어 / 🌙생각 정리 (2026-07-27 사장님 요청) */
+let lcRoom=(()=>{try{return localStorage.getItem('idf_lcroom')||'idea'}catch(e){return'idea'}})();
+function lcSetRoom(r){lcRoom=r;try{localStorage.setItem('idf_lcroom',r)}catch(e){}renderDrawer();}
 function lcRenderThink(){
   const all=store.items.filter(i=>i.ws==='think');
+  const ideaN=all.filter(i=>!i.diary).length, diaryN=all.filter(i=>i.diary).length;
+  let html=`<div class="lc-rooms">
+    <button data-lcroom="idea" class="${lcRoom==='idea'?'on':''}">💡 아이디어<i>${ideaN}</i></button>
+    <button data-lcroom="diary" class="dia ${lcRoom==='diary'?'on':''}">🌙 생각 정리<i>${diaryN}</i></button>
+  </div>`;
+  if(lcRoom==='diary'){
+    const diary=all.filter(i=>i.diary).sort((a,b)=>b.ts-a.ts);
+    html+=diary.length?lcCatHtml('__diary','🌙 흘려보낸 생각','#E0B27A',diary)
+      :`<div class="lc-empty" style="padding:14px">아직 정리한 생각이 없어요 🌙</div>`;
+    return html;
+  }
   const items=all.filter(i=>!i.diary);                       // 생각 정리(일기)는 카테고리에 안 섞임
-  let html=tkCats().map(c=>lcCatHtml(c.id,c.nm,c.color,items.filter(i=>i.group===c.id).sort((a,b)=>b.ts-a.ts))).join('');
+  html+=tkCats().map(c=>lcCatHtml(c.id,c.nm,c.color,items.filter(i=>i.group===c.id).sort((a,b)=>b.ts-a.ts))).join('');
   const uncat=items.filter(i=>!i.group||!tkCat(i.group)).sort((a,b)=>b.ts-a.ts);
   if(uncat.length) html+=lcCatHtml('__none','미분류','#7a7a76',uncat);
-  const diary=all.filter(i=>i.diary).sort((a,b)=>b.ts-a.ts); // 별도 앰버 방
-  if(diary.length) html+=lcCatHtml('__diary','🌙 생각 정리','#E0B27A',diary);
   return html||`<div class="lc-empty" style="padding:14px">아직 담은 생각이 없어요</div>`;
 }
 function lcRenderBook(){
@@ -3251,6 +3271,7 @@ document.addEventListener('click',function(e){
   if(e.target.closest('#lcX')||e.target.closest('#lcScrim')){lcClose();return}
   if(e.target.closest('#lcFab')){lcClose();if(lcWsCur==='book'){activeWs='book';if(typeof ebStart==='function')ebStart();}else{activeWs='think';if(typeof thinkNew==='function')thinkNew();}return}
   const wsb=e.target.closest('[data-lcws]');if(wsb){lcWsCur=wsb.dataset.lcws;renderDrawer();const si=document.getElementById('lcSearch');if(si)si.value='';return}
+  const rmb=e.target.closest('[data-lcroom]');if(rmb){lcSetRoom(rmb.dataset.lcroom);const si=document.getElementById('lcSearch');if(si)si.value='';if(typeof ebBuzz==='function')ebBuzz(5);return}
   const ch=e.target.closest('.lc-cat-h');if(ch){const cat=ch.parentNode;lcCollapsed[cat.dataset.cat]=!lcCollapsed[cat.dataset.cat];cat.classList.toggle('col');lcSetMax(cat);return}
   const th=e.target.closest('.lc-item[data-think]');if(th){lcClose();activeWs='think';thinkEdit(th.dataset.think);return}
   const bk=e.target.closest('.lc-item[data-book]');if(bk){lcClose();activeWs='book';ebOpen(bk.dataset.book);return}
@@ -4379,9 +4400,10 @@ function ideaBoardHtml(items){
   const runs=runItems();
   const trayRuns=runs.filter(i=>!i.bdp);
   const pinnedRuns=runs.filter(i=>i.bdp);
-  /* 폴라로이드: ✕로 뺀 사진은 보드에만 안 나옴 (글 속 원본·갤러리는 그대로) */
+  /* 폴라로이드: ✕로 빼면 «그 자리를 다시 안 채운다» (예전엔 7번째가 올라와 «안 지워진다»로 보였음)
+     · 사진 전체 끄기 = bd.photosOff */
   const hidP=Array.isArray(bd.hidePhotos)?bd.hidePhotos:[];
-  const photos=ideaAllPhotos().filter(p=>hidP.indexOf(p.src)<0).slice(0,6);
+  const photos=bd.photosOff?[]:ideaAllPhotos().slice(0,6).filter(p=>hidP.indexOf(p.src)<0);
   const doneN=doneItems().length;
   let tray=`<div class="bd-tray"><span class="bd-trayt">🏃 실행 대기 ${trayRuns.length?trayRuns.length+' — 잡아서 판에 끌어다 꽂으세요':''}</span>
       <button class="bd-addbtn" id="bdAdd">＋ 실행할 것</button></div>`;
@@ -4428,7 +4450,10 @@ function ideaBoardHtml(items){
       <span class="gg-l">이번 달 해냄 <b>${mDone}</b></span>
       <span class="gg-r">${left>0?`다음 ${goal}까지 ${left}개`:'목표 달성 🎉'}</span></div>
     <div class="gg-bar"><i class="gg-fill" style="width:${Math.min(100,Math.round(mDone/goal*100))}%"></i></div></div>`;
-  const clean=bd.holes.length?`<button class="bd-cleanbtn" id="bdClean">🧹 판 정리${bd.plqN?` · ${bd.plqN}판째`:''}</button>`:'';
+  const clean=`<div class="bd-topbtns">
+    ${bd.holes.length?`<button class="bd-cleanbtn" id="bdClean">🧹 판 정리${bd.plqN?` · ${bd.plqN}판째`:''}</button>`:''}
+    <button class="bd-cleanbtn" id="bdPhotoTg">${bd.photosOff?'🖼 사진 올리기':'🖼 사진 치우기'}</button>
+  </div>`;
   if(!stuff&&!pinnedRuns.length&&!bd.holes.length){
     stuff=`<div class="bd-hint"><span class="bd-tack" style="background:#8FAECF"></span>
       아직 빈 판이에요.<br>· 위 <b>＋ 실행할 것</b>으로 담고 → 판에 끌어다 꽂기<br>· 홈·노트에서 <b>🏃</b>로 보내도 여기로 와요<br>· 글에 사진을 넣으면 폴라로이드로 꽂혀요</div>`;
@@ -4634,6 +4659,14 @@ function bindBoard(){
     store.items=store.items.filter(x=>x.id!==id);
     save(); ebBuzz(6); render(); toast('🗑 삭제했어요');
   });
+  /* 🖼 사진 전체 치우기 / 다시 올리기 — 사진이 80장씩 되니 하나씩 뺄 순 없다 */
+  const ptg=document.getElementById('bdPhotoTg');
+  if(ptg)ptg.onclick=()=>{
+    const bd=bdData(); bd.photosOff=!bd.photosOff;
+    if(!bd.photosOff)bd.hidePhotos=[];            // 다시 올릴 땐 개별 숨김도 초기화
+    save(); ebBuzz(8); render();
+    toast(bd.photosOff?'🖼 사진을 판에서 치웠어요':'🖼 사진을 다시 올렸어요');
+  };
   /* 폴라로이드 ✕ = 보드에서만 빼기 (원본 사진은 글·갤러리에 그대로) */
   document.querySelectorAll('[data-bdunpola]').forEach(b=>b.onclick=e=>{e.stopPropagation();
     const bd=bdData(); if(!Array.isArray(bd.hidePhotos))bd.hidePhotos=[];
