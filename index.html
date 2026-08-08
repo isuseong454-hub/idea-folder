@@ -2993,7 +2993,12 @@ function wireHome(){
     nhHls=Array.isArray(dft.hls)?dft.hls.map(r=>r.slice()):[];    // 칠해둔 형광도 함께 복원
   }
   if(ti)ti.addEventListener('input',()=>{upd();nhSaveDraft()});
-  if(ti)ti.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();ta.focus();}});   // 제목 → 본문
+  /* 제목 → 본문. 한글 조합 중 엔터는 preventDefault하면 IME가 깨지므로 keyup에서 넘긴다 */
+  let tiArm=false;
+  if(ti)ti.addEventListener('keydown',e=>{if(e.key!=='Enter')return;
+    if(e.isComposing||e.keyCode===229){tiArm=true;return;}
+    e.preventDefault();ta.focus();});
+  if(ti)ti.addEventListener('keyup',e=>{if(e.key==='Enter'&&tiArm){tiArm=false;ta.focus();}});
   /* 🖍 거울판: 글을 고치면 칠한 구간도 따라 움직이고, 스크롤도 같이 */
   nhPrevLen=(ta.value||'').length; nhRenderMirror();
   ta.addEventListener('input',()=>{
@@ -3004,10 +3009,18 @@ function wireHome(){
   ta.addEventListener('scroll',()=>{const m=document.getElementById('nhMirror');if(m)m.scrollTop=ta.scrollTop;},{passive:true});
   /* # 키워드 태그 입력 */
   const kwIn=document.getElementById('nhKwIn'); nhRenderKw();
+  /* ⌨️ 한글 엔터 — 조합 중(IME) 엔터는 keydown에서 무시되던 버그. 그땐 «예약»해 두고 keyup에서 처리
+     (2026-07-27: 한글로 치면 엔터가 한 번에 안 먹던 원인) */
+  let kwArm=false;
   if(kwIn)kwIn.addEventListener('keydown',e=>{
-    if(e.isComposing)return;
-    if(e.key==='Enter'||e.key===','){e.preventDefault();nhAddKw(kwIn.value);kwIn.value='';}
-    else if(e.key==='Backspace'&&!kwIn.value&&nhKw.length){nhKw.pop();nhRenderKw();}});
+    if(e.key==='Enter'){
+      if(e.isComposing||e.keyCode===229){kwArm=true;return;}      // 한글 조합 중 → keyup에서
+      e.preventDefault();nhAddKw(kwIn.value);kwIn.value='';return;
+    }
+    if(e.key===','){e.preventDefault();nhAddKw(kwIn.value);kwIn.value='';return;}
+    if(e.key==='Backspace'&&!kwIn.value&&nhKw.length){nhKw.pop();nhRenderKw();}});
+  if(kwIn)kwIn.addEventListener('keyup',e=>{
+    if(e.key==='Enter'&&kwArm){kwArm=false;nhAddKw(kwIn.value);kwIn.value='';}});
   sv.addEventListener('click',()=>{const t=ta.value.trim();const tt=ti?ti.value.trim():'';
     if(kwIn&&kwIn.value.trim()){nhAddKw(kwIn.value);kwIn.value='';}   // 안 누른 마지막 키워드도 담기
     if(!t&&!nhShots.length&&!tt)return;
@@ -5770,7 +5783,11 @@ function thinkEdit(id){const it=store.items.find(x=>x.id===id);if(!it)return;cur
   /* 드래그 선택바 안 씀 — 아이폰 기본 메뉴(오려두기·복사)와 겹침. 형광은 Ctrl+E / 형광 모드로 */
   if(title){
     title.addEventListener('input',()=>{curThink.title=title.textContent;const tm=document.getElementById('thinkTitleMini');if(tm&&title.textContent.trim())tm.textContent=title.textContent.trim().slice(0,18);thinkMark();});
-    title.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();body.focus();}});   // 제목에서 엔터 → 본문
+    let ttArm=false;                                                  // 제목에서 엔터 → 본문 (한글 조합 보호)
+    title.addEventListener('keydown',e=>{if(e.key!=='Enter')return;
+      if(e.isComposing||e.keyCode===229){ttArm=true;return;}
+      e.preventDefault();body.focus();});
+    title.addEventListener('keyup',e=>{if(e.key==='Enter'&&ttArm){ttArm=false;body.focus();}});
   }
   tkWriting();
   body.addEventListener('input',()=>{atNote();ebSmartType();curThink.text=body.innerHTML;ebUpdWc();tkWriting();tkCaretIntoView();thinkMark();if(bkFocus)ebHiFocus()});
